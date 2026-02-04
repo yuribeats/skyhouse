@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKYSPACE</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #000;
+            overflow: hidden;
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: crosshair;
+        }
+        canvas {
+            display: block;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+        }
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #fff;
+            font-size: 10px;
+            letter-spacing: 3px;
+            text-decoration: none;
+            opacity: 0.5;
+            z-index: 10;
+            cursor: pointer;
+        }
+        .back-link:hover { opacity: 1; }
+        .hud {
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 9px;
+            letter-spacing: 3px;
+            opacity: 0.35;
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="back-link">BACK</a>
+    <canvas id="game"></canvas>
+    <div class="hud">WASD / ARROWS LOOK &mdash; SPACE SHOOT</div>
+
+    <script>
+    (function() {
+        var canvas = document.getElementById('game');
+        var ctx = canvas.getContext('2d');
+        var W, H, cx, cy;
+
+        function resize() {
+            W = canvas.width = window.innerWidth;
+            H = canvas.height = window.innerHeight;
+            cx = W / 2;
+            cy = H / 2;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+
+        /* ── VIDEOS ── */
+        var NUM = 11;
+        var vids = [];
+        var vtex = [];
+        var vctx = [];
+        var TEX = 512;
+
+        var trackNames = [
+            'I THANK GOD',
+            "GOD'S HEART INSIDE MY OWN CHEST",
+            'UNCONDITIONALLY CELEBRATORY WITNESS',
+            'DREAM HOUSE INTRO',
+            'THE DREAM ABOUT THE HOUSE FROM INSIDE THE HOUSE',
+            'I WISH',
+            'UNSEEN HAND',
+            'COST OF LOVING',
+            'MOLASSES OF TIME',
+            'TENDERNESS',
+            'DIVINE RIGHT'
+        ];
+
+        for (var i = 0; i < NUM; i++) {
+            var v = document.createElement('video');
+            v.src = 'images/walls/hall' + (i + 1) + '.mp4';
+            v.autoplay = true;
+            v.muted = true;
+            v.loop = true;
+            v.playsInline = true;
+            v.setAttribute('playsinline', '');
+            v.style.display = 'none';
+            document.body.appendChild(v);
+            vids.push(v);
+            var c = document.createElement('canvas');
+            c.width = TEX; c.height = TEX;
+            vtex.push(c);
+            vctx.push(c.getContext('2d'));
+        }
+
+        function grabFrames() {
+            for (var i = 0; i < NUM; i++) {
+                if (vids[i].readyState >= 2) {
+                    vctx[i].drawImage(vids[i], 0, 0, TEX, TEX);
+                }
+            }
+        }
+
+        /* ── VIEW STATE ── */
+        var pz = 0;
+        var lookX = 0;
+        var lookY = 0;
+        var autoSpeed = 16;
+        var keys = {};
+        var lookSpeed = 2.5;
+
+        document.addEventListener('keydown', function(e) {
+            keys[e.code] = true;
+            if (e.code === 'Space') { e.preventDefault(); shoot(); }
+        });
+        document.addEventListener('keyup', function(e) { keys[e.code] = false; });
+
+        // pointer lock for mouse look
+        var locked = false;
+        canvas.addEventListener('click', function() {
+            if (!locked) {
+                canvas.requestPointerLock();
+            }
+            for (var i = 0; i < NUM; i++) vids[i].play().catch(function(){});
+        });
+        document.addEventListener('pointerlockchange', function() {
+            locked = (document.pointerLockElement === canvas);
+        });
+
+        // mouse move — works both locked and unlocked
+        document.addEventListener('mousemove', function(e) {
+            if (locked) {
+                lookX += e.movementX * 0.004;
+                lookY += e.movementY * 0.003;
+            } else {
+                // map mouse position to look angle
+                lookX = ((e.clientX / window.innerWidth) - 0.5) * 2.0;
+                lookY = ((e.clientY / window.innerHeight) - 0.5) * 1.2;
+            }
+            if (lookX > 1.4) lookX = 1.4;
+            if (lookX < -1.4) lookX = -1.4;
+            if (lookY > 1.0) lookY = 1.0;
+            if (lookY < -1.0) lookY = -1.0;
+        });
+
+        /* ── HALLWAY RENDERING ── */
+        var SEG_DEPTH = 3;
+        var VISIBLE = 22;
+        var HALL_W = 2.8;
+        var HALL_H = 2.8;
+
+        function vidFor(seg, face) {
+            var n = (((seg % NUM) + NUM) % NUM + face * 3) % NUM;
+            return n;
+        }
+
+        function proj(x, y, z) {
+            if (z < 0.01) z = 0.01;
+            return [cx + (x * cx) / z, cy - (y * cy) / z];
+        }
+
+        function fillQuad(pts, vidIdx, darkness) {
+            var tc = vtex[vidIdx];
+            var p0 = pts[0], p1 = pts[1], p2 = pts[2], p3 = pts[3];
+
+            // skip if entirely off screen
+            var minSX = p0[0], maxSX = p0[0], minSY = p0[1], maxSY = p0[1];
+            for (var k = 1; k < 4; k++) {
+                if (pts[k][0] < minSX) minSX = pts[k][0];
+                if (pts[k][0] > maxSX) maxSX = pts[k][0];
+                if (pts[k][1] < minSY) minSY = pts[k][1];
+                if (pts[k][1] > maxSY) maxSY = pts[k][1];
+            }
+            if (maxSX < 0 || minSX > W || maxSY < 0 || minSY > H) return;
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.moveTo(p0[0], p0[1]);
+            ctx.lineTo(p1[0], p1[1]);
+            ctx.lineTo(p2[0], p2[1]);
+            ctx.lineTo(p3[0], p3[1]);
+            ctx.closePath();
+            ctx.clip();
+
+            // draw the full texture into the bounding box of the quad
+            // the clip path ensures only the quad shape is visible
+            // use overlapping slices to eliminate gaps
+            var qW = maxSX - minSX;
+            var S = Math.max(6, Math.min(32, Math.ceil(qW / 30)));
+
+            for (var s = 0; s < S; s++) {
+                var t0 = s / S;
+                var t1 = (s + 1) / S;
+                // slight overlap to kill seams
+                var tA = Math.max(0, t0 - 0.005);
+                var tB = Math.min(1, t1 + 0.005);
+
+                var ax = p0[0] + (p1[0] - p0[0]) * tA;
+                var ay = p0[1] + (p1[1] - p0[1]) * tA;
+                var bx = p0[0] + (p1[0] - p0[0]) * tB;
+                var by = p0[1] + (p1[1] - p0[1]) * tB;
+                var ex = p3[0] + (p2[0] - p3[0]) * tA;
+                var ey = p3[1] + (p2[1] - p3[1]) * tA;
+                var fx = p3[0] + (p2[0] - p3[0]) * tB;
+                var fy = p3[1] + (p2[1] - p3[1]) * tB;
+
+                var dMinX = Math.min(ax, bx, ex, fx);
+                var dMinY = Math.min(ay, by, ey, fy);
+                var dMaxX = Math.max(ax, bx, ex, fx);
+                var dMaxY = Math.max(ay, by, ey, fy);
+                var dW = dMaxX - dMinX + 1;
+                var dH = dMaxY - dMinY + 1;
+
+                var srcX = Math.floor(t0 * TEX);
+                var srcW = Math.max(1, Math.ceil((t1 - t0) * TEX));
+
+                ctx.drawImage(tc, srcX, 0, srcW, TEX, dMinX, dMinY, dW, dH);
+            }
+
+            if (darkness > 0) {
+                ctx.globalAlpha = Math.min(darkness, 0.88);
+                ctx.fillStyle = '#000';
+                ctx.fill();
+            }
+            ctx.restore();
+        }
+
+        function renderHall() {
+            var off = ((pz % SEG_DEPTH) + SEG_DEPTH) % SEG_DEPTH;
+            var baseSeg = Math.floor(pz / SEG_DEPTH);
+            var hw = HALL_W / 2;
+            var hh = HALL_H / 2;
+            var sx = -lookX * 2;
+            var sy = lookY * 1.5;
+
+            // first pass: fill entire screen with nearest wall textures
+            // this guarantees zero black pixels
+            var seg0 = baseSeg;
+            ctx.save();
+            // left half
+            ctx.drawImage(vtex[vidFor(seg0, 0)], 0, 0, TEX, TEX, 0, 0, cx, H);
+            // right half
+            ctx.drawImage(vtex[vidFor(seg0, 1)], 0, 0, TEX, TEX, cx, 0, cx, H);
+            ctx.restore();
+
+            // second pass: draw hallway segments far to near
+            for (var i = VISIBLE; i >= 0; i--) {
+                var seg = baseSeg + i;
+                var zf = (i + 1) * SEG_DEPTH - off;
+                var zn = i * SEG_DEPTH - off;
+                if (zn < 0.05) zn = 0.05;
+                if (zf < 0.1) continue;
+
+                var dark = (i / VISIBLE) * 0.7;
+
+                var ntl = proj(-hw + sx, hh + sy, zn);
+                var ntr = proj( hw + sx, hh + sy, zn);
+                var nbl = proj(-hw + sx,-hh + sy, zn);
+                var nbr = proj( hw + sx,-hh + sy, zn);
+                var ftl = proj(-hw + sx, hh + sy, zf);
+                var ftr = proj( hw + sx, hh + sy, zf);
+                var fbl = proj(-hw + sx,-hh + sy, zf);
+                var fbr = proj( hw + sx,-hh + sy, zf);
+
+                // floor
+                fillQuad([fbl, fbr, nbr, nbl], vidFor(seg, 3), dark);
+                // ceiling
+                fillQuad([ftl, ftr, ntr, ntl], vidFor(seg, 2), dark);
+                // left wall
+                fillQuad([ftl, ntl, nbl, fbl], vidFor(seg, 0), dark + 0.05);
+                // right wall
+                fillQuad([ntr, ftr, fbr, nbr], vidFor(seg, 1), dark + 0.05);
+
+                // back wall at far end
+                if (i === VISIBLE) {
+                    fillQuad([ftl, ftr, fbr, fbl], vidFor(seg, 0), dark + 0.1);
+                }
+            }
+        }
+
+        /* ── LIGHTNING ── */
+        var bolt = null;
+        var audioIdx = 0;
+        var trackLabel = '';
+        var labelTimer = 0;
+
+        function shoot() {
+            var startX = cx;
+            var startY = H * 0.85;
+            var tx = cx;
+            var ty = cy;
+
+            var pts = [[startX, startY]];
+            var n = 5 + Math.floor(Math.random() * 3);
+            for (var i = 1; i < n; i++) {
+                var t = i / n;
+                pts.push([
+                    startX + (tx - startX) * t + (Math.random() - 0.5) * 120,
+                    startY + (ty - startY) * t + (Math.random() - 0.5) * 60
+                ]);
+            }
+            pts.push([tx, ty]);
+
+            bolt = { pts: pts, t: 0 };
+
+            trackLabel = trackNames[audioIdx];
+            labelTimer = 2500;
+
+            var vid = vids[audioIdx];
+            vid.muted = false;
+            vid.currentTime = 0;
+            vid.play().catch(function(){});
+
+            for (var j = 0; j < NUM; j++) {
+                if (j !== audioIdx) vids[j].muted = true;
+            }
+
+            audioIdx = (audioIdx + 1) % NUM;
+        }
+
+        function drawBolt(dt) {
+            if (!bolt) return;
+            bolt.t += dt;
+            if (bolt.t >= 400) { bolt = null; return; }
+
+            var a = 1 - bolt.t / 400;
+            var pts = bolt.pts;
+
+            ctx.save();
+            ctx.globalAlpha = a * 0.25;
+            ctx.strokeStyle = '#6af';
+            ctx.lineWidth = 16;
+            ctx.lineJoin = 'round';
+            ctx.beginPath();
+            ctx.moveTo(pts[0][0], pts[0][1]);
+            for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+            ctx.stroke();
+
+            ctx.globalAlpha = a * 0.5;
+            ctx.strokeStyle = '#adf';
+            ctx.lineWidth = 7;
+            ctx.beginPath();
+            ctx.moveTo(pts[0][0], pts[0][1]);
+            for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+            ctx.stroke();
+
+            ctx.globalAlpha = a;
+            ctx.strokeStyle = '#fff';
+            ctx.lineWidth = 2.5;
+            ctx.shadowColor = '#8cf';
+            ctx.shadowBlur = 30;
+            ctx.beginPath();
+            ctx.moveTo(pts[0][0], pts[0][1]);
+            for (var i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+            ctx.stroke();
+            ctx.restore();
+
+            if (bolt.t < 60) {
+                ctx.save();
+                ctx.globalAlpha = (1 - bolt.t / 60) * 0.2;
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(0, 0, W, H);
+                ctx.restore();
+            }
+
+            if (bolt.t < 120) {
+                var r = bolt.t * 0.8;
+                ctx.save();
+                ctx.globalAlpha = (1 - bolt.t / 120) * 0.6;
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                ctx.fillStyle = '#fff';
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function drawLabel(dt) {
+            if (labelTimer <= 0) return;
+            labelTimer -= dt;
+            var a = Math.min(1, labelTimer / 600);
+            ctx.save();
+            ctx.globalAlpha = a * 0.7;
+            ctx.fillStyle = '#fff';
+            ctx.font = '700 13px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(trackLabel, cx, cy + 50);
+            ctx.restore();
+        }
+
+        /* ── LOOP ── */
+        var last = 0;
+        var running = false;
+
+        function loop(ts) {
+            if (!last) last = ts;
+            var dt = Math.min(ts - last, 50);
+            last = ts;
+
+            pz += autoSpeed * (dt / 1000);
+
+            // keyboard look
+            var ld = lookSpeed * (dt / 1000);
+            if (keys['KeyA'] || keys['ArrowLeft'])  lookX -= ld;
+            if (keys['KeyD'] || keys['ArrowRight']) lookX += ld;
+            if (keys['KeyW'] || keys['ArrowUp'])    lookY -= ld;
+            if (keys['KeyS'] || keys['ArrowDown'])  lookY += ld;
+            if (lookX > 1.4) lookX = 1.4;
+            if (lookX < -1.4) lookX = -1.4;
+            if (lookY > 1.0) lookY = 1.0;
+            if (lookY < -1.0) lookY = -1.0;
+
+            grabFrames();
+            renderHall();
+            drawBolt(dt);
+            drawLabel(dt);
+
+            requestAnimationFrame(loop);
+        }
+
+        function tryStart() {
+            if (running) return;
+            var ready = 0;
+            for (var i = 0; i < NUM; i++) if (vids[i].readyState >= 2) ready++;
+            if (ready >= 2) { running = true; requestAnimationFrame(loop); }
+        }
+
+        for (var i = 0; i < NUM; i++) {
+            vids[i].addEventListener('canplay', tryStart);
+            vids[i].play().catch(function(){});
+        }
+        setTimeout(function() { if (!running) { running = true; requestAnimationFrame(loop); } }, 3000);
+    })();
+    </script>
+</body>
+</html>
