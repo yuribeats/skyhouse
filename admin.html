@@ -138,17 +138,12 @@
 
     <script>
         var QUESTIONS = {
-            q0: "HOW MANY SERVICES HAVE YOU ATTENDED? WHEN WAS THE MOST RECENT?",
-            q1: "HOW MEANINGFUL WAS LAST NIGHT'S EXPERIENCE FOR YOU?",
-            q2: "DO YOU FEEL CLOSER TO YOUR INNER ANGEL?",
-            q3: "HOW COMFORTABLE DID YOU FEEL WITH THE INVITATIONS TO PARTICIPATE?",
-            q4: "AFTER LEAVING, HOW INTEGRATED DID YOU FEEL?",
-            q5: "IS THERE ANYTHING ELSE YOU'D LIKE TO SHARE, REFLECT UPON, OR ILLUMINATE?",
-            q6: "HOW IMPACTFUL WAS THIS WEEK'S SERVICE?",
-            q7: "HOW DID YOU FEEL LEAVING THE SERVICE?",
-            q8: "HOW COHESIVE DID THE PACING + FLOW FEEL?",
-            q9: "IF YOU COULD REQUEST ONE THING FOR WEEK 3, WHAT WOULD IT BE?",
-            q10: "DESCRIBE THE ASCENSION SERVICE TO A FRIEND"
+            q0: "IS THERE ANYTHING ELSE YOU'D LIKE TO SHARE, REFLECT UPON, OR ILLUMINATE?",
+            q1: "HOW IMPACTFUL WAS THIS WEEK'S SERVICE?",
+            q2: "HOW DID YOU FEEL LEAVING THE SERVICE?",
+            q3: "HOW COHESIVE DID THE PACING + FLOW FEEL?",
+            q4: "IF YOU COULD REQUEST ONE THING FOR WEEK 3, WHAT WOULD IT BE?",
+            q5: "DESCRIBE THE ASCENSION SERVICE TO A FRIEND"
         };
 
         function esc(s) {
@@ -185,7 +180,7 @@
                 var html = '<div class="entry">';
                 html += '<div class="entry-time">' + formatDate(entry.timestamp) + '</div>';
 
-                for (var i = 0; i <= 10; i++) {
+                for (var i = 0; i <= 5; i++) {
                     var key = 'q' + i;
                     var scaleKey = key + '_scale';
                     var commentKey = key + '_comment';
