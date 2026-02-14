@@ -328,7 +328,19 @@
 
         <form id="feedbackForm">
             <div class="question-block">
-                <p class="question-text">ON A SCALE OF 1–5, HOW IMPACTFUL WAS THIS WEEK'S SERVICE FOR YOU, AND WHY?</p>
+                <p class="question-text">HOW MANY SERVICES HAVE YOU ATTENDED? WHEN WAS THE MOST RECENT?</p>
+                <div class="scale">
+                    <label><input type="radio" name="q0_scale" value="1"><span class="scale-btn">1</span></label>
+                    <label><input type="radio" name="q0_scale" value="2"><span class="scale-btn">2</span></label>
+                    <label><input type="radio" name="q0_scale" value="3"><span class="scale-btn">3</span></label>
+                    <label><input type="radio" name="q0_scale" value="4"><span class="scale-btn">4</span></label>
+                    <label><input type="radio" name="q0_scale" value="4+"><span class="scale-btn">4+</span></label>
+                </div>
+                <textarea class="comment-input" name="q0" placeholder="MOST RECENT..." rows="2"></textarea>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">HOW MEANINGFUL WAS LAST NIGHT'S EXPERIENCE FOR YOU?</p>
                 <div class="scale">
                     <label><input type="radio" name="q1_scale" value="1"><span class="scale-btn">1</span></label>
                     <label><input type="radio" name="q1_scale" value="2"><span class="scale-btn">2</span></label>
@@ -336,12 +348,12 @@
                     <label><input type="radio" name="q1_scale" value="4"><span class="scale-btn">4</span></label>
                     <label><input type="radio" name="q1_scale" value="5"><span class="scale-btn">5</span></label>
                 </div>
-                <div class="scale-labels"><span>MILDLY PLEASANT</span><span>TRANSFORMATIVE</span></div>
-                <textarea class="comment-input" name="q1" placeholder="WHY..." rows="3"></textarea>
+                <div class="scale-labels"><span>NOT AT ALL</span><span>VERY MUCH</span></div>
+                <textarea class="comment-input" name="q1" placeholder="COMMENTS..." rows="3"></textarea>
             </div>
 
             <div class="question-block">
-                <p class="question-text">HOW DID YOU FEEL LEAVING THE SERVICE? WHAT EMOTION LINGERED MOST?</p>
+                <p class="question-text">DO YOU FEEL CLOSER TO YOUR INNER ANGEL?</p>
                 <div class="scale">
                     <label><input type="radio" name="q2_scale" value="1"><span class="scale-btn">1</span></label>
                     <label><input type="radio" name="q2_scale" value="2"><span class="scale-btn">2</span></label>
@@ -349,12 +361,12 @@
                     <label><input type="radio" name="q2_scale" value="4"><span class="scale-btn">4</span></label>
                     <label><input type="radio" name="q2_scale" value="5"><span class="scale-btn">5</span></label>
                 </div>
-                <div class="scale-labels"><span>UNCHANGED</span><span>DEEPLY SHIFTED</span></div>
-                <textarea class="comment-input" name="q2" placeholder="WHAT EMOTION..." rows="3"></textarea>
+                <div class="scale-labels"><span>NOT AT ALL</span><span>VERY MUCH</span></div>
+                <textarea class="comment-input" name="q2" placeholder="COMMENTS..." rows="3"></textarea>
             </div>
 
             <div class="question-block">
-                <p class="question-text">HOW COHESIVE DID THE PACING + FLOW FEEL? WHAT WOULD YOU BE CURIOUS TO SEE NEXT TIME?</p>
+                <p class="question-text">HOW COMFORTABLE DID YOU FEEL WITH THE INVITATIONS TO PARTICIPATE? ANYTHING YOU WOULD LIKE MORE OR LESS OF?</p>
                 <div class="scale">
                     <label><input type="radio" name="q3_scale" value="1"><span class="scale-btn">1</span></label>
                     <label><input type="radio" name="q3_scale" value="2"><span class="scale-btn">2</span></label>
@@ -362,18 +374,75 @@
                     <label><input type="radio" name="q3_scale" value="4"><span class="scale-btn">4</span></label>
                     <label><input type="radio" name="q3_scale" value="5"><span class="scale-btn">5</span></label>
                 </div>
+                <div class="scale-labels"><span>NOT AT ALL</span><span>VERY MUCH</span></div>
+                <textarea class="comment-input" name="q3" placeholder="COMMENTS..." rows="3"></textarea>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">AFTER LEAVING, HOW INTEGRATED DID YOU FEEL? WHAT MIGHT SUPPORT YOU IN FURTHER INTEGRATION?</p>
+                <div class="scale">
+                    <label><input type="radio" name="q4_scale" value="1"><span class="scale-btn">1</span></label>
+                    <label><input type="radio" name="q4_scale" value="2"><span class="scale-btn">2</span></label>
+                    <label><input type="radio" name="q4_scale" value="3"><span class="scale-btn">3</span></label>
+                    <label><input type="radio" name="q4_scale" value="4"><span class="scale-btn">4</span></label>
+                    <label><input type="radio" name="q4_scale" value="5"><span class="scale-btn">5</span></label>
+                </div>
+                <div class="scale-labels"><span>NOT AT ALL</span><span>VERY MUCH</span></div>
+                <textarea class="comment-input" name="q4" placeholder="COMMENTS..." rows="3"></textarea>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">IS THERE ANYTHING ELSE YOU'D LIKE TO SHARE, REFLECT UPON, OR ILLUMINATE?</p>
+                <textarea class="comment-input" name="q5" placeholder="..." rows="3"></textarea>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">ON A SCALE OF 1–5, HOW IMPACTFUL WAS THIS WEEK'S SERVICE FOR YOU, AND WHY?</p>
+                <div class="scale">
+                    <label><input type="radio" name="q6_scale" value="1"><span class="scale-btn">1</span></label>
+                    <label><input type="radio" name="q6_scale" value="2"><span class="scale-btn">2</span></label>
+                    <label><input type="radio" name="q6_scale" value="3"><span class="scale-btn">3</span></label>
+                    <label><input type="radio" name="q6_scale" value="4"><span class="scale-btn">4</span></label>
+                    <label><input type="radio" name="q6_scale" value="5"><span class="scale-btn">5</span></label>
+                </div>
+                <div class="scale-labels"><span>MILDLY PLEASANT</span><span>TRANSFORMATIVE</span></div>
+                <textarea class="comment-input" name="q6" placeholder="WHY..." rows="3"></textarea>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">HOW DID YOU FEEL LEAVING THE SERVICE? WHAT EMOTION LINGERED MOST?</p>
+                <div class="scale">
+                    <label><input type="radio" name="q7_scale" value="1"><span class="scale-btn">1</span></label>
+                    <label><input type="radio" name="q7_scale" value="2"><span class="scale-btn">2</span></label>
+                    <label><input type="radio" name="q7_scale" value="3"><span class="scale-btn">3</span></label>
+                    <label><input type="radio" name="q7_scale" value="4"><span class="scale-btn">4</span></label>
+                    <label><input type="radio" name="q7_scale" value="5"><span class="scale-btn">5</span></label>
+                </div>
+                <div class="scale-labels"><span>UNCHANGED</span><span>DEEPLY SHIFTED</span></div>
+                <textarea class="comment-input" name="q7" placeholder="WHAT EMOTION..." rows="3"></textarea>
+            </div>
+
+            <div class="question-block">
+                <p class="question-text">HOW COHESIVE DID THE PACING + FLOW FEEL? WHAT WOULD YOU BE CURIOUS TO SEE NEXT TIME?</p>
+                <div class="scale">
+                    <label><input type="radio" name="q8_scale" value="1"><span class="scale-btn">1</span></label>
+                    <label><input type="radio" name="q8_scale" value="2"><span class="scale-btn">2</span></label>
+                    <label><input type="radio" name="q8_scale" value="3"><span class="scale-btn">3</span></label>
+                    <label><input type="radio" name="q8_scale" value="4"><span class="scale-btn">4</span></label>
+                    <label><input type="radio" name="q8_scale" value="5"><span class="scale-btn">5</span></label>
+                </div>
                 <div class="scale-labels"><span>DISJOINTED</span><span>SEAMLESS</span></div>
-                <textarea class="comment-input" name="q3" placeholder="CURIOUS TO SEE..." rows="3"></textarea>
+                <textarea class="comment-input" name="q8" placeholder="CURIOUS TO SEE..." rows="3"></textarea>
             </div>
 
             <div class="question-block">
                 <p class="question-text">IF YOU COULD REQUEST ONE THING FOR WEEK 3, WHAT WOULD IT BE?</p>
-                <textarea class="comment-input" name="q4" placeholder="YOUR REQUEST..." rows="3"></textarea>
+                <textarea class="comment-input" name="q9" placeholder="YOUR REQUEST..." rows="3"></textarea>
             </div>
 
             <div class="question-block">
                 <p class="question-text">IF YOU HAD TO DESCRIBE THE ASCENSION SERVICE TO A FRIEND, WHAT WOULD YOU SAY?</p>
-                <textarea class="comment-input" name="q5" placeholder="I WOULD SAY..." rows="3"></textarea>
+                <textarea class="comment-input" name="q10" placeholder="I WOULD SAY..." rows="3"></textarea>
             </div>
 
             <p style="font-size:14px;font-weight:700;letter-spacing:2px;text-align:center;margin-bottom:30px;">THANK YOU FOR BUILDING SPIRITUAL TECHNOLOGY</p>
@@ -396,13 +465,22 @@
         document.getElementById('feedbackForm').addEventListener('submit', function(e) {
             e.preventDefault();
             var response = {};
-            for (var i = 1; i <= 3; i++) {
+            var q0checked = document.querySelector('input[name="q0_scale"]:checked');
+            response.q0_scale = q0checked ? q0checked.value : null;
+            response.q0 = document.querySelector('[name="q0"]').value || '';
+            for (var i = 1; i <= 4; i++) {
                 var checked = document.querySelector('input[name="q'+i+'_scale"]:checked');
                 response['q'+i+'_scale'] = checked ? parseInt(checked.value) : null;
                 response['q'+i] = document.querySelector('[name="q'+i+'"]').value || '';
             }
-            response.q4 = document.querySelector('[name="q4"]').value || '';
             response.q5 = document.querySelector('[name="q5"]').value || '';
+            for (var i = 6; i <= 8; i++) {
+                var checked = document.querySelector('input[name="q'+i+'_scale"]:checked');
+                response['q'+i+'_scale'] = checked ? parseInt(checked.value) : null;
+                response['q'+i] = document.querySelector('[name="q'+i+'"]').value || '';
+            }
+            response.q9 = document.querySelector('[name="q9"]').value || '';
+            response.q10 = document.querySelector('[name="q10"]').value || '';
             fetch('/api/feedback', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
