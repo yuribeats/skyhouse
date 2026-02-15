@@ -119,10 +119,172 @@
             color: #fff;
             border-color: #fff;
         }
+
+        .q-item {
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 16px;
+            margin-bottom: 10px;
+        }
+
+        .q-item-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .q-item-text {
+            font-size: 12px;
+            letter-spacing: 1px;
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .q-item-type {
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.4);
+            margin-top: 6px;
+        }
+
+        .q-item-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .q-btn {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 700;
+            font-size: 9px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            background: transparent;
+            color: rgba(255,255,255,0.4);
+            border: 1px solid rgba(255,255,255,0.15);
+            padding: 4px 8px;
+            cursor: pointer;
+        }
+
+        .q-btn:hover {
+            color: #fff;
+            border-color: #fff;
+        }
+
+        .q-btn-del:hover {
+            color: #c97070;
+            border-color: #c97070;
+        }
+
+        .q-add-btn {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 700;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: #fff;
+            color: #000;
+            border: none;
+            padding: 12px 24px;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        .q-add-btn:hover {
+            background: #ddd;
+        }
+
+        .q-edit-form {
+            margin-top: 12px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 12px;
+        }
+
+        .q-edit-form input,
+        .q-edit-form textarea {
+            width: 100%;
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 8px 10px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            outline: none;
+            margin-bottom: 8px;
+        }
+
+        .q-edit-form textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .q-edit-form input:focus,
+        .q-edit-form textarea:focus {
+            border-color: rgba(255,255,255,0.5);
+        }
+
+        .q-edit-label {
+            font-size: 9px;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 4px;
+        }
+
+        .q-edit-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .q-edit-row > div {
+            flex: 1;
+        }
+
+        .q-type-toggle {
+            display: flex;
+            gap: 0;
+            margin-bottom: 8px;
+        }
+
+        .q-type-opt {
+            font-family: Arial, Helvetica, sans-serif;
+            font-weight: 700;
+            font-size: 10px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 6px 14px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: transparent;
+            color: rgba(255,255,255,0.4);
+            cursor: pointer;
+        }
+
+        .q-type-opt.active {
+            background: #fff;
+            color: #000;
+            border-color: #fff;
+        }
+
+        .q-save-msg {
+            font-size: 10px;
+            letter-spacing: 2px;
+            color: rgba(255,255,255,0.5);
+            margin-top: 8px;
+            min-height: 16px;
+        }
     </style>
 </head>
 <body>
     <h1>SKYHOUSE ADMIN</h1>
+
+    <div class="section">
+        <h2>QUESTIONS</h2>
+        <div id="questionsList"><span class="loading">LOADING...</span></div>
+        <button class="q-add-btn" onclick="addQuestion()">ADD QUESTION</button>
+        <div class="q-save-msg" id="qSaveMsg"></div>
+    </div>
 
     <div class="section">
         <h2>FEEDBACK RESPONSES <button class="clear-btn" onclick="clearFeedback()">CLEAR RESPONSES</button></h2>
@@ -137,14 +299,7 @@
     </div>
 
     <script>
-        var QUESTIONS = {
-            q0: "IS THERE ANYTHING ELSE YOU'D LIKE TO SHARE, REFLECT UPON, OR ILLUMINATE?",
-            q1: "HOW IMPACTFUL WAS THIS WEEK'S SERVICE?",
-            q2: "HOW DID YOU FEEL LEAVING THE SERVICE?",
-            q3: "HOW COHESIVE DID THE PACING + FLOW FEEL?",
-            q4: "IF YOU COULD REQUEST ONE THING FOR WEEK 3, WHAT WOULD IT BE?",
-            q5: "DESCRIBE THE ASCENSION SERVICE TO A FRIEND"
-        };
+        var questions = [];
 
         function esc(s) {
             var d = document.createElement('div');
@@ -158,6 +313,142 @@
             return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' }).toUpperCase();
         }
 
+        function saveQuestions() {
+            var msg = document.getElementById('qSaveMsg');
+            msg.textContent = 'SAVING...';
+            fetch('/api/questions', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ questions: questions })
+            }).then(function(r) { return r.json(); }).then(function() {
+                msg.textContent = 'SAVED';
+                setTimeout(function() { msg.textContent = ''; }, 2000);
+            }).catch(function() {
+                msg.textContent = 'SAVE FAILED';
+            });
+        }
+
+        function renderQuestions() {
+            var el = document.getElementById('questionsList');
+            if (questions.length === 0) {
+                el.innerHTML = '<div class="empty">NO QUESTIONS</div>';
+                return;
+            }
+            var html = '';
+            questions.forEach(function(q, i) {
+                html += '<div class="q-item" id="qi_' + i + '">';
+                html += '<div class="q-item-top">';
+                html += '<div>';
+                html += '<div class="q-item-text">' + esc(q.text) + '</div>';
+                var typeLabel = q.type === 'scale' ? 'SCALE 1-5' + (q.low ? ' (' + q.low + ' \u2192 ' + q.high + ')' : '') : 'COMMENT ONLY';
+                html += '<div class="q-item-type">' + esc(typeLabel) + '</div>';
+                html += '</div>';
+                html += '<div class="q-item-actions">';
+                if (i > 0) html += '<button class="q-btn" onclick="moveQuestion(' + i + ',-1)">\u2191</button>';
+                if (i < questions.length - 1) html += '<button class="q-btn" onclick="moveQuestion(' + i + ',1)">\u2193</button>';
+                html += '<button class="q-btn" onclick="editQuestion(' + i + ')">EDIT</button>';
+                html += '<button class="q-btn q-btn-del" onclick="deleteQuestion(' + i + ')">DEL</button>';
+                html += '</div>';
+                html += '</div>';
+                html += '</div>';
+            });
+            el.innerHTML = html;
+        }
+
+        function moveQuestion(i, dir) {
+            var j = i + dir;
+            if (j < 0 || j >= questions.length) return;
+            var temp = questions[i];
+            questions[i] = questions[j];
+            questions[j] = temp;
+            renderQuestions();
+            saveQuestions();
+        }
+
+        function deleteQuestion(i) {
+            if (!confirm('DELETE THIS QUESTION?')) return;
+            questions.splice(i, 1);
+            questions.forEach(function(q, idx) { q.id = 'q' + idx; });
+            renderQuestions();
+            saveQuestions();
+        }
+
+        function showEditForm(i) {
+            var q = questions[i];
+            var item = document.getElementById('qi_' + i);
+            var existing = item.querySelector('.q-edit-form');
+            if (existing) { existing.remove(); return; }
+
+            var form = document.createElement('div');
+            form.className = 'q-edit-form';
+
+            var isScale = q.type === 'scale';
+
+            form.innerHTML = '<div class="q-edit-label">TYPE</div>' +
+                '<div class="q-type-toggle">' +
+                '<button class="q-type-opt' + (isScale ? ' active' : '') + '" data-type="scale">SCALE</button>' +
+                '<button class="q-type-opt' + (!isScale ? ' active' : '') + '" data-type="comment">COMMENT</button>' +
+                '</div>' +
+                '<div class="q-edit-label">QUESTION TEXT</div>' +
+                '<textarea class="q-edit-text">' + esc(q.text) + '</textarea>' +
+                '<div class="q-edit-label">PLACEHOLDER</div>' +
+                '<input class="q-edit-ph" value="' + esc(q.placeholder || '') + '">' +
+                '<div class="q-scale-fields" style="' + (isScale ? '' : 'display:none') + '">' +
+                '<div class="q-edit-row">' +
+                '<div><div class="q-edit-label">LOW LABEL</div><input class="q-edit-low" value="' + esc(q.low || '') + '"></div>' +
+                '<div><div class="q-edit-label">HIGH LABEL</div><input class="q-edit-high" value="' + esc(q.high || '') + '"></div>' +
+                '</div></div>' +
+                '<button class="q-btn" style="margin-top:8px" onclick="saveEdit(' + i + ')">SAVE</button>' +
+                '<button class="q-btn" style="margin-top:8px;margin-left:6px" onclick="cancelEdit(' + i + ')">CANCEL</button>';
+
+            item.appendChild(form);
+
+            var toggleBtns = form.querySelectorAll('.q-type-opt');
+            toggleBtns.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    toggleBtns.forEach(function(b) { b.classList.remove('active'); });
+                    btn.classList.add('active');
+                    var sf = form.querySelector('.q-scale-fields');
+                    sf.style.display = btn.dataset.type === 'scale' ? '' : 'none';
+                });
+            });
+        }
+
+        function editQuestion(i) {
+            showEditForm(i);
+        }
+
+        function cancelEdit(i) {
+            var item = document.getElementById('qi_' + i);
+            var form = item.querySelector('.q-edit-form');
+            if (form) form.remove();
+        }
+
+        function saveEdit(i) {
+            var item = document.getElementById('qi_' + i);
+            var form = item.querySelector('.q-edit-form');
+            var activeType = form.querySelector('.q-type-opt.active').dataset.type;
+            questions[i].text = form.querySelector('.q-edit-text').value.trim();
+            questions[i].placeholder = form.querySelector('.q-edit-ph').value.trim();
+            questions[i].type = activeType;
+            if (activeType === 'scale') {
+                questions[i].low = form.querySelector('.q-edit-low').value.trim();
+                questions[i].high = form.querySelector('.q-edit-high').value.trim();
+            } else {
+                delete questions[i].low;
+                delete questions[i].high;
+            }
+            renderQuestions();
+            saveQuestions();
+        }
+
+        function addQuestion() {
+            var id = 'q' + questions.length;
+            questions.push({ id: id, text: '', type: 'comment', placeholder: 'COMMENTS...' });
+            renderQuestions();
+            showEditForm(questions.length - 1);
+        }
+
         function clearFeedback() {
             if (!confirm('CLEAR ALL FEEDBACK RESPONSES?')) return;
             fetch('/api/feedback', { method: 'DELETE' }).then(function(r) { return r.json(); }).then(function() {
@@ -166,41 +457,45 @@
             });
         }
 
-        fetch('/api/feedback').then(function(r) { return r.json(); }).then(function(data) {
-            var list = data.feedback || [];
-            var el = document.getElementById('feedbackList');
-            document.getElementById('feedbackCount').textContent = list.length + ' RESPONSES';
+        function loadFeedback() {
+            fetch('/api/feedback').then(function(r) { return r.json(); }).then(function(data) {
+                var list = data.feedback || [];
+                var el = document.getElementById('feedbackList');
+                document.getElementById('feedbackCount').textContent = list.length + ' RESPONSES';
 
-            if (list.length === 0) {
-                el.innerHTML = '<div class="empty">NO FEEDBACK YET</div>';
-                return;
-            }
+                if (list.length === 0) {
+                    el.innerHTML = '<div class="empty">NO FEEDBACK YET</div>';
+                    return;
+                }
 
-            el.innerHTML = list.map(function(entry) {
-                var html = '<div class="entry">';
-                html += '<div class="entry-time">' + formatDate(entry.timestamp) + '</div>';
+                var qMap = {};
+                questions.forEach(function(q) { qMap[q.id] = q.text; });
 
-                for (var i = 0; i <= 5; i++) {
-                    var key = 'q' + i;
-                    var scaleKey = key + '_scale';
-                    var commentKey = key + '_comment';
-                    var answer = entry[key] || entry[commentKey] || '';
-                    var scale = entry[scaleKey] || (typeof entry[key] === 'number' ? entry[key] : null);
-                    var comment = entry[commentKey] || (typeof entry[key] === 'string' ? entry[key] : '');
+                el.innerHTML = list.map(function(entry) {
+                    var html = '<div class="entry">';
+                    html += '<div class="entry-time">' + formatDate(entry.timestamp) + '</div>';
 
-                    if (scale || comment) {
-                        html += '<div class="entry-q">' + esc(QUESTIONS[key] || key) + '</div>';
+                    var keys = Object.keys(entry).filter(function(k) { return k !== 'timestamp'; });
+                    var seen = {};
+                    keys.forEach(function(k) {
+                        var base = k.replace(/_scale$/, '');
+                        if (seen[base]) return;
+                        seen[base] = true;
+                        var scale = entry[base + '_scale'];
+                        var comment = typeof entry[base] === 'string' ? entry[base] : '';
+                        if (!scale && !comment) return;
+                        html += '<div class="entry-q">' + esc(qMap[base] || base) + '</div>';
                         html += '<div class="entry-a">';
                         if (scale) html += '<span class="entry-scale">' + scale + '/5</span>';
                         if (comment) html += esc(comment);
                         html += '</div>';
-                    }
-                }
+                    });
 
-                html += '</div>';
-                return html;
-            }).join('');
-        });
+                    html += '</div>';
+                    return html;
+                }).join('');
+            });
+        }
 
         fetch('/api/emails').then(function(r) { return r.json(); }).then(function(data) {
             var list = data.emails || [];
@@ -215,6 +510,12 @@
             el.innerHTML = list.map(function(email) {
                 return '<div class="email-item">' + esc(email) + '</div>';
             }).join('');
+        });
+
+        fetch('/api/questions').then(function(r) { return r.json(); }).then(function(data) {
+            questions = data.questions || [];
+            renderQuestions();
+            loadFeedback();
         });
     </script>
 </body>
