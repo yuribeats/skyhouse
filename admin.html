@@ -176,6 +176,27 @@
             border-color: #c97070;
         }
 
+        .q-item.dragging {
+            opacity: 0.3;
+        }
+
+        .q-item.drag-over {
+            border-top: 2px solid #fff;
+        }
+
+        .q-drag-handle {
+            font-size: 14px;
+            color: rgba(255,255,255,0.25);
+            padding: 0 8px 0 0;
+            user-select: none;
+            -webkit-user-select: none;
+            letter-spacing: 2px;
+        }
+
+        .q-item:hover .q-drag-handle {
+            color: rgba(255,255,255,0.6);
+        }
+
         .q-add-btn {
             font-family: Arial, Helvetica, sans-serif;
             font-weight: 700;
@@ -336,16 +357,15 @@
             }
             var html = '';
             questions.forEach(function(q, i) {
-                html += '<div class="q-item" id="qi_' + i + '">';
+                html += '<div class="q-item" id="qi_' + i + '" draggable="true" data-idx="' + i + '">';
                 html += '<div class="q-item-top">';
-                html += '<div>';
+                html += '<span class="q-drag-handle">:::</span>';
+                html += '<div style="flex:1">';
                 html += '<div class="q-item-text">' + esc(q.text) + '</div>';
                 var typeLabel = q.type === 'scale' ? 'SCALE 1-5' + (q.low ? ' (' + q.low + ' \u2192 ' + q.high + ')' : '') : 'COMMENT ONLY';
                 html += '<div class="q-item-type">' + esc(typeLabel) + '</div>';
                 html += '</div>';
                 html += '<div class="q-item-actions">';
-                if (i > 0) html += '<button class="q-btn" onclick="moveQuestion(' + i + ',-1)">\u2191</button>';
-                if (i < questions.length - 1) html += '<button class="q-btn" onclick="moveQuestion(' + i + ',1)">\u2193</button>';
                 html += '<button class="q-btn" onclick="editQuestion(' + i + ')">EDIT</button>';
                 html += '<button class="q-btn q-btn-del" onclick="deleteQuestion(' + i + ')">DEL</button>';
                 html += '</div>';
@@ -353,16 +373,46 @@
                 html += '</div>';
             });
             el.innerHTML = html;
+            initDrag();
         }
 
-        function moveQuestion(i, dir) {
-            var j = i + dir;
-            if (j < 0 || j >= questions.length) return;
-            var temp = questions[i];
-            questions[i] = questions[j];
-            questions[j] = temp;
-            renderQuestions();
-            saveQuestions();
+        var dragSrcIdx = null;
+
+        function initDrag() {
+            var items = document.querySelectorAll('.q-item[draggable]');
+            items.forEach(function(item) {
+                item.addEventListener('dragstart', function(e) {
+                    dragSrcIdx = parseInt(item.dataset.idx);
+                    item.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                });
+                item.addEventListener('dragend', function() {
+                    item.classList.remove('dragging');
+                    document.querySelectorAll('.q-item').forEach(function(el) { el.classList.remove('drag-over'); });
+                    dragSrcIdx = null;
+                });
+                item.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    document.querySelectorAll('.q-item').forEach(function(el) { el.classList.remove('drag-over'); });
+                    if (parseInt(item.dataset.idx) !== dragSrcIdx) {
+                        item.classList.add('drag-over');
+                    }
+                });
+                item.addEventListener('dragleave', function() {
+                    item.classList.remove('drag-over');
+                });
+                item.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    var dropIdx = parseInt(item.dataset.idx);
+                    if (dragSrcIdx === null || dragSrcIdx === dropIdx) return;
+                    var moved = questions.splice(dragSrcIdx, 1)[0];
+                    questions.splice(dropIdx, 0, moved);
+                    questions.forEach(function(q, idx) { q.id = 'q' + idx; });
+                    renderQuestions();
+                    saveQuestions();
+                });
+            });
         }
 
         function deleteQuestion(i) {
