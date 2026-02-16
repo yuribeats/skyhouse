@@ -518,14 +518,19 @@
                     return;
                 }
 
-                var qMap = {};
-                questions.forEach(function(q) { qMap[q.id] = q.text; });
-
                 el.innerHTML = list.map(function(entry) {
+                    var qMap = {};
+                    var snap = entry._questions || [];
+                    if (snap.length > 0) {
+                        snap.forEach(function(q) { qMap[q.id] = q.text; });
+                    } else {
+                        questions.forEach(function(q) { qMap[q.id] = q.text; });
+                    }
+
                     var html = '<div class="entry">';
                     html += '<div class="entry-time">' + formatDate(entry.timestamp) + '</div>';
 
-                    var keys = Object.keys(entry).filter(function(k) { return k !== 'timestamp'; });
+                    var keys = Object.keys(entry).filter(function(k) { return k !== 'timestamp' && k !== '_questions'; });
                     var seen = {};
                     keys.forEach(function(k) {
                         var base = k.replace(/_scale$/, '');

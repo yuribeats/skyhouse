@@ -24,6 +24,10 @@ module.exports = async function handler(req, res) {
             var body = req.body;
             var id = 'fb_' + Date.now() + '_' + Math.random().toString(36).slice(2, 8);
             body.timestamp = Date.now();
+            var qData = await redis.get('skyhouse:questions');
+            if (qData) {
+                body._questions = typeof qData === 'string' ? JSON.parse(qData) : qData;
+            }
             await redis.set(id, JSON.stringify(body));
             await redis.lpush('feedback_ids', id);
             return res.status(200).json({ ok: true });
