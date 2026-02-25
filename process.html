@@ -62,6 +62,35 @@
       margin-bottom: 24px;
     }
 
+    .help-icon {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 1px solid #888;
+      text-align: center;
+      line-height: 16px;
+      font-size: 10px;
+      color: #888;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    .help-tooltip {
+      display: none;
+      margin-top: 8px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      color: #666;
+      line-height: 1.6;
+    }
+
+    .help-tooltip.open {
+      display: block;
+    }
+
     /* Custom file drop zone */
     .drop-zone {
       border: 2px solid #000;
@@ -483,8 +512,9 @@
       </div>
 
       <div class="field">
-        <label>API KEY</label>
+        <label>API KEY <span class="help-icon" id="apiKeyHelp">?</span></label>
         <input type="text" class="text-input" id="apiKeyInput" placeholder="INPROCESS API KEY" style="text-transform: none;">
+        <div class="help-tooltip" id="apiKeyTooltip">YOUR API KEY AUTHENTICATES MINTING ACTIONS ON INPROCESS. <a href="https://www.inprocess.world/manage/api-keys" target="_blank" style="color:#228B22; text-decoration:underline;">GET YOUR API KEY HERE</a></div>
       </div>
 
       <div id="authError" class="error-message" style="display:none"></div>
@@ -625,6 +655,11 @@
     const apiKeyInput = document.getElementById('apiKeyInput');
     const loginBtn = document.getElementById('loginBtn');
     const authError = document.getElementById('authError');
+
+    // API key help toggle
+    document.getElementById('apiKeyHelp').addEventListener('click', () => {
+      document.getElementById('apiKeyTooltip').classList.toggle('open');
+    });
 
     // Login validation
     function validateLogin() {
