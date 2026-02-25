@@ -9,14 +9,14 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      font-family: Arial, sans-serif;
-      font-weight: 900;
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: 700;
       text-transform: uppercase;
     }
 
     body {
-      background: #fff;
-      color: #000;
+      background: #0000AA;
+      color: #fff;
       min-height: 100vh;
       padding: 40px 20px;
     }
@@ -24,15 +24,21 @@
     .container {
       max-width: 600px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
     h1 {
       font-size: 32px;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
       letter-spacing: 2px;
       margin-bottom: 40px;
-      border-bottom: 2px solid #000;
+      border-bottom: 2px solid #fff;
       padding-bottom: 12px;
       text-align: center;
+      -webkit-text-stroke: 1.5px #fff;
+      paint-order: stroke fill;
     }
 
     .step {
@@ -45,7 +51,7 @@
 
     .step-label {
       font-size: 14px;
-      color: #666;
+      color: #aaa;
       margin-bottom: 24px;
       letter-spacing: 1px;
     }
@@ -55,7 +61,7 @@
       font-size: 12px;
       letter-spacing: 1px;
       margin-bottom: 8px;
-      color: #888;
+      color: #aaa;
     }
 
     .field {
@@ -66,11 +72,11 @@
       display: inline-block;
       width: 16px;
       height: 16px;
-      border: 1px solid #888;
+      border: 1px solid #aaa;
       text-align: center;
       line-height: 16px;
       font-size: 10px;
-      color: #888;
+      color: #aaa;
       margin-left: 4px;
       vertical-align: middle;
     }
@@ -79,11 +85,11 @@
       display: none;
       margin-top: 8px;
       padding: 10px;
-      border: 1px solid #ccc;
+      border: 1px solid #5555FF;
       font-size: 11px;
       font-weight: 900;
       text-transform: uppercase;
-      color: #666;
+      color: #aaa;
       line-height: 1.6;
     }
 
@@ -91,13 +97,18 @@
       display: block;
     }
 
+    input, textarea {
+      caret-shape: block;
+      caret-color: #fff;
+    }
+
     /* Custom file drop zone */
     .drop-zone {
-      border: 2px solid #000;
+      border: 2px solid #5555FF;
       padding: 40px 20px;
       text-align: center;
       font-size: 14px;
-      color: #666;
+      color: #aaa;
       letter-spacing: 1px;
       position: relative;
       transition: border-color 0.2s;
@@ -110,7 +121,7 @@
 
     .drop-zone.has-file {
       border-color: #228B22;
-      color: #000;
+      color: #fff;
     }
 
     .drop-zone input[type="file"] {
@@ -124,12 +135,12 @@
     /* Custom textarea */
     textarea {
       width: 100%;
-      background: #fff;
-      border: 2px solid #000;
-      color: #000;
+      background: #000055;
+      border: 2px solid #5555FF;
+      color: #fff;
       padding: 12px;
       font-size: 14px;
-      font-family: Arial, sans-serif;
+      font-family: 'Courier New', Courier, monospace;
       font-weight: 900;
       text-transform: uppercase;
       resize: vertical;
@@ -144,12 +155,12 @@
     /* Custom text input */
     .text-input {
       width: 100%;
-      background: #fff;
-      border: 2px solid #000;
-      color: #000;
+      background: #000055;
+      border: 2px solid #5555FF;
+      color: #fff;
       padding: 12px;
       font-size: 14px;
-      font-family: Arial, sans-serif;
+      font-family: 'Courier New', Courier, monospace;
       font-weight: 900;
       text-transform: uppercase;
       outline: none;
@@ -166,12 +177,12 @@
 
     .dropdown-trigger {
       width: 100%;
-      background: #fff;
-      border: 2px solid #000;
-      color: #000;
+      background: #000055;
+      border: 2px solid #5555FF;
+      color: #fff;
       padding: 12px;
       font-size: 14px;
-      font-family: Arial, sans-serif;
+      font-family: 'Courier New', Courier, monospace;
       font-weight: 900;
       text-transform: uppercase;
       text-align: left;
@@ -199,8 +210,8 @@
       top: 100%;
       left: 0;
       right: 0;
-      background: #fff;
-      border: 2px solid #000;
+      background: #000055;
+      border: 2px solid #5555FF;
       border-top: none;
       max-height: 200px;
       overflow-y: auto;
@@ -214,8 +225,8 @@
     .dropdown-item {
       padding: 12px;
       font-size: 13px;
-      color: #000;
-      border-bottom: 1px solid #333;
+      color: #fff;
+      border-bottom: 1px solid #5555FF;
     }
 
     .dropdown-item:last-child {
@@ -223,7 +234,7 @@
     }
 
     .dropdown-item:hover {
-      background: #f0f0f0;
+      background: #0000CC;
     }
 
     .dropdown-item.selected {
@@ -233,12 +244,12 @@
     /* Name input */
     .name-input {
       width: 100%;
-      background: #fff;
-      border: 2px solid #000;
-      color: #000;
+      background: #000055;
+      border: 2px solid #5555FF;
+      color: #fff;
       padding: 12px;
       font-size: 14px;
-      font-family: Arial, sans-serif;
+      font-family: 'Courier New', Courier, monospace;
       font-weight: 900;
       text-transform: uppercase;
       outline: none;
@@ -250,12 +261,12 @@
 
     /* Buttons */
     .btn {
-      background: #000;
-      color: #fff;
+      background: #fff;
+      color: #0000AA;
       border: none;
       padding: 14px 32px;
       font-size: 14px;
-      font-family: Arial, sans-serif;
+      font-family: 'Courier New', Courier, monospace;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 2px;
@@ -266,12 +277,12 @@
     }
 
     .btn-outline {
-      background: #fff;
-      color: #000;
-      border: 2px solid #000;
+      background: transparent;
+      color: #fff;
+      border: 2px solid #fff;
       padding: 14px 32px;
       font-size: 14px;
-      font-family: Arial, sans-serif;
+      font-family: 'Courier New', Courier, monospace;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 2px;
@@ -302,7 +313,7 @@
       justify-content: space-between;
       align-items: center;
       padding: 10px 0;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #5555FF;
       font-size: 13px;
       word-break: break-all;
     }
@@ -314,23 +325,23 @@
 
     .remove-btn {
       background: none;
-      border: 1px solid #666;
-      color: #666;
+      border: 1px solid #aaa;
+      color: #aaa;
       padding: 4px 10px;
       font-size: 11px;
-      font-family: Arial, sans-serif;
+      font-family: 'Courier New', Courier, monospace;
       font-weight: 900;
       text-transform: uppercase;
     }
 
     .remove-btn:hover {
-      border-color: #000;
-      color: #000;
+      border-color: #fff;
+      color: #fff;
     }
 
     .recipient-count {
       font-size: 12px;
-      color: #666;
+      color: #aaa;
       margin-top: 8px;
     }
 
@@ -341,16 +352,16 @@
 
     .status-list li {
       padding: 12px 0;
-      border-bottom: 1px solid #222;
+      border-bottom: 1px solid #5555FF;
       font-size: 14px;
-      color: #666;
+      color: #aaa;
       display: flex;
       align-items: center;
       gap: 12px;
     }
 
     .status-list li.active {
-      color: #000;
+      color: #fff;
     }
 
     .status-list li.done {
@@ -364,8 +375,8 @@
     .spinner {
       width: 12px;
       height: 12px;
-      border: 2px solid #666;
-      border-top-color: #000;
+      border: 2px solid #5555FF;
+      border-top-color: #fff;
       animation: spin 0.6s linear infinite;
       flex-shrink: 0;
     }
@@ -412,7 +423,7 @@
     }
 
     .gallery-item {
-      border: 2px solid #333;
+      border: 2px solid #5555FF;
     }
 
     .gallery-item img {
@@ -425,20 +436,20 @@
     .gallery-item .gallery-info {
       padding: 10px;
       font-size: 11px;
-      border-top: 1px solid #333;
+      border-top: 1px solid #5555FF;
     }
 
     .gallery-item .gallery-name {
-      color: #000;
+      color: #fff;
       margin-bottom: 4px;
     }
 
     .gallery-item .gallery-id {
-      color: #666;
+      color: #aaa;
     }
 
     .gallery-loading {
-      color: #666;
+      color: #aaa;
       font-size: 14px;
       padding: 20px 0;
     }
@@ -447,7 +458,7 @@
     .token-image {
       width: 100%;
       display: block;
-      border: 2px solid #000;
+      border: 2px solid #5555FF;
     }
 
     .token-name {
@@ -458,7 +469,7 @@
 
     .token-id {
       font-size: 12px;
-      color: #666;
+      color: #aaa;
       margin-bottom: 20px;
     }
 
@@ -467,13 +478,13 @@
       font-weight: 900;
       text-transform: uppercase;
       line-height: 1.6;
-      color: #333;
+      color: #aaa;
       margin-bottom: 20px;
       white-space: pre-wrap;
     }
 
     .token-meta {
-      border-top: 1px solid #ddd;
+      border-top: 1px solid #5555FF;
       padding-top: 16px;
       margin-top: 16px;
     }
@@ -482,29 +493,87 @@
       display: flex;
       justify-content: space-between;
       padding: 8px 0;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #5555FF;
       font-size: 11px;
     }
 
     .token-meta-label {
-      color: #666;
+      color: #aaa;
     }
 
     .token-meta-value {
-      color: #000;
+      color: #fff;
       word-break: break-all;
       text-align: right;
       max-width: 60%;
     }
+    @media (max-width: 640px) {
+      body {
+        padding: 20px 12px;
+      }
+
+      .container {
+        max-width: 100%;
+      }
+
+      .text-input, .name-input, textarea, .dropdown-trigger {
+        font-size: 16px;
+        padding: 14px;
+      }
+
+      .btn, .btn-outline {
+        font-size: 14px;
+        padding: 16px 20px;
+        width: 100%;
+        text-align: center;
+      }
+
+      .btn-row {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .add-row {
+        flex-direction: column;
+      }
+
+      .add-row .btn {
+        width: 100%;
+      }
+
+      .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .recipient-item {
+        font-size: 11px;
+      }
+
+      .token-meta-row {
+        flex-direction: column;
+        gap: 4px;
+      }
+
+      .token-meta-value {
+        text-align: left;
+        max-width: 100%;
+      }
+
+      .drop-zone {
+        padding: 30px 12px;
+      }
+    }
   </style>
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <body>
+  <canvas id="meshCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;"></canvas>
   <div class="container">
-    <h1>ASCENSION PORTAL</h1>
 
     <!-- STEP 0: LOGIN -->
     <div id="step0" class="step active">
-      <div class="step-label">SIGN IN</div>
+      <div class="step-label">WELCOME TO THE ASCENSION CORPORATION</div>
 
       <div class="field">
         <label>USERNAME</label>
@@ -513,14 +582,15 @@
 
       <div class="field">
         <label>API KEY <span class="help-icon" id="apiKeyHelp">?</span></label>
-        <input type="text" class="text-input" id="apiKeyInput" placeholder="INPROCESS API KEY" style="text-transform: none;">
+        <input type="text" class="text-input" id="apiKeyInput" placeholder="INPROCESS API KEY" style="text-transform: none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
         <div class="help-tooltip" id="apiKeyTooltip">YOUR API KEY AUTHENTICATES MINTING ACTIONS ON INPROCESS. <a href="https://www.inprocess.world/manage/api-keys" target="_blank" style="color:#228B22; text-decoration:underline;">GET YOUR API KEY HERE</a></div>
       </div>
 
       <div id="authError" class="error-message" style="display:none"></div>
 
       <div class="btn-row">
-        <button class="btn" id="loginBtn" disabled>ENTER</button>
+        <button class="btn" id="loginBtn" disabled>CREATE TOKEN</button>
+        <button class="btn-outline" id="galleryLoginBtn" disabled>GALLERY</button>
       </div>
     </div>
 
@@ -529,12 +599,17 @@
       <div class="step-label">STEP 1 / UPLOAD</div>
 
       <div class="field">
-        <label>IMAGE</label>
+        <label>IMAGE / VIDEO</label>
         <div class="drop-zone" id="dropZone">
-          <span id="dropText">DROP IMAGE HERE OR CLICK TO SELECT</span>
-          <input type="file" id="fileInput" accept="image/*">
+          <span id="dropText">DROP FILE HERE OR CLICK TO SELECT</span>
+          <input type="file" id="fileInput" accept="image/*,video/mp4">
         </div>
+        <div id="uploadProgress" style="display:none; margin-top:8px; height:4px; border:1px solid #5555FF;">
+          <div id="uploadProgressBar" style="height:100%; width:0%; background:#fff; transition:width 0.2s;"></div>
+        </div>
+        <div id="fileError" class="error-message" style="display:none"></div>
         <img id="imagePreview" style="display:none; max-width:100%; margin-top:12px; margin-left:auto; margin-right:auto;">
+        <video id="videoPreview" style="display:none; max-width:100%; margin-top:12px; margin-left:auto; margin-right:auto;" controls muted></video>
       </div>
 
       <div class="field">
@@ -568,14 +643,17 @@
       <div class="step-label">STEP 2 / RECIPIENTS</div>
 
       <div class="field">
-        <label>ADD BASE ADDRESS</label>
+        <label>RECIPIENT 2</label>
         <div class="add-row">
-          <input type="text" class="text-input" id="addrInput" placeholder="0X...">
+          <input type="text" class="text-input" id="addrInput" placeholder="0X..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
           <button class="btn" id="addAddrBtn">ADD</button>
         </div>
       </div>
 
-      <div class="recipient-list" id="recipientList"></div>
+      <div class="recipient-list">
+        <div class="recipient-item"><span class="addr">CXY.ETH</span></div>
+        <div id="recipient2Row"></div>
+      </div>
       <div class="recipient-count" id="recipientCount"></div>
 
       <div class="btn-row">
@@ -607,6 +685,15 @@
     <!-- STEP 4: GALLERY -->
     <div id="step4" class="step">
       <div class="step-label">GALLERY</div>
+      <div class="field">
+        <div class="dropdown" id="galleryDropdown">
+          <div class="dropdown-trigger" id="galleryTrigger">
+            <span id="galleryDropLabel">ALL COLLECTIONS</span>
+            <span class="arrow">&#9660;</span>
+          </div>
+          <div class="dropdown-menu" id="galleryMenu"></div>
+        </div>
+      </div>
       <div id="galleryContent" class="gallery-loading">LOADING TOKENS...</div>
       <div class="btn-row">
         <button class="btn-outline" id="galleryBackBtn">BACK</button>
@@ -631,7 +718,8 @@
     let selectedFileData = null;
     let selectedCollection = null;
     let collections = [];
-    let recipients = [];
+    const CXY_ADDR = '0x7b753919b953b1021a33f55671716dc13c1eae08';
+    let recipients = [CXY_ADDR];
 
     // Elements
     const dropZone = document.getElementById('dropZone');
@@ -654,6 +742,7 @@
     const usernameInput = document.getElementById('usernameInput');
     const apiKeyInput = document.getElementById('apiKeyInput');
     const loginBtn = document.getElementById('loginBtn');
+    const galleryLoginBtn = document.getElementById('galleryLoginBtn');
     const authError = document.getElementById('authError');
 
     // API key help toggle
@@ -663,7 +752,9 @@
 
     // Login validation
     function validateLogin() {
-      loginBtn.disabled = !(usernameInput.value.trim() && apiKeyInput.value.trim());
+      const valid = !!(usernameInput.value.trim() && apiKeyInput.value.trim());
+      loginBtn.disabled = !valid;
+      galleryLoginBtn.disabled = !usernameInput.value.trim();
     }
     usernameInput.addEventListener('input', validateLogin);
     apiKeyInput.addEventListener('input', validateLogin);
@@ -678,8 +769,21 @@
       loadCollections();
     });
 
-    apiKeyInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' && !loginBtn.disabled) loginBtn.click();
+    galleryLoginBtn.addEventListener('click', async () => {
+      galleryLoginBtn.disabled = true;
+      authError.style.display = 'none';
+
+      artistUsername = usernameInput.value.trim().toLowerCase();
+      artistApiKey = apiKeyInput.value.trim();
+      galleryReturnStep = 0;
+      gallerySelectedAddr = null;
+      galleryDropLabel.textContent = 'ALL COLLECTIONS';
+      showStep(4);
+      galleryContent.className = 'gallery-loading';
+      galleryContent.innerHTML = 'LOADING COLLECTIONS...';
+      await loadCollections();
+      buildGalleryDropdown();
+      loadGallery();
     });
 
     // Steps
@@ -718,22 +822,53 @@
     });
 
     function handleFile(file) {
-      if (!file.type.startsWith('image/')) return;
+      const isImage = file.type.startsWith('image/');
+      const isVideo = file.type === 'video/mp4';
+      const fileError = document.getElementById('fileError');
+      const progressWrap = document.getElementById('uploadProgress');
+      const progressBar = document.getElementById('uploadProgressBar');
+      const imagePreview = document.getElementById('imagePreview');
+      const videoPreview = document.getElementById('videoPreview');
+
+      fileError.style.display = 'none';
+      imagePreview.style.display = 'none';
+      videoPreview.style.display = 'none';
+      progressWrap.style.display = 'none';
+      progressBar.style.width = '0%';
+
+      if (!isImage && !isVideo) return;
+
+      if (isVideo && file.size > 200 * 1024 * 1024) {
+        fileError.textContent = 'VIDEO MUST BE UNDER 200MB';
+        fileError.style.display = 'block';
+        return;
+      }
+
       selectedFile = file;
+      progressWrap.style.display = 'block';
 
       const reader = new FileReader();
+      reader.onprogress = (e) => {
+        if (e.lengthComputable) {
+          progressBar.style.width = Math.round((e.loaded / e.total) * 100) + '%';
+        }
+      };
       reader.onload = (e) => {
         selectedFileData = e.target.result;
+        progressBar.style.width = '100%';
 
         dropText.textContent = file.name;
         dropZone.classList.add('has-file');
 
-        const preview = document.getElementById('imagePreview');
-        preview.src = e.target.result;
-        preview.style.display = 'block';
-        preview.style.marginLeft = 'auto';
-        preview.style.marginRight = 'auto';
+        if (isImage) {
+          imagePreview.src = e.target.result;
+          imagePreview.style.display = 'block';
+        } else {
+          videoPreview.src = URL.createObjectURL(file);
+          videoPreview.style.display = 'block';
+        }
 
+        setTimeout(() => { progressWrap.style.display = 'none'; }, 500);
         validateStep1();
       };
       reader.readAsDataURL(file);
@@ -789,42 +924,41 @@
     }
 
     // Navigation
-    nextBtn.addEventListener('click', () => showStep(2));
+    nextBtn.addEventListener('click', () => { showStep(2); validateStep2(); });
     backBtn.addEventListener('click', () => showStep(1));
 
     // Recipients
     function validateStep2() {
-      mintBtn.disabled = recipients.length === 0;
-      recipientCount.textContent = recipients.length > 0 ? (recipients.length + ' RECIPIENT' + (recipients.length > 1 ? 'S' : '')) : '';
+      mintBtn.disabled = false;
+      recipientCount.textContent = recipients.length + ' RECIPIENT' + (recipients.length > 1 ? 'S' : '');
     }
 
     function renderRecipients() {
-      recipientList.innerHTML = '';
-      recipients.forEach((addr, i) => {
+      const r2 = document.getElementById('recipient2Row');
+      r2.innerHTML = '';
+      if (recipients.length > 1) {
         const item = document.createElement('div');
         item.className = 'recipient-item';
-
         const addrSpan = document.createElement('span');
         addrSpan.className = 'addr';
-        addrSpan.textContent = addr;
-
+        addrSpan.textContent = recipients[1];
         const removeBtn = document.createElement('button');
         removeBtn.className = 'remove-btn';
         removeBtn.textContent = 'X';
         removeBtn.addEventListener('click', () => {
-          recipients.splice(i, 1);
+          recipients.splice(1, 1);
           renderRecipients();
           validateStep2();
         });
-
         item.appendChild(addrSpan);
         item.appendChild(removeBtn);
-        recipientList.appendChild(item);
-      });
+        r2.appendChild(item);
+      }
       validateStep2();
     }
 
     function addRecipient() {
+      if (recipients.length >= 2) return;
       const addr = addrInput.value.trim();
       if (!addr) return;
       if (!/^0x[a-fA-F0-9]{40}$/.test(addr)) {
@@ -916,11 +1050,16 @@
 
         // 2. Upload metadata JSON to Arweave
         setStatus('statusMeta', 'active');
+        const isVideo = selectedFile.type === 'video/mp4';
         const metadata = {
           name: nameInput.value.trim(),
           description: descInput.value.trim(),
-          image: imageUri,
+          image: isVideo ? '' : imageUri,
         };
+        if (isVideo) {
+          metadata.animation_url = imageUri;
+          metadata.content = { mime: 'video/mp4', uri: imageUri };
+        }
         const metaBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(metadata))));
         const metaRes = await fetch('/api/process/upload', {
           method: 'POST',
@@ -1030,14 +1169,16 @@
       selectedFile = null;
       selectedFileData = null;
       selectedCollection = null;
-      recipients = [];
+      recipients = [CXY_ADDR];
 
       fileInput.value = '';
       nameInput.value = '';
       descInput.value = '';
-      dropText.textContent = 'DROP IMAGE HERE OR CLICK TO SELECT';
+      dropText.textContent = 'DROP FILE HERE OR CLICK TO SELECT';
       dropZone.classList.remove('has-file');
       document.getElementById('imagePreview').style.display = 'none';
+      document.getElementById('videoPreview').style.display = 'none';
+      document.getElementById('fileError').style.display = 'none';
 
       collectionLabel.textContent = 'SELECT COLLECTION';
       collectionMenu.innerHTML = '';
@@ -1060,22 +1201,75 @@
     const galleryBtn = document.getElementById('galleryBtn');
     const galleryBackBtn = document.getElementById('galleryBackBtn');
     const galleryContent = document.getElementById('galleryContent');
+    const galleryDropdown = document.getElementById('galleryDropdown');
+    const galleryTrigger = document.getElementById('galleryTrigger');
+    const galleryDropLabel = document.getElementById('galleryDropLabel');
+    const galleryMenu = document.getElementById('galleryMenu');
+    let galleryReturnStep = 3;
+    let galleryTokens = [];
+    let gallerySelectedAddr = null;
 
-    galleryBtn.addEventListener('click', async () => {
-      showStep(4);
+    galleryTrigger.addEventListener('click', () => {
+      if (collections.length === 0) return;
+      galleryDropdown.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!galleryDropdown.contains(e.target)) {
+        galleryDropdown.classList.remove('open');
+      }
+    });
+
+    function buildGalleryDropdown() {
+      galleryMenu.innerHTML = '';
+      const allItem = document.createElement('div');
+      allItem.className = 'dropdown-item' + (gallerySelectedAddr === null ? ' selected' : '');
+      allItem.textContent = 'ALL COLLECTIONS';
+      allItem.addEventListener('click', () => {
+        gallerySelectedAddr = null;
+        galleryDropLabel.textContent = 'ALL COLLECTIONS';
+        galleryMenu.querySelectorAll('.dropdown-item').forEach(d => d.classList.remove('selected'));
+        allItem.classList.add('selected');
+        galleryDropdown.classList.remove('open');
+        loadGallery();
+      });
+      galleryMenu.appendChild(allItem);
+
+      collections.forEach((col, i) => {
+        const item = document.createElement('div');
+        item.className = 'dropdown-item' + (gallerySelectedAddr === col.address ? ' selected' : '');
+        item.textContent = col.name || col.address || ('COLLECTION ' + (i + 1));
+        item.addEventListener('click', () => {
+          gallerySelectedAddr = col.address;
+          galleryDropLabel.textContent = item.textContent;
+          galleryMenu.querySelectorAll('.dropdown-item').forEach(d => d.classList.remove('selected'));
+          item.classList.add('selected');
+          galleryDropdown.classList.remove('open');
+          loadGallery();
+        });
+        galleryMenu.appendChild(item);
+      });
+    }
+
+    async function loadGalleryForAddress(addr) {
+      const res = await fetch('/api/process/gallery?address=' + encodeURIComponent(addr));
+      const data = await res.json();
+      return (data.tokens || []).map(t => ({ ...t, collectionAddress: addr }));
+    }
+
+    async function loadGallery() {
       galleryContent.className = 'gallery-loading';
       galleryContent.innerHTML = 'LOADING TOKENS...';
 
-      const addr = selectedCollection?.address;
-      if (!addr) {
-        galleryContent.innerHTML = 'NO COLLECTION SELECTED';
-        return;
-      }
-
       try {
-        const res = await fetch('/api/process/gallery?address=' + encodeURIComponent(addr));
-        const data = await res.json();
-        const tokens = data.tokens || [];
+        let tokens = [];
+        if (gallerySelectedAddr) {
+          tokens = await loadGalleryForAddress(gallerySelectedAddr);
+        } else {
+          const fetches = collections.map(c => loadGalleryForAddress(c.address));
+          const results = await Promise.all(fetches);
+          for (const r of results) tokens.push(...r);
+        }
 
         if (tokens.length === 0) {
           galleryContent.innerHTML = 'NO TOKENS FOUND';
@@ -1084,12 +1278,11 @@
 
         galleryContent.className = 'gallery-grid';
         galleryContent.innerHTML = '';
-
         galleryTokens = tokens;
+
         tokens.forEach(t => {
           const item = document.createElement('div');
           item.className = 'gallery-item';
-
           const imageUrl = (t.image || '').replace('ar://', 'https://ar-io.net/');
           item.innerHTML =
             '<img src="' + imageUrl + '" onerror="this.style.display=\'none\'">' +
@@ -1097,17 +1290,21 @@
               '<div class="gallery-name">' + (t.name || 'UNTITLED') + '</div>' +
               '<div class="gallery-id">TOKEN ' + t.tokenId + '</div>' +
             '</div>';
-
           item.addEventListener('click', () => showTokenDetail(t));
           galleryContent.appendChild(item);
         });
       } catch (err) {
         galleryContent.innerHTML = 'ERROR LOADING GALLERY';
       }
-    });
+    }
 
-    let galleryReturnStep = 3;
-    let galleryTokens = [];
+    galleryBtn.addEventListener('click', () => {
+      showStep(4);
+      buildGalleryDropdown();
+      gallerySelectedAddr = selectedCollection?.address || null;
+      galleryDropLabel.textContent = gallerySelectedAddr ? (selectedCollection?.name || selectedCollection?.address) : 'ALL COLLECTIONS';
+      loadGallery();
+    });
 
     galleryBackBtn.addEventListener('click', () => showStep(galleryReturnStep));
 
@@ -1158,6 +1355,37 @@
       showStep(5);
     }
 
+  </script>
+  <script>
+    (function() {
+      const canvas = document.getElementById('meshCanvas');
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+      camera.position.z = 4;
+
+      const geo = new THREE.SphereGeometry(3, 32, 32);
+      const mat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.15 });
+      const sphere = new THREE.Mesh(geo, mat);
+      sphere.position.set(0, 0, 0);
+      scene.add(sphere);
+
+      function animate() {
+        requestAnimationFrame(animate);
+        sphere.rotation.y += 0.003;
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      });
+    })();
   </script>
 </body>
 </html>

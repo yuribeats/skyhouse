@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   try {
     // Get nextTokenId from contract
-    const nextTokenRes = await fetch('https://mainnet.base.org', {
+    const nextTokenRes = await fetch('https://base-mainnet.public.blastapi.io', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
     for (let i = 1; i < nextTokenId; i++) {
       const tokenIdHex = i.toString(16).padStart(64, '0');
       calls.push(
-        fetch('https://mainnet.base.org', {
+        fetch('https://base-mainnet.public.blastapi.io', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
