@@ -6,12 +6,9 @@ export default async function handler(req, res) {
   }
 
   const username = (req.query.username || '').toLowerCase();
-  const apiKey = req.query.apiKey || '';
   if (!username) {
     return res.status(400).json({ error: 'Username required' });
   }
-
-  const headers = apiKey ? { 'x-api-key': apiKey } : {};
 
   try {
     let adminWallet = walletCache.get(username);
@@ -22,8 +19,7 @@ export default async function handler(req, res) {
 
       while (!adminWallet && page <= totalPages) {
         const scan = await fetch(
-          `https://api.inprocess.world/api/collections?page=${page}&limit=100`,
-          { headers }
+          `https://api.inprocess.world/api/collections?page=${page}&limit=100`
         );
         const scanData = await scan.json();
         const cols = scanData.collections || [];
@@ -47,8 +43,7 @@ export default async function handler(req, res) {
     }
 
     const response = await fetch(
-      `https://api.inprocess.world/api/collections?artist=${adminWallet}`,
-      { headers }
+      `https://api.inprocess.world/api/collections?artist=${adminWallet}`
     );
 
     if (!response.ok) {
