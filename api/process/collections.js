@@ -14,27 +14,37 @@ export default async function handler(req, res) {
     let adminWallet = walletCache.get(username);
 
     if (!adminWallet) {
-      let page = 1;
-      let totalPages = 1;
+      const first = await fetch('https://api.inprocess.world/api/collections?page=1&limit=100');
+      const firstData = await first.json();
+      const totalPages = firstData.pagination?.total_pages || 1;
 
-      while (!adminWallet && page <= totalPages) {
-        const scan = await fetch(
-          `https://api.inprocess.world/api/collections?page=${page}&limit=100`
-        );
-        const scanData = await scan.json();
-        const cols = scanData.collections || [];
-        totalPages = scanData.pagination?.total_pages || 1;
+      const allCols = [...(firstData.collections || [])];
 
-        for (const c of cols) {
-          const u = (c.default_admin?.username || '').toLowerCase();
-          if (u && c.default_admin?.address) {
-            walletCache.set(u, c.default_admin.address);
-          }
-          if (u === username) {
-            adminWallet = c.default_admin.address;
-          }
+      if (totalPages > 1) {
+        const fetches = [];
+        for (let p = 2; p <= totalPages; p++) {
+          fetches.push(fetch(`https://api.inprocess.world/api/collections?page=${p}&limit=100`).then(r => r.json()));
         }
-        page++;
+        const results = await Promise.all(fetches);
+        for (const r of results) {
+          allCols.push(...(r.collections || []));
+        }
+      }
+
+      let partialMatch = null;
+      for (const c of allCols) {
+        const u = (c.default_admin?.username || '').toLowerCase();
+        if (u && c.default_admin?.address) {
+          walletCache.set(u, c.default_admin.address);
+        }
+        if (u === username) {
+          adminWallet = c.default_admin.address;
+        } else if (!partialMatch && (u.startsWith(username) || username.startsWith(u))) {
+          partialMatch = c.default_admin.address;
+        }
+      }
+      if (!adminWallet && partialMatch) {
+        adminWallet = partialMatch;
       }
     }
 
