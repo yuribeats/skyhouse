@@ -722,7 +722,7 @@
     async function loadCollections() {
       collectionLabel.textContent = 'LOADING COLLECTIONS...';
       try {
-        const res = await fetch('/api/process/collections?username=' + encodeURIComponent(artistUsername));
+        const res = await fetch('/api/process/collections?username=' + encodeURIComponent(artistUsername) + '&apiKey=' + encodeURIComponent(artistApiKey));
         const data = await res.json();
         collections = Array.isArray(data) ? data : (data.collections || []);
 
