@@ -722,17 +722,12 @@
     async function loadCollections() {
       collectionLabel.textContent = 'LOADING COLLECTIONS...';
       try {
-        const url = '/api/process/collections?username=' + encodeURIComponent(artistUsername);
-        console.log('FETCHING:', url, 'username:', artistUsername);
-        const res = await fetch(url);
-        console.log('RESPONSE STATUS:', res.status);
+        const res = await fetch('/api/process/collections?username=' + encodeURIComponent(artistUsername));
         const data = await res.json();
-        console.log('DATA:', JSON.stringify(data).substring(0, 200));
         collections = Array.isArray(data) ? data : (data.collections || []);
-        console.log('COLLECTIONS COUNT:', collections.length);
 
         if (collections.length === 0) {
-          collectionLabel.textContent = 'NO COLLECTIONS FOR [' + artistUsername + ']';
+          collectionLabel.textContent = 'NO COLLECTIONS FOUND';
           return;
         }
 
@@ -754,7 +749,7 @@
           collectionMenu.appendChild(item);
         });
       } catch (err) {
-        collectionLabel.textContent = 'ERROR: ' + err.message;
+        collectionLabel.textContent = 'ERROR LOADING COLLECTIONS';
       }
     }
 
