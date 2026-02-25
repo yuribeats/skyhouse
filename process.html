@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ASCENSION PORTAL</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    body {
+      background: #fff;
+      color: #000;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 32px;
+      letter-spacing: 2px;
+      margin-bottom: 40px;
+      border-bottom: 2px solid #000;
+      padding-bottom: 12px;
+      text-align: center;
+    }
+
+    .step {
+      display: none;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    .step-label {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 24px;
+      letter-spacing: 1px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+      color: #888;
+    }
+
+    .field {
+      margin-bottom: 24px;
+    }
+
+    /* Custom file drop zone */
+    .drop-zone {
+      border: 2px solid #000;
+      padding: 40px 20px;
+      text-align: center;
+      font-size: 14px;
+      color: #666;
+      letter-spacing: 1px;
+      position: relative;
+      transition: border-color 0.2s;
+    }
+
+    .drop-zone.dragover {
+      border-color: #228B22;
+      color: #228B22;
+    }
+
+    .drop-zone.has-file {
+      border-color: #228B22;
+      color: #000;
+    }
+
+    .drop-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Custom textarea */
+    textarea {
+      width: 100%;
+      background: #fff;
+      border: 2px solid #000;
+      color: #000;
+      padding: 12px;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      resize: vertical;
+      min-height: 120px;
+      outline: none;
+    }
+
+    textarea:focus {
+      border-color: #228B22;
+    }
+
+    /* Custom text input */
+    .text-input {
+      width: 100%;
+      background: #fff;
+      border: 2px solid #000;
+      color: #000;
+      padding: 12px;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      outline: none;
+    }
+
+    .text-input:focus {
+      border-color: #228B22;
+    }
+
+    /* Custom dropdown */
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-trigger {
+      width: 100%;
+      background: #fff;
+      border: 2px solid #000;
+      color: #000;
+      padding: 12px;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-align: left;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dropdown-trigger .arrow {
+      font-size: 10px;
+      transition: transform 0.2s;
+    }
+
+    .dropdown.open .dropdown-trigger {
+      border-color: #228B22;
+    }
+
+    .dropdown.open .dropdown-trigger .arrow {
+      transform: rotate(180deg);
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border: 2px solid #000;
+      border-top: none;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 10;
+    }
+
+    .dropdown.open .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-item {
+      padding: 12px;
+      font-size: 13px;
+      color: #000;
+      border-bottom: 1px solid #333;
+    }
+
+    .dropdown-item:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown-item:hover {
+      background: #f0f0f0;
+    }
+
+    .dropdown-item.selected {
+      color: #228B22;
+    }
+
+    /* Name input */
+    .name-input {
+      width: 100%;
+      background: #fff;
+      border: 2px solid #000;
+      color: #000;
+      padding: 12px;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      outline: none;
+    }
+
+    .name-input:focus {
+      border-color: #228B22;
+    }
+
+    /* Buttons */
+    .btn {
+      background: #000;
+      color: #fff;
+      border: none;
+      padding: 14px 32px;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .btn:disabled {
+      opacity: 0.3;
+    }
+
+    .btn-outline {
+      background: #fff;
+      color: #000;
+      border: 2px solid #000;
+      padding: 14px 32px;
+      font-size: 14px;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    /* Recipients list */
+    .add-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .add-row .text-input {
+      flex: 1;
+    }
+
+    .recipient-list {
+      margin-top: 16px;
+    }
+
+    .recipient-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #333;
+      font-size: 13px;
+      word-break: break-all;
+    }
+
+    .recipient-item .addr {
+      flex: 1;
+      margin-right: 12px;
+    }
+
+    .remove-btn {
+      background: none;
+      border: 1px solid #666;
+      color: #666;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-family: Arial, sans-serif;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    .remove-btn:hover {
+      border-color: #000;
+      color: #000;
+    }
+
+    .recipient-count {
+      font-size: 12px;
+      color: #666;
+      margin-top: 8px;
+    }
+
+    /* Status */
+    .status-list {
+      list-style: none;
+    }
+
+    .status-list li {
+      padding: 12px 0;
+      border-bottom: 1px solid #222;
+      font-size: 14px;
+      color: #666;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-list li.active {
+      color: #000;
+    }
+
+    .status-list li.done {
+      color: #228B22;
+    }
+
+    .status-list li.error {
+      color: #ff4444;
+    }
+
+    .spinner {
+      width: 12px;
+      height: 12px;
+      border: 2px solid #666;
+      border-top-color: #000;
+      animation: spin 0.6s linear infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .checkmark {
+      color: #228B22;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+
+    .error-icon {
+      color: #ff4444;
+      flex-shrink: 0;
+      font-size: 14px;
+    }
+
+    .error-message {
+      margin-top: 20px;
+      padding: 16px;
+      border: 2px solid #ff4444;
+      color: #ff4444;
+      font-size: 13px;
+      word-break: break-word;
+    }
+
+    .success-message {
+      margin-top: 20px;
+      padding: 16px;
+      border: 2px solid #228B22;
+      color: #228B22;
+      font-size: 13px;
+    }
+
+    /* Gallery */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .gallery-item {
+      border: 2px solid #333;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+    }
+
+    .gallery-item .gallery-info {
+      padding: 10px;
+      font-size: 11px;
+      border-top: 1px solid #333;
+    }
+
+    .gallery-item .gallery-name {
+      color: #000;
+      margin-bottom: 4px;
+    }
+
+    .gallery-item .gallery-id {
+      color: #666;
+    }
+
+    .gallery-loading {
+      color: #666;
+      font-size: 14px;
+      padding: 20px 0;
+    }
+
+    /* Token detail */
+    .token-image {
+      width: 100%;
+      display: block;
+      border: 2px solid #000;
+    }
+
+    .token-name {
+      font-size: 20px;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    .token-id {
+      font-size: 12px;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .token-description {
+      font-size: 13px;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1.6;
+      color: #333;
+      margin-bottom: 20px;
+      white-space: pre-wrap;
+    }
+
+    .token-meta {
+      border-top: 1px solid #ddd;
+      padding-top: 16px;
+      margin-top: 16px;
+    }
+
+    .token-meta-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 11px;
+    }
+
+    .token-meta-label {
+      color: #666;
+    }
+
+    .token-meta-value {
+      color: #000;
+      word-break: break-all;
+      text-align: right;
+      max-width: 60%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>ASCENSION PORTAL</h1>
+
+    <!-- STEP 0: LOGIN -->
+    <div id="step0" class="step active">
+      <div class="step-label">SIGN IN</div>
+
+      <div class="field">
+        <label>USERNAME</label>
+        <input type="text" class="text-input" id="usernameInput" placeholder="INPROCESS USERNAME">
+      </div>
+
+      <div class="field">
+        <label>API KEY</label>
+        <input type="text" class="text-input" id="apiKeyInput" placeholder="INPROCESS API KEY" style="text-transform: none;">
+      </div>
+
+      <div id="authError" class="error-message" style="display:none"></div>
+
+      <div class="btn-row">
+        <button class="btn" id="loginBtn" disabled>ENTER</button>
+      </div>
+    </div>
+
+    <!-- STEP 1: UPLOAD -->
+    <div id="step1" class="step">
+      <div class="step-label">STEP 1 / UPLOAD</div>
+
+      <div class="field">
+        <label>IMAGE</label>
+        <div class="drop-zone" id="dropZone">
+          <span id="dropText">DROP IMAGE HERE OR CLICK TO SELECT</span>
+          <input type="file" id="fileInput" accept="image/*">
+        </div>
+        <img id="imagePreview" style="display:none; max-width:100%; margin-top:12px; margin-left:auto; margin-right:auto;">
+      </div>
+
+      <div class="field">
+        <label>NAME</label>
+        <input type="text" class="name-input" id="nameInput" placeholder="MOMENT NAME">
+      </div>
+
+      <div class="field">
+        <label>DESCRIPTION</label>
+        <textarea id="descInput" placeholder="DESCRIBE THIS MOMENT"></textarea>
+      </div>
+
+      <div class="field">
+        <label>COLLECTION</label>
+        <div class="dropdown" id="collectionDropdown">
+          <div class="dropdown-trigger" id="collectionTrigger">
+            <span id="collectionLabel">LOADING COLLECTIONS...</span>
+            <span class="arrow">&#9660;</span>
+          </div>
+          <div class="dropdown-menu" id="collectionMenu"></div>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="nextBtn" disabled>NEXT</button>
+      </div>
+    </div>
+
+    <!-- STEP 2: RECIPIENTS -->
+    <div id="step2" class="step">
+      <div class="step-label">STEP 2 / RECIPIENTS</div>
+
+      <div class="field">
+        <label>ADD BASE ADDRESS</label>
+        <div class="add-row">
+          <input type="text" class="text-input" id="addrInput" placeholder="0X...">
+          <button class="btn" id="addAddrBtn">ADD</button>
+        </div>
+      </div>
+
+      <div class="recipient-list" id="recipientList"></div>
+      <div class="recipient-count" id="recipientCount"></div>
+
+      <div class="btn-row">
+        <button class="btn-outline" id="backBtn">BACK</button>
+        <button class="btn" id="mintBtn" disabled>MINT</button>
+      </div>
+    </div>
+
+    <!-- STEP 3: STATUS -->
+    <div id="step3" class="step">
+      <div class="step-label">STEP 3 / STATUS</div>
+
+      <ul class="status-list" id="statusList">
+        <li id="statusUpload">UPLOADING IMAGE TO ARWEAVE</li>
+        <li id="statusMeta">UPLOADING METADATA TO ARWEAVE</li>
+        <li id="statusMint">CREATING MOMENT</li>
+        <li id="statusBreathe">BREATHE</li>
+        <li id="statusAirdrop">AIRDROPPING TO RECIPIENTS</li>
+      </ul>
+
+      <div id="resultArea"></div>
+
+      <div class="btn-row" id="resetRow" style="display:none">
+        <button class="btn" id="resetBtn">MINT ANOTHER</button>
+        <button class="btn-outline" id="galleryBtn">GALLERY</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: GALLERY -->
+    <div id="step4" class="step">
+      <div class="step-label">GALLERY</div>
+      <div id="galleryContent" class="gallery-loading">LOADING TOKENS...</div>
+      <div class="btn-row">
+        <button class="btn-outline" id="galleryBackBtn">BACK</button>
+      </div>
+    </div>
+
+    <!-- STEP 5: TOKEN DETAIL -->
+    <div id="step5" class="step">
+      <div class="step-label">TOKEN DETAIL</div>
+      <div id="tokenDetail"></div>
+      <div class="btn-row">
+        <button class="btn-outline" id="tokenBackBtn">BACK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // State
+    let artistUsername = null;
+    let artistApiKey = null;
+    let selectedFile = null;
+    let selectedFileData = null;
+    let selectedCollection = null;
+    let collections = [];
+    let recipients = [];
+
+    // Elements
+    const dropZone = document.getElementById('dropZone');
+    const fileInput = document.getElementById('fileInput');
+    const dropText = document.getElementById('dropText');
+    const nameInput = document.getElementById('nameInput');
+    const descInput = document.getElementById('descInput');
+    const collectionDropdown = document.getElementById('collectionDropdown');
+    const collectionTrigger = document.getElementById('collectionTrigger');
+    const collectionLabel = document.getElementById('collectionLabel');
+    const collectionMenu = document.getElementById('collectionMenu');
+    const nextBtn = document.getElementById('nextBtn');
+    const backBtn = document.getElementById('backBtn');
+    const mintBtn = document.getElementById('mintBtn');
+    const addrInput = document.getElementById('addrInput');
+    const addAddrBtn = document.getElementById('addAddrBtn');
+    const recipientList = document.getElementById('recipientList');
+    const recipientCount = document.getElementById('recipientCount');
+    const resetBtn = document.getElementById('resetBtn');
+    const usernameInput = document.getElementById('usernameInput');
+    const apiKeyInput = document.getElementById('apiKeyInput');
+    const loginBtn = document.getElementById('loginBtn');
+    const authError = document.getElementById('authError');
+
+    // Login validation
+    function validateLogin() {
+      loginBtn.disabled = !(usernameInput.value.trim() && apiKeyInput.value.trim());
+    }
+    usernameInput.addEventListener('input', validateLogin);
+    apiKeyInput.addEventListener('input', validateLogin);
+
+    loginBtn.addEventListener('click', async () => {
+      loginBtn.disabled = true;
+      authError.style.display = 'none';
+
+      artistUsername = usernameInput.value.trim().toLowerCase();
+      artistApiKey = apiKeyInput.value.trim();
+      showStep(1);
+      loadCollections();
+    });
+
+    apiKeyInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && !loginBtn.disabled) loginBtn.click();
+    });
+
+    // Steps
+    function showStep(n) {
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById('step' + n).classList.add('active');
+    }
+
+    // Validate step 1
+    function validateStep1() {
+      nextBtn.disabled = !(selectedFile && nameInput.value.trim() && descInput.value.trim() && selectedCollection);
+    }
+
+    // File handling
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+      if (e.dataTransfer.files.length) {
+        handleFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length) {
+        handleFile(fileInput.files[0]);
+      }
+    });
+
+    function handleFile(file) {
+      if (!file.type.startsWith('image/')) return;
+      selectedFile = file;
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        selectedFileData = e.target.result;
+
+        dropText.textContent = file.name;
+        dropZone.classList.add('has-file');
+
+        const preview = document.getElementById('imagePreview');
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        preview.style.marginLeft = 'auto';
+        preview.style.marginRight = 'auto';
+
+        validateStep1();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    nameInput.addEventListener('input', validateStep1);
+    descInput.addEventListener('input', validateStep1);
+
+    // Collection dropdown
+    collectionTrigger.addEventListener('click', () => {
+      if (collections.length === 0) return;
+      collectionDropdown.classList.toggle('open');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!collectionDropdown.contains(e.target)) {
+        collectionDropdown.classList.remove('open');
+      }
+    });
+
+    async function loadCollections() {
+      collectionLabel.textContent = 'LOADING COLLECTIONS...';
+      try {
+        const res = await fetch('/api/process/collections?username=' + encodeURIComponent(artistUsername));
+        const data = await res.json();
+        collections = Array.isArray(data) ? data : (data.collections || []);
+
+        if (collections.length === 0) {
+          collectionLabel.textContent = 'NO COLLECTIONS FOUND';
+          return;
+        }
+
+        collectionLabel.textContent = 'SELECT COLLECTION';
+        collectionMenu.innerHTML = '';
+
+        collections.forEach((col, i) => {
+          const item = document.createElement('div');
+          item.className = 'dropdown-item';
+          item.textContent = col.name || col.address || ('COLLECTION ' + (i + 1));
+          item.addEventListener('click', () => {
+            selectedCollection = col;
+            collectionLabel.textContent = item.textContent;
+            collectionMenu.querySelectorAll('.dropdown-item').forEach(d => d.classList.remove('selected'));
+            item.classList.add('selected');
+            collectionDropdown.classList.remove('open');
+            validateStep1();
+          });
+          collectionMenu.appendChild(item);
+        });
+      } catch (err) {
+        collectionLabel.textContent = 'ERROR LOADING COLLECTIONS';
+      }
+    }
+
+    // Navigation
+    nextBtn.addEventListener('click', () => showStep(2));
+    backBtn.addEventListener('click', () => showStep(1));
+
+    // Recipients
+    function validateStep2() {
+      mintBtn.disabled = recipients.length === 0;
+      recipientCount.textContent = recipients.length > 0 ? (recipients.length + ' RECIPIENT' + (recipients.length > 1 ? 'S' : '')) : '';
+    }
+
+    function renderRecipients() {
+      recipientList.innerHTML = '';
+      recipients.forEach((addr, i) => {
+        const item = document.createElement('div');
+        item.className = 'recipient-item';
+
+        const addrSpan = document.createElement('span');
+        addrSpan.className = 'addr';
+        addrSpan.textContent = addr;
+
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.textContent = 'X';
+        removeBtn.addEventListener('click', () => {
+          recipients.splice(i, 1);
+          renderRecipients();
+          validateStep2();
+        });
+
+        item.appendChild(addrSpan);
+        item.appendChild(removeBtn);
+        recipientList.appendChild(item);
+      });
+      validateStep2();
+    }
+
+    function addRecipient() {
+      const addr = addrInput.value.trim();
+      if (!addr) return;
+      if (!/^0x[a-fA-F0-9]{40}$/.test(addr)) {
+        addrInput.style.borderColor = '#ff4444';
+        return;
+      }
+      if (recipients.includes(addr.toLowerCase())) return;
+      recipients.push(addr.toLowerCase());
+      addrInput.value = '';
+      addrInput.style.borderColor = '#000';
+      renderRecipients();
+    }
+
+    addAddrBtn.addEventListener('click', addRecipient);
+    addrInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') addRecipient();
+      addrInput.style.borderColor = '#000';
+    });
+
+    // Mint flow
+    mintBtn.addEventListener('click', startMint);
+
+    function setStatus(id, state, extra) {
+      const el = document.getElementById(id);
+      el.className = '';
+
+      const existingIcon = el.querySelector('.spinner, .checkmark, .error-icon');
+      if (existingIcon) existingIcon.remove();
+
+      if (state === 'active') {
+        el.classList.add('active');
+        const spinner = document.createElement('div');
+        spinner.className = 'spinner';
+        el.prepend(spinner);
+      } else if (state === 'done') {
+        el.classList.add('done');
+        const check = document.createElement('span');
+        check.className = 'checkmark';
+        check.textContent = '\u2713';
+        el.prepend(check);
+      } else if (state === 'error') {
+        el.classList.add('error');
+        const icon = document.createElement('span');
+        icon.className = 'error-icon';
+        icon.textContent = '\u2717';
+        el.prepend(icon);
+      }
+    }
+
+    async function startMint() {
+      showStep(3);
+
+      const resultArea = document.getElementById('resultArea');
+      const resetRow = document.getElementById('resetRow');
+      resultArea.innerHTML = '';
+      resetRow.style.display = 'none';
+
+      // Reset all statuses
+      ['statusUpload', 'statusMeta', 'statusMint', 'statusBreathe', 'statusAirdrop'].forEach(id => {
+        const el = document.getElementById(id);
+        el.className = '';
+        const icon = el.querySelector('.spinner, .checkmark, .error-icon');
+        if (icon) icon.remove();
+      });
+
+      try {
+        // 1. Upload image to Arweave
+        setStatus('statusUpload', 'active');
+        const base64 = selectedFileData.split(',')[1];
+        const uploadRes = await fetch('/api/process/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            data: base64,
+            contentType: selectedFile.type,
+            filename: selectedFile.name,
+            apiKey: artistApiKey,
+          }),
+        });
+
+        if (!uploadRes.ok) {
+          const err = await uploadRes.json();
+          throw new Error('IMAGE UPLOAD FAILED: ' + (err.error || uploadRes.status));
+        }
+
+        const uploadData = await uploadRes.json();
+        const imageUri = uploadData.uri || uploadData.url || ('ar://' + uploadData.id);
+        setStatus('statusUpload', 'done');
+
+        // 2. Upload metadata JSON to Arweave
+        setStatus('statusMeta', 'active');
+        const metadata = {
+          name: nameInput.value.trim(),
+          description: descInput.value.trim(),
+          image: imageUri,
+        };
+        const metaBase64 = btoa(unescape(encodeURIComponent(JSON.stringify(metadata))));
+        const metaRes = await fetch('/api/process/upload', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            data: metaBase64,
+            contentType: 'application/json',
+            filename: 'metadata.json',
+            apiKey: artistApiKey,
+          }),
+        });
+
+        if (!metaRes.ok) {
+          const err = await metaRes.json();
+          throw new Error('METADATA UPLOAD FAILED: ' + (err.error || metaRes.status));
+        }
+
+        const metaData = await metaRes.json();
+        const momentUri = metaData.uri || metaData.url || ('ar://' + metaData.id);
+        setStatus('statusMeta', 'done');
+
+        // 3. Create moment
+        setStatus('statusMint', 'active');
+        const collectionAddress = selectedCollection.address || selectedCollection.contractAddress;
+        const mintRes = await fetch('/api/process/mint', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            momentUri,
+            collectionAddress,
+            account: selectedCollection.default_admin?.address,
+            recipientCount: recipients.length,
+            apiKey: artistApiKey,
+          }),
+        });
+
+        if (!mintRes.ok) {
+          const err = await mintRes.json();
+          throw new Error('MINT FAILED: ' + (err.error || mintRes.status));
+        }
+
+        const mintData = await mintRes.json();
+        const tokenId = mintData.tokenId;
+        const mintedCollectionAddress = mintData.contractAddress || collectionAddress;
+        setStatus('statusMint', 'done');
+
+        // Wait for mint tx to confirm on-chain
+        setStatus('statusBreathe', 'active');
+        await new Promise(resolve => {
+          let seconds = 0;
+          const el = document.getElementById('statusBreathe');
+          const textNode = el.childNodes[el.childNodes.length - 1];
+          const interval = setInterval(() => {
+            seconds++;
+            textNode.textContent = 'BREATHE ' + seconds + 'S';
+          }, 1000);
+          setTimeout(() => {
+            clearInterval(interval);
+            resolve();
+          }, 5000);
+        });
+        setStatus('statusBreathe', 'done');
+
+        // 4. Airdrop
+        setStatus('statusAirdrop', 'active');
+        document.getElementById('statusAirdrop').childNodes[document.getElementById('statusAirdrop').childNodes.length - 1].textContent =
+          'AIRDROPPING TO ' + recipients.length + ' RECIPIENT' + (recipients.length > 1 ? 'S' : '');
+
+        const airdropRes = await fetch('/api/process/airdrop', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            collectionAddress: mintedCollectionAddress,
+            tokenId,
+            recipients,
+            account: selectedCollection.default_admin?.address,
+            apiKey: artistApiKey,
+          }),
+        });
+
+        if (!airdropRes.ok) {
+          const err = await airdropRes.json();
+          throw new Error('AIRDROP FAILED: ' + (err.error || airdropRes.status));
+        }
+
+        setStatus('statusAirdrop', 'done');
+
+        resultArea.innerHTML = '<div class="success-message">MOMENT MINTED AND AIRDROPPED SUCCESSFULLY</div>';
+        resetRow.style.display = 'flex';
+
+      } catch (err) {
+        // Mark the current active step as error
+        ['statusUpload', 'statusMeta', 'statusMint', 'statusBreathe', 'statusAirdrop'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el.classList.contains('active')) {
+            setStatus(id, 'error');
+          }
+        });
+
+        resultArea.innerHTML = '<div class="error-message">' + err.message + '</div>';
+        resetRow.style.display = 'flex';
+      }
+    }
+
+    // Reset
+    resetBtn.addEventListener('click', () => {
+      selectedFile = null;
+      selectedFileData = null;
+      selectedCollection = null;
+      recipients = [];
+
+      fileInput.value = '';
+      nameInput.value = '';
+      descInput.value = '';
+      dropText.textContent = 'DROP IMAGE HERE OR CLICK TO SELECT';
+      dropZone.classList.remove('has-file');
+      document.getElementById('imagePreview').style.display = 'none';
+
+      collectionLabel.textContent = 'SELECT COLLECTION';
+      collectionMenu.innerHTML = '';
+
+      recipientList.innerHTML = '';
+      recipientCount.textContent = '';
+
+      validateStep1();
+      validateStep2();
+      showStep(0);
+      artistUsername = null;
+      artistApiKey = null;
+      usernameInput.value = '';
+      apiKeyInput.value = '';
+      authError.style.display = 'none';
+      validateLogin();
+    });
+
+    // Gallery
+    const galleryBtn = document.getElementById('galleryBtn');
+    const galleryBackBtn = document.getElementById('galleryBackBtn');
+    const galleryContent = document.getElementById('galleryContent');
+
+    galleryBtn.addEventListener('click', async () => {
+      showStep(4);
+      galleryContent.className = 'gallery-loading';
+      galleryContent.innerHTML = 'LOADING TOKENS...';
+
+      const addr = selectedCollection?.address;
+      if (!addr) {
+        galleryContent.innerHTML = 'NO COLLECTION SELECTED';
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/process/gallery?address=' + encodeURIComponent(addr));
+        const data = await res.json();
+        const tokens = data.tokens || [];
+
+        if (tokens.length === 0) {
+          galleryContent.innerHTML = 'NO TOKENS FOUND';
+          return;
+        }
+
+        galleryContent.className = 'gallery-grid';
+        galleryContent.innerHTML = '';
+
+        galleryTokens = tokens;
+        tokens.forEach(t => {
+          const item = document.createElement('div');
+          item.className = 'gallery-item';
+
+          const imageUrl = (t.image || '').replace('ar://', 'https://ar-io.net/');
+          item.innerHTML =
+            '<img src="' + imageUrl + '" onerror="this.style.display=\'none\'">' +
+            '<div class="gallery-info">' +
+              '<div class="gallery-name">' + (t.name || 'UNTITLED') + '</div>' +
+              '<div class="gallery-id">TOKEN ' + t.tokenId + '</div>' +
+            '</div>';
+
+          item.addEventListener('click', () => showTokenDetail(t));
+          galleryContent.appendChild(item);
+        });
+      } catch (err) {
+        galleryContent.innerHTML = 'ERROR LOADING GALLERY';
+      }
+    });
+
+    let galleryReturnStep = 3;
+    let galleryTokens = [];
+
+    galleryBackBtn.addEventListener('click', () => showStep(galleryReturnStep));
+
+    const tokenDetail = document.getElementById('tokenDetail');
+    const tokenBackBtn = document.getElementById('tokenBackBtn');
+
+    tokenBackBtn.addEventListener('click', () => showStep(4));
+
+    function showTokenDetail(t) {
+      const imageUrl = (t.image || '').replace('ar://', 'https://ar-io.net/');
+      const animUrl = (t.animation_url || '').replace('ar://', 'https://ar-io.net/');
+      const contentUri = t.content?.uri ? t.content.uri.replace('ar://', 'https://ar-io.net/') : '';
+      const contentMime = t.content?.mime || '';
+
+      let mediaHtml = '';
+      if (contentMime.startsWith('video/') && contentUri) {
+        mediaHtml = '<video src="' + contentUri + '" controls style="width:100%; border:2px solid #000;"></video>';
+      } else if (contentMime.startsWith('audio/') && contentUri) {
+        mediaHtml = '<img class="token-image" src="' + imageUrl + '" onerror="this.style.display=\'none\'">' +
+          '<audio src="' + contentUri + '" controls style="width:100%; margin-top:12px;"></audio>';
+      } else if (animUrl && !contentMime) {
+        mediaHtml = '<img class="token-image" src="' + animUrl + '" onerror="this.src=\'' + imageUrl + '\'">';
+      } else {
+        mediaHtml = '<img class="token-image" src="' + imageUrl + '" onerror="this.style.display=\'none\'">';
+      }
+
+      let metaHtml = '<div class="token-meta">';
+      metaHtml += '<div class="token-meta-row"><span class="token-meta-label">TOKEN ID</span><span class="token-meta-value">' + t.tokenId + '</span></div>';
+      metaHtml += '<div class="token-meta-row"><span class="token-meta-label">COLLECTION</span><span class="token-meta-value">' + (selectedCollection?.name || selectedCollection?.address || '') + '</span></div>';
+      if (t.uri) {
+        metaHtml += '<div class="token-meta-row"><span class="token-meta-label">METADATA</span><span class="token-meta-value">' + t.uri + '</span></div>';
+      }
+      if (t.image) {
+        metaHtml += '<div class="token-meta-row"><span class="token-meta-label">IMAGE</span><span class="token-meta-value">' + t.image + '</span></div>';
+      }
+      if (contentMime) {
+        metaHtml += '<div class="token-meta-row"><span class="token-meta-label">CONTENT TYPE</span><span class="token-meta-value">' + contentMime + '</span></div>';
+      }
+      metaHtml += '</div>';
+
+      tokenDetail.innerHTML =
+        mediaHtml +
+        '<div class="token-name">' + (t.name || 'UNTITLED') + '</div>' +
+        '<div class="token-id">TOKEN ' + t.tokenId + '</div>' +
+        '<div class="token-description">' + (t.description || '') + '</div>' +
+        metaHtml;
+
+      showStep(5);
+    }
+
+  </script>
+</body>
+</html>
