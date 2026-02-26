@@ -791,10 +791,28 @@
     });
 
     // Steps
-    function showStep(n) {
+    const stepPaths = {
+      0: '/process',
+      1: '/process/upload',
+      2: '/process/recipients',
+      3: '/process/status',
+      4: '/process/gallery',
+      5: '/process/token'
+    };
+    const pathToStep = Object.fromEntries(Object.entries(stepPaths).map(([k, v]) => [v, Number(k)]));
+
+    function showStep(n, pushHistory) {
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
       document.getElementById('step' + n).classList.add('active');
+      if (pushHistory !== false && stepPaths[n] && location.pathname !== stepPaths[n]) {
+        history.pushState({ step: n }, '', stepPaths[n]);
+      }
     }
+
+    window.addEventListener('popstate', (e) => {
+      const step = e.state?.step ?? pathToStep[location.pathname] ?? 0;
+      showStep(step, false);
+    });
 
     // Validate step 1
     function validateStep1() {
@@ -1358,6 +1376,20 @@
 
       showStep(5);
     }
+
+    // Route on initial load
+    (function() {
+      const initStep = pathToStep[location.pathname];
+      if (initStep !== undefined && initStep !== 0) {
+        if (initStep === 4) {
+          showStep(0, false);
+        } else {
+          showStep(0, false);
+        }
+      } else {
+        history.replaceState({ step: 0 }, '', '/process');
+      }
+    })();
 
   </script>
   <script>
