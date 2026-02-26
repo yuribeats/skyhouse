@@ -1452,7 +1452,7 @@
       scene.fog = new THREE.FogExp2(BG_COLOR, 0.008);
 
       const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
-      camera.position.set(0, 0, 14);
+      camera.position.set(0, 0, 5.5);
 
       const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
       document.addEventListener('mousemove', (e) => {
@@ -1612,8 +1612,8 @@
         sphereGroup.rotation.y = elapsed * 0.015;
         sphereGroup.rotation.x = Math.sin(elapsed * 0.008) * 0.08;
         animateTokens(elapsed);
-        camera.position.x = Math.sin(elapsed * 0.04) * 1.0 + mouse.x * 2;
-        camera.position.y = Math.cos(elapsed * 0.03) * 0.8 + mouse.y * 1.5;
+        camera.position.x = Math.sin(elapsed * 0.04) * 0.3 + mouse.x * 0.6;
+        camera.position.y = Math.cos(elapsed * 0.03) * 0.25 + mouse.y * 0.5;
         camera.lookAt(0, 0, 0);
         renderer.render(scene, camera);
       }
