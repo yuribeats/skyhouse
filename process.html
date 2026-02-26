@@ -590,8 +590,8 @@
       <div id="authError" class="error-message" style="display:none"></div>
 
       <div class="btn-row">
-        <button class="btn" id="loginBtn" disabled>CREATE TOKEN</button>
-        <button class="btn-outline" id="galleryLoginBtn" disabled>GALLERY</button>
+        <button class="btn" id="loginBtn" style="display:none">CREATE TOKEN</button>
+        <button class="btn-outline" id="galleryLoginBtn" style="display:none">GALLERY</button>
       </div>
     </div>
 
@@ -757,9 +757,12 @@
 
     // Login validation
     function validateLogin() {
-      const valid = !!(usernameInput.value.trim() && apiKeyInput.value.trim());
-      loginBtn.disabled = !valid;
-      galleryLoginBtn.disabled = !usernameInput.value.trim();
+      const hasUsername = !!usernameInput.value.trim();
+      const hasApiKey = !!apiKeyInput.value.trim();
+      galleryLoginBtn.style.display = hasUsername ? '' : 'none';
+      galleryLoginBtn.disabled = !hasUsername;
+      loginBtn.style.display = hasApiKey ? '' : 'none';
+      loginBtn.disabled = !(hasUsername && hasApiKey);
     }
     usernameInput.addEventListener('input', validateLogin);
     apiKeyInput.addEventListener('input', validateLogin);
