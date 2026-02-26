@@ -718,6 +718,7 @@
     // State
     let artistUsername = null;
     let artistApiKey = null;
+    let artistWallet = null;
     let selectedFile = null;
     let selectedFileData = null;
     let selectedCollection = null;
@@ -796,21 +797,27 @@
       1: '/process/upload',
       2: '/process/recipients',
       3: '/process/status',
-      4: '/process/gallery',
-      5: '/process/token'
+      4: null,
+      5: null
     };
     const pathToStep = Object.fromEntries(Object.entries(stepPaths).map(([k, v]) => [v, Number(k)]));
 
     function showStep(n, pushHistory) {
       document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
       document.getElementById('step' + n).classList.add('active');
-      if (pushHistory !== false && stepPaths[n] && location.pathname !== stepPaths[n]) {
-        history.pushState({ step: n }, '', stepPaths[n]);
+      if (pushHistory !== false) {
+        let path = stepPaths[n];
+        if (n === 4 && artistWallet) {
+          path = '/process/gallery/' + artistWallet;
+        }
+        if (path && location.pathname !== path) {
+          history.pushState({ step: n }, '', path);
+        }
       }
     }
 
     window.addEventListener('popstate', (e) => {
-      const step = e.state?.step ?? pathToStep[location.pathname] ?? 0;
+      const step = e.state?.step ?? 0;
       showStep(step, false);
     });
 
@@ -917,6 +924,7 @@
         const res = await fetch('/api/process/collections?username=' + encodeURIComponent(artistUsername));
         const data = await res.json();
         collections = Array.isArray(data) ? data : (data.collections || []);
+        if (data.wallet) artistWallet = data.wallet;
 
         if (collections.length === 0) {
           collectionLabel.textContent = 'NO COLLECTIONS FOUND';
@@ -1213,6 +1221,7 @@
       showStep(0);
       artistUsername = null;
       artistApiKey = null;
+      artistWallet = null;
       usernameInput.value = '';
       apiKeyInput.value = '';
       authError.style.display = 'none';
