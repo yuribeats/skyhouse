@@ -615,9 +615,9 @@
       </div>
 
       <div class="field">
-        <label>API KEY <span class="help-icon" id="apiKeyHelp">?</span></label>
+        <label>API KEY</label>
         <input type="text" class="text-input" id="apiKeyInput" placeholder="INPROCESS API KEY" style="text-transform: none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-        <div class="help-tooltip" id="apiKeyTooltip">YOUR API KEY AUTHENTICATES MINTING ACTIONS ON INPROCESS. <a href="https://www.inprocess.world/manage/api-keys" target="_blank" style="color:#228B22; text-decoration:underline;">GET YOUR API KEY HERE</a></div>
+        <div class="help-tooltip" style="display:block; margin-top:6px;">YOUR API KEY AUTHENTICATES MINTING ACTIONS ON INPROCESS. <a href="https://www.inprocess.world/manage/api-keys" target="_blank" style="color:#228B22; text-decoration:underline;">GET YOUR API KEY HERE</a></div>
       </div>
 
       <div id="authError" class="error-message" style="display:none"></div>
@@ -782,11 +782,6 @@
     const loginBtn = document.getElementById('loginBtn');
     const galleryLoginBtn = document.getElementById('galleryLoginBtn');
     const authError = document.getElementById('authError');
-
-    // API key help toggle
-    document.getElementById('apiKeyHelp').addEventListener('click', () => {
-      document.getElementById('apiKeyTooltip').classList.toggle('open');
-    });
 
     // Login validation
     function validateLogin() {
