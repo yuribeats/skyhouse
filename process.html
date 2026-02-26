@@ -1433,9 +1433,9 @@
   </script>
   <script>
     (function() {
-      const PARTICLE_COUNT = 20000;
       const SPHERE_RADIUS = 5.0;
       const BG_COLOR = 0x0000AA;
+      const AMBIENT_PARTICLES = 8000;
 
       const canvas = document.getElementById('meshCanvas');
       const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -1455,118 +1455,143 @@
         mouse.targetY = -(e.clientY / window.innerHeight) * 2 + 1;
       });
 
-      // Particles distributed on/near sphere surface
-      const geometry = new THREE.BufferGeometry();
-      const positions = new Float32Array(PARTICLE_COUNT * 3);
-      const colors = new Float32Array(PARTICLE_COUNT * 3);
-      const sizes = new Float32Array(PARTICLE_COUNT);
-      const velocities = new Float32Array(PARTICLE_COUNT * 3);
+      // Group that rotates together
+      const sphereGroup = new THREE.Group();
+      scene.add(sphereGroup);
 
-      for (let i = 0; i < PARTICLE_COUNT; i++) {
+      // Ambient particle cloud (unlabeled, forms sphere shape)
+      const ambGeo = new THREE.BufferGeometry();
+      const ambPos = new Float32Array(AMBIENT_PARTICLES * 3);
+      const ambCol = new Float32Array(AMBIENT_PARTICLES * 3);
+      const ambSiz = new Float32Array(AMBIENT_PARTICLES);
+      for (let i = 0; i < AMBIENT_PARTICLES; i++) {
         const i3 = i * 3;
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(2 * Math.random() - 1);
-        // Most particles on surface, some scattered nearby
-        const spread = 1.0 + (Math.random() - 0.5) * 0.4;
-        const r = SPHERE_RADIUS * spread;
-        positions[i3]     = r * Math.sin(phi) * Math.cos(theta);
-        positions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-        positions[i3 + 2] = r * Math.cos(phi);
-        // Color: white at poles, blue at equator
-        const lat = Math.abs(Math.cos(phi));
-        const color = new THREE.Color();
-        color.lerpColors(new THREE.Color(0x5555ff), new THREE.Color(0xffffff), lat * 0.6 + Math.random() * 0.2);
-        colors[i3] = color.r; colors[i3+1] = color.g; colors[i3+2] = color.b;
-        sizes[i] = Math.random() * 3 + 1.0;
-        velocities[i3] = (Math.random()-0.5)*0.002;
-        velocities[i3+1] = (Math.random()-0.5)*0.002;
-        velocities[i3+2] = (Math.random()-0.5)*0.002;
+        const r = SPHERE_RADIUS * (1.0 + (Math.random() - 0.5) * 0.3);
+        ambPos[i3]     = r * Math.sin(phi) * Math.cos(theta);
+        ambPos[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+        ambPos[i3 + 2] = r * Math.cos(phi);
+        const c = new THREE.Color().lerpColors(new THREE.Color(0x5555ff), new THREE.Color(0xffffff), Math.random() * 0.4 + 0.2);
+        ambCol[i3] = c.r; ambCol[i3+1] = c.g; ambCol[i3+2] = c.b;
+        ambSiz[i] = Math.random() * 2 + 0.5;
       }
+      ambGeo.setAttribute('position', new THREE.BufferAttribute(ambPos, 3));
+      ambGeo.setAttribute('color', new THREE.BufferAttribute(ambCol, 3));
+      ambGeo.setAttribute('size', new THREE.BufferAttribute(ambSiz, 1));
 
-      geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-      geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-      geometry.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-      const particleMaterial = new THREE.ShaderMaterial({
-        uniforms: {
-          uTime: { value: 0 },
-          uMouse: { value: new THREE.Vector2(0, 0) },
-          uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) },
-        },
+      const ambMat = new THREE.ShaderMaterial({
+        uniforms: { uTime: { value: 0 }, uPixelRatio: { value: Math.min(window.devicePixelRatio, 2) } },
         vertexShader: `
-          uniform float uTime;
-          uniform vec2 uMouse;
-          uniform float uPixelRatio;
-          attribute float size;
-          attribute vec3 color;
-          varying vec3 vColor;
-          varying float vAlpha;
-          vec3 mod289(vec3 x){return x-floor(x*(1.0/289.0))*289.0;}
-          vec4 mod289(vec4 x){return x-floor(x*(1.0/289.0))*289.0;}
-          vec4 permute(vec4 x){return mod289(((x*34.0)+1.0)*x);}
-          vec4 taylorInvSqrt(vec4 r){return 1.79284291400159-0.85373472095314*r;}
-          float snoise(vec3 v){
-            const vec2 C=vec2(1.0/6.0,1.0/3.0);const vec4 D=vec4(0.0,0.5,1.0,2.0);
-            vec3 i=floor(v+dot(v,C.yyy));vec3 x0=v-i+dot(i,C.xxx);
-            vec3 g=step(x0.yzx,x0.xyz);vec3 l=1.0-g;
-            vec3 i1=min(g.xyz,l.zxy);vec3 i2=max(g.xyz,l.zxy);
-            vec3 x1=x0-i1+C.xxx;vec3 x2=x0-i2+C.yyy;vec3 x3=x0-D.yyy;
-            i=mod289(i);
-            vec4 p=permute(permute(permute(i.z+vec4(0.0,i1.z,i2.z,1.0))+i.y+vec4(0.0,i1.y,i2.y,1.0))+i.x+vec4(0.0,i1.x,i2.x,1.0));
-            float n_=0.142857142857;vec3 ns=n_*D.wyz-D.xzx;
-            vec4 j=p-49.0*floor(p*ns.z*ns.z);vec4 x_=floor(j*ns.z);vec4 y_=floor(j-7.0*x_);
-            vec4 x=x_*ns.x+ns.yyyy;vec4 y=y_*ns.x+ns.yyyy;vec4 h=1.0-abs(x)-abs(y);
-            vec4 b0=vec4(x.xy,y.xy);vec4 b1=vec4(x.zw,y.zw);
-            vec4 s0=floor(b0)*2.0+1.0;vec4 s1=floor(b1)*2.0+1.0;
-            vec4 sh=-step(h,vec4(0.0));
-            vec4 a0=b0.xzyw+s0.xzyw*sh.xxyy;vec4 a1=b1.xzyw+s1.xzyw*sh.zzww;
-            vec3 p0=vec3(a0.xy,h.x);vec3 p1=vec3(a0.zw,h.y);vec3 p2=vec3(a1.xy,h.z);vec3 p3=vec3(a1.zw,h.w);
-            vec4 norm=taylorInvSqrt(vec4(dot(p0,p0),dot(p1,p1),dot(p2,p2),dot(p3,p3)));
-            p0*=norm.x;p1*=norm.y;p2*=norm.z;p3*=norm.w;
-            vec4 m=max(0.6-vec4(dot(x0,x0),dot(x1,x1),dot(x2,x2),dot(x3,x3)),0.0);m=m*m;
-            return 42.0*dot(m*m,vec4(dot(p0,x0),dot(p1,x1),dot(p2,x2),dot(p3,x3)));
-          }
+          uniform float uTime; uniform float uPixelRatio;
+          attribute float size; attribute vec3 color;
+          varying vec3 vColor; varying float vAlpha;
           void main(){
             vColor=color;
-            float t=uTime*0.08;
             vec3 pos=position;
-            float nx=snoise(pos*0.15+t);float ny=snoise(pos*0.15+t+100.0);float nz=snoise(pos*0.15+t+200.0);
-            pos+=vec3(nx,ny,nz)*0.8;
-            vec4 mvPos=modelViewMatrix*vec4(pos,1.0);
-            vec2 screenPos=mvPos.xy/-mvPos.z;
-            float mouseDist=length(screenPos-uMouse*2.0);
-            float mouseForce=smoothstep(2.0,0.0,mouseDist)*4.0;
-            pos.x+=(screenPos.x-uMouse.x)*mouseForce*1.2;
-            pos.y+=(screenPos.y-uMouse.y)*mouseForce*1.2;
-            pos.z+=mouseForce*2.0;
             float breath=sin(uTime*0.2+length(position)*0.1)*0.5+0.5;
             pos*=1.0+breath*0.03;
-            gl_Position=projectionMatrix*modelViewMatrix*vec4(pos,1.0);
-            float dist=length(mvPos.xyz);
-            gl_PointSize=size*uPixelRatio*(12.0/dist);
-            vAlpha=smoothstep(60.0,3.0,dist)*(0.6+mouseForce*0.4);
-            vAlpha*=0.5+breath*0.3;
+            vec4 mv=modelViewMatrix*vec4(pos,1.0);
+            gl_Position=projectionMatrix*mv;
+            float d=length(mv.xyz);
+            gl_PointSize=size*uPixelRatio*(10.0/d);
+            vAlpha=smoothstep(50.0,3.0,d)*0.4;
+            vAlpha*=0.4+breath*0.2;
           }
         `,
         fragmentShader: `
-          varying vec3 vColor;
-          varying float vAlpha;
+          varying vec3 vColor; varying float vAlpha;
           void main(){
-            vec2 center=gl_PointCoord-0.5;
-            float dist=length(center);
-            float alpha=smoothstep(0.5,0.0,dist);
-            float core=exp(-dist*4.0)*0.8;
-            float glow=exp(-dist*2.0)*0.3;
-            gl_FragColor=vec4(vColor,(alpha+core+glow)*vAlpha);
+            float d=length(gl_PointCoord-0.5);
+            float a=smoothstep(0.5,0.0,d);
+            gl_FragColor=vec4(vColor,a*vAlpha);
           }
         `,
-        transparent: true,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false,
+        transparent: true, blending: THREE.AdditiveBlending, depthWrite: false,
       });
+      sphereGroup.add(new THREE.Points(ambGeo, ambMat));
 
-      const particles = new THREE.Points(geometry, particleMaterial);
-      scene.add(particles);
+      // Token labels + connection lines (added after fetch)
+      const labelSprites = [];
+      const tokenPositions = []; // {pos, artist}
+      let connectionLines = null;
+
+      function makeTextTexture(text) {
+        const c = document.createElement('canvas');
+        const ctx = c.getContext('2d');
+        const fontSize = 48;
+        ctx.font = fontSize + 'px Arial';
+        const w = Math.min(ctx.measureText(text).width + 20, 512);
+        c.width = w; c.height = fontSize + 16;
+        ctx.font = 'bold ' + fontSize + 'px Arial';
+        ctx.fillStyle = '#fff';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(text, 10, c.height / 2);
+        const tex = new THREE.CanvasTexture(c);
+        tex.minFilter = THREE.LinearFilter;
+        return { tex, aspect: c.width / c.height };
+      }
+
+      function buildTokenSphere(tokens) {
+        if (!tokens || !tokens.length) return;
+
+        // Distribute tokens evenly on sphere using golden spiral
+        const n = tokens.length;
+        for (let i = 0; i < n; i++) {
+          const y = 1 - (i / (n - 1 || 1)) * 2;
+          const radiusAtY = Math.sqrt(1 - y * y);
+          const theta = ((Math.PI * (1 + Math.sqrt(5))) * i);
+          const x = Math.cos(theta) * radiusAtY;
+          const z = Math.sin(theta) * radiusAtY;
+          const pos = new THREE.Vector3(x * SPHERE_RADIUS, y * SPHERE_RADIUS, z * SPHERE_RADIUS);
+
+          const label = tokens[i].name || 'UNTITLED';
+          const { tex, aspect } = makeTextTexture(label.toUpperCase());
+          const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, opacity: 0.7, depthWrite: false, blending: THREE.AdditiveBlending });
+          const sprite = new THREE.Sprite(mat);
+          sprite.position.copy(pos);
+          const scale = 0.6;
+          sprite.scale.set(scale * aspect, scale, 1);
+          sphereGroup.add(sprite);
+          labelSprites.push(sprite);
+          tokenPositions.push({ pos: pos.clone(), artist: tokens[i].artist });
+        }
+
+        // Draw lines between tokens by same artist
+        const byArtist = {};
+        tokenPositions.forEach((t, i) => {
+          if (!byArtist[t.artist]) byArtist[t.artist] = [];
+          byArtist[t.artist].push(i);
+        });
+
+        const lineVerts = [];
+        for (const artist in byArtist) {
+          const indices = byArtist[artist];
+          if (indices.length < 2) continue;
+          for (let i = 0; i < indices.length; i++) {
+            for (let j = i + 1; j < indices.length; j++) {
+              const a = tokenPositions[indices[i]].pos;
+              const b = tokenPositions[indices[j]].pos;
+              lineVerts.push(a.x, a.y, a.z, b.x, b.y, b.z);
+            }
+          }
+        }
+
+        if (lineVerts.length) {
+          const lineGeo = new THREE.BufferGeometry();
+          lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(lineVerts, 3));
+          connectionLines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({
+            color: 0x5555ff, transparent: true, opacity: 0.15, blending: THREE.AdditiveBlending
+          }));
+          sphereGroup.add(connectionLines);
+        }
+      }
+
+      // Fetch token data
+      fetch('/api/process/all-tokens')
+        .then(r => r.json())
+        .then(data => { if (data.tokens) buildTokenSphere(data.tokens); })
+        .catch(() => {});
 
       // Orbital rings
       function createRing(radius, segments, color, opacity) {
@@ -1581,13 +1606,13 @@
       }
       const ring1 = createRing(10, 128, 0x5555ff, 0.2);
       ring1.rotation.x = Math.PI*0.4; ring1.rotation.y = Math.PI*0.2;
-      scene.add(ring1);
+      sphereGroup.add(ring1);
       const ring2 = createRing(13, 128, 0x4444ee, 0.12);
       ring2.rotation.x = Math.PI*0.6; ring2.rotation.z = Math.PI*0.3;
-      scene.add(ring2);
+      sphereGroup.add(ring2);
       const ring3 = createRing(7, 64, 0xffffff, 0.1);
       ring3.rotation.x = Math.PI*0.15; ring3.rotation.y = Math.PI*0.7;
-      scene.add(ring3);
+      sphereGroup.add(ring3);
 
       const clock = new THREE.Clock();
 
@@ -1596,13 +1621,9 @@
         const elapsed = clock.getElapsedTime();
         mouse.x += (mouse.targetX - mouse.x) * 0.08;
         mouse.y += (mouse.targetY - mouse.y) * 0.08;
-        particleMaterial.uniforms.uTime.value = elapsed;
-        particleMaterial.uniforms.uMouse.value.set(mouse.x, mouse.y);
-        particles.rotation.y = elapsed * 0.015;
-        particles.rotation.x = Math.sin(elapsed * 0.008) * 0.08;
-        ring1.rotation.z = elapsed * 0.03;
-        ring2.rotation.z = -elapsed * 0.02;
-        ring3.rotation.z = elapsed * 0.04;
+        ambMat.uniforms.uTime.value = elapsed;
+        sphereGroup.rotation.y = elapsed * 0.015;
+        sphereGroup.rotation.x = Math.sin(elapsed * 0.008) * 0.08;
         camera.position.x = Math.sin(elapsed * 0.04) * 1.0 + mouse.x * 2;
         camera.position.y = Math.cos(elapsed * 0.03) * 0.8 + mouse.y * 1.5;
         camera.lookAt(0, 0, 0);
@@ -1610,44 +1631,12 @@
       }
       animate();
 
-      // Click burst (listen on document, canvas stays pointer-events:none)
-      document.addEventListener('click', (e) => {
-        const posArray = geometry.attributes.position.array;
-        const bc = new THREE.Vector3(
-          (e.clientX/window.innerWidth*2-1)*15,
-          (-(e.clientY/window.innerHeight)*2+1)*10, 0
-        );
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
-          const i3 = i*3;
-          const dx=posArray[i3]-bc.x, dy=posArray[i3+1]-bc.y, dz=posArray[i3+2]-bc.z;
-          const dist=Math.sqrt(dx*dx+dy*dy+dz*dz);
-          if (dist < 8) {
-            const force=(1-dist/8)*4;
-            velocities[i3]+=(dx/dist)*force*0.3;
-            velocities[i3+1]+=(dy/dist)*force*0.3;
-            velocities[i3+2]+=(dz/dist)*force*0.3;
-          }
-        }
-      });
-
-      function updatePositions() {
-        const posArray = geometry.attributes.position.array;
-        for (let i = 0; i < PARTICLE_COUNT; i++) {
-          const i3 = i*3;
-          posArray[i3]+=velocities[i3]; posArray[i3+1]+=velocities[i3+1]; posArray[i3+2]+=velocities[i3+2];
-          velocities[i3]*=0.94; velocities[i3+1]*=0.94; velocities[i3+2]*=0.94;
-        }
-        geometry.attributes.position.needsUpdate = true;
-        requestAnimationFrame(updatePositions);
-      }
-      updatePositions();
-
       window.addEventListener('resize', () => {
         camera.aspect = window.innerWidth / window.innerHeight;
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        particleMaterial.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
+        ambMat.uniforms.uPixelRatio.value = Math.min(window.devicePixelRatio, 2);
       });
     })();
   </script>
