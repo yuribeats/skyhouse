@@ -1613,17 +1613,26 @@
       sphereGroup.add(ring3);
 
       const clock = new THREE.Clock();
+      let camZ = 5.5;
+      let camZTarget = 5.5;
+
+      document.addEventListener('click', (e) => {
+        if (e.target.closest('.container')) return;
+        camZTarget -= 1.5;
+      });
 
       function animate() {
         requestAnimationFrame(animate);
         const elapsed = clock.getElapsedTime();
         mouse.x += (mouse.targetX - mouse.x) * 0.08;
         mouse.y += (mouse.targetY - mouse.y) * 0.08;
+        camZ += (camZTarget - camZ) * 0.06;
         sphereGroup.rotation.y = elapsed * 0.048;
         sphereGroup.rotation.x = Math.sin(elapsed * 0.024) * 0.16;
         animateTokens(elapsed);
         camera.position.x = Math.sin(elapsed * 0.032) * 0.3 + mouse.x * 0.6;
         camera.position.y = Math.cos(elapsed * 0.024) * 0.25 + mouse.y * 0.5;
+        camera.position.z = camZ;
         camera.lookAt(0, 0, 0);
         renderer.render(scene, camera);
       }
