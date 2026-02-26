@@ -1433,14 +1433,9 @@
   </script>
   <script>
     (function() {
-      const PARTICLE_COUNT = 25000;
-      const FIELD_SIZE = 20;
+      const PARTICLE_COUNT = 20000;
+      const SPHERE_RADIUS = 5.0;
       const BG_COLOR = 0x0000AA;
-
-      const COLOR_A = new THREE.Color(0x4444ff);
-      const COLOR_B = new THREE.Color(0x7777ff);
-      const COLOR_C = new THREE.Color(0xffffff);
-      const COLOR_D = new THREE.Color(0x5555ff);
 
       const canvas = document.getElementById('meshCanvas');
       const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -1449,7 +1444,7 @@
       renderer.setClearColor(BG_COLOR, 0);
 
       const scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2(BG_COLOR, 0.006);
+      scene.fog = new THREE.FogExp2(BG_COLOR, 0.008);
 
       const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
       camera.position.set(0, 0, 14);
@@ -1460,13 +1455,7 @@
         mouse.targetY = -(e.clientY / window.innerHeight) * 2 + 1;
       });
 
-      // Wireframe sphere
-      const sphereGeo = new THREE.SphereGeometry(6, 32, 32);
-      const sphereMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.12 });
-      const sphere = new THREE.Mesh(sphereGeo, sphereMat);
-      scene.add(sphere);
-
-      // Particles
+      // Particles distributed on/near sphere surface
       const geometry = new THREE.BufferGeometry();
       const positions = new Float32Array(PARTICLE_COUNT * 3);
       const colors = new Float32Array(PARTICLE_COUNT * 3);
@@ -1477,20 +1466,21 @@
         const i3 = i * 3;
         const theta = Math.random() * Math.PI * 2;
         const phi = Math.acos(2 * Math.random() - 1);
-        const r = Math.pow(Math.random(), 0.6) * FIELD_SIZE;
+        // Most particles on surface, some scattered nearby
+        const spread = 1.0 + (Math.random() - 0.5) * 0.4;
+        const r = SPHERE_RADIUS * spread;
         positions[i3]     = r * Math.sin(phi) * Math.cos(theta);
         positions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
         positions[i3 + 2] = r * Math.cos(phi);
-        const t = r / FIELD_SIZE;
+        // Color: white at poles, blue at equator
+        const lat = Math.abs(Math.cos(phi));
         const color = new THREE.Color();
-        if (t < 0.33) color.lerpColors(COLOR_B, COLOR_D, t / 0.33);
-        else if (t < 0.66) color.lerpColors(COLOR_D, COLOR_C, (t - 0.33) / 0.33);
-        else color.lerpColors(COLOR_C, COLOR_A, (t - 0.66) / 0.33);
+        color.lerpColors(new THREE.Color(0x5555ff), new THREE.Color(0xffffff), lat * 0.6 + Math.random() * 0.2);
         colors[i3] = color.r; colors[i3+1] = color.g; colors[i3+2] = color.b;
-        sizes[i] = Math.random() * 5 + 1.5;
-        velocities[i3] = (Math.random()-0.5)*0.01;
-        velocities[i3+1] = (Math.random()-0.5)*0.01;
-        velocities[i3+2] = (Math.random()-0.5)*0.01;
+        sizes[i] = Math.random() * 3 + 1.0;
+        velocities[i3] = (Math.random()-0.5)*0.002;
+        velocities[i3+1] = (Math.random()-0.5)*0.002;
+        velocities[i3+2] = (Math.random()-0.5)*0.002;
       }
 
       geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -1538,24 +1528,24 @@
           }
           void main(){
             vColor=color;
-            float t=uTime*0.4;
+            float t=uTime*0.08;
             vec3 pos=position;
-            float nx=snoise(pos*0.12+t);float ny=snoise(pos*0.12+t+100.0);float nz=snoise(pos*0.12+t+200.0);
-            pos+=vec3(nx,ny,nz)*4.0;
+            float nx=snoise(pos*0.15+t);float ny=snoise(pos*0.15+t+100.0);float nz=snoise(pos*0.15+t+200.0);
+            pos+=vec3(nx,ny,nz)*0.8;
             vec4 mvPos=modelViewMatrix*vec4(pos,1.0);
             vec2 screenPos=mvPos.xy/-mvPos.z;
             float mouseDist=length(screenPos-uMouse*2.0);
-            float mouseForce=smoothstep(2.5,0.0,mouseDist)*5.0;
-            pos.x+=(screenPos.x-uMouse.x)*mouseForce*1.5;
-            pos.y+=(screenPos.y-uMouse.y)*mouseForce*1.5;
-            pos.z+=mouseForce*3.0;
-            float breath=sin(uTime*0.5+length(position)*0.15)*0.5+0.5;
-            pos*=1.0+breath*0.08;
+            float mouseForce=smoothstep(2.0,0.0,mouseDist)*4.0;
+            pos.x+=(screenPos.x-uMouse.x)*mouseForce*1.2;
+            pos.y+=(screenPos.y-uMouse.y)*mouseForce*1.2;
+            pos.z+=mouseForce*2.0;
+            float breath=sin(uTime*0.2+length(position)*0.1)*0.5+0.5;
+            pos*=1.0+breath*0.03;
             gl_Position=projectionMatrix*modelViewMatrix*vec4(pos,1.0);
             float dist=length(mvPos.xyz);
-            gl_PointSize=size*uPixelRatio*(14.0/dist);
-            vAlpha=smoothstep(80.0,3.0,dist)*(0.7+mouseForce*0.5);
-            vAlpha*=0.6+breath*0.4;
+            gl_PointSize=size*uPixelRatio*(12.0/dist);
+            vAlpha=smoothstep(60.0,3.0,dist)*(0.6+mouseForce*0.4);
+            vAlpha*=0.5+breath*0.3;
           }
         `,
         fragmentShader: `
@@ -1604,19 +1594,17 @@
       function animate() {
         requestAnimationFrame(animate);
         const elapsed = clock.getElapsedTime();
-        mouse.x += (mouse.targetX - mouse.x) * 0.12;
-        mouse.y += (mouse.targetY - mouse.y) * 0.12;
+        mouse.x += (mouse.targetX - mouse.x) * 0.08;
+        mouse.y += (mouse.targetY - mouse.y) * 0.08;
         particleMaterial.uniforms.uTime.value = elapsed;
         particleMaterial.uniforms.uMouse.value.set(mouse.x, mouse.y);
-        particles.rotation.y = elapsed * 0.04;
-        particles.rotation.x = Math.sin(elapsed * 0.02) * 0.15;
-        sphere.rotation.y = elapsed * 0.08;
-        sphere.rotation.x = Math.sin(elapsed * 0.03) * 0.1;
-        ring1.rotation.z = elapsed * 0.08;
-        ring2.rotation.z = -elapsed * 0.05;
-        ring3.rotation.z = elapsed * 0.1;
-        camera.position.x = Math.sin(elapsed * 0.12) * 2.0 + mouse.x * 3;
-        camera.position.y = Math.cos(elapsed * 0.09) * 1.5 + mouse.y * 2.5;
+        particles.rotation.y = elapsed * 0.015;
+        particles.rotation.x = Math.sin(elapsed * 0.008) * 0.08;
+        ring1.rotation.z = elapsed * 0.03;
+        ring2.rotation.z = -elapsed * 0.02;
+        ring3.rotation.z = elapsed * 0.04;
+        camera.position.x = Math.sin(elapsed * 0.04) * 1.0 + mouse.x * 2;
+        camera.position.y = Math.cos(elapsed * 0.03) * 0.8 + mouse.y * 1.5;
         camera.lookAt(0, 0, 0);
         renderer.render(scene, camera);
       }
@@ -1647,7 +1635,7 @@
         for (let i = 0; i < PARTICLE_COUNT; i++) {
           const i3 = i*3;
           posArray[i3]+=velocities[i3]; posArray[i3+1]+=velocities[i3+1]; posArray[i3+2]+=velocities[i3+2];
-          velocities[i3]*=0.96; velocities[i3+1]*=0.96; velocities[i3+2]*=0.96;
+          velocities[i3]*=0.94; velocities[i3+1]*=0.94; velocities[i3+2]*=0.94;
         }
         geometry.attributes.position.needsUpdate = true;
         requestAnimationFrame(updatePositions);
