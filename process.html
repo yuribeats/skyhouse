@@ -1447,7 +1447,7 @@
       scene.fog = new THREE.FogExp2(BG_COLOR, 0.008);
 
       const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
-      camera.position.set(0, 0, 8);
+      camera.position.set(0, 0, 10);
 
       const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
       document.addEventListener('mousemove', (e) => {
@@ -1643,8 +1643,8 @@
       sphereGroup.add(ring3);
 
       const clock = new THREE.Clock();
-      let camZ = 8;
-      let camZTarget = 8;
+      let camZ = 10;
+      let camZTarget = 10;
 
       document.addEventListener('click', (e) => {
         if (e.target.closest('.container')) return;
