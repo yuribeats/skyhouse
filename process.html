@@ -1487,6 +1487,23 @@
         return { tex, aspect: c.width / c.height };
       }
 
+      function makeDotTexture() {
+        const c = document.createElement('canvas');
+        c.width = 32; c.height = 32;
+        const ctx = c.getContext('2d');
+        const g = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+        g.addColorStop(0, 'rgba(255,255,255,1)');
+        g.addColorStop(0.3, 'rgba(255,255,255,0.6)');
+        g.addColorStop(1, 'rgba(255,255,255,0)');
+        ctx.fillStyle = g;
+        ctx.fillRect(0, 0, 32, 32);
+        const tex = new THREE.CanvasTexture(c);
+        tex.minFilter = THREE.LinearFilter;
+        return tex;
+      }
+      const dotTex = makeDotTexture();
+      const dotSprites = [];
+
       function buildTokenSphere(tokens) {
         if (!tokens || !tokens.length) return;
 
@@ -1498,6 +1515,14 @@
           const x = Math.cos(theta) * radiusAtY;
           const z = Math.sin(theta) * radiusAtY;
           const base = new THREE.Vector3(x * SPHERE_RADIUS, y * SPHERE_RADIUS, z * SPHERE_RADIUS);
+
+          // White dot
+          const dotMat = new THREE.SpriteMaterial({ map: dotTex, transparent: true, opacity: 0.9, depthWrite: false, blending: THREE.AdditiveBlending });
+          const dot = new THREE.Sprite(dotMat);
+          dot.position.copy(base);
+          dot.scale.set(0.06, 0.06, 1);
+          sphereGroup.add(dot);
+          dotSprites.push(dot);
 
           const label = tokens[i].name || 'UNTITLED';
           const { tex, aspect } = makeTextTexture(label.toUpperCase());
@@ -1555,6 +1580,9 @@
           s.position.x = b.x + dx;
           s.position.y = b.y + dy;
           s.position.z = b.z + dz;
+          if (dotSprites[i]) {
+            dotSprites[i].position.copy(s.position);
+          }
         }
         if (lineGeo && linePairs.length) {
           const arr = lineGeo.attributes.position.array;
