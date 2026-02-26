@@ -1535,6 +1535,7 @@
           sprite.position.copy(base);
           const scale = 0.06;
           sprite.scale.set(scale * aspect, scale, 1);
+          sprite.userData.tokenUrl = '/process/token/' + tokens[i].address + '/' + tokens[i].tokenId;
           sphereGroup.add(sprite);
           labelSprites.push(sprite);
           basePositions.push(base.clone());
@@ -1654,7 +1655,7 @@
         clickMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
         clickMouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
         raycaster.setFromCamera(clickMouse, camera);
-        const hits = raycaster.intersectObjects(dotSprites);
+        const hits = raycaster.intersectObjects(dotSprites.concat(labelSprites));
         if (hits.length > 0 && hits[0].object.userData.tokenUrl) {
           window.location.href = hits[0].object.userData.tokenUrl;
           return;
