@@ -1475,10 +1475,10 @@
         const c = document.createElement('canvas');
         const ctx = c.getContext('2d');
         const fontSize = 36;
-        ctx.font = '900 ' + fontSize + 'px Arial';
+        ctx.font = '700 ' + fontSize + 'px Courier New';
         const w = Math.min(ctx.measureText(text).width + 12, 512);
         c.width = w; c.height = fontSize + 10;
-        ctx.font = '900 ' + fontSize + 'px Arial';
+        ctx.font = '700 ' + fontSize + 'px Courier New';
         ctx.fillStyle = '#fff';
         ctx.textBaseline = 'middle';
         ctx.fillText(text, 6, c.height / 2);
