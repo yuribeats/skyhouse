@@ -1509,6 +1509,8 @@
 
       function buildTokenSphere(tokens) {
         if (!tokens || !tokens.length) return;
+        const blocked = ['create a cinematic', 'hani'];
+        tokens = tokens.filter(t => !blocked.some(b => (t.name || '').toLowerCase().includes(b)));
 
         const n = tokens.length;
         for (let i = 0; i < n; i++) {
