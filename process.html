@@ -1374,7 +1374,10 @@
         '<div class="token-description">' + (t.description || '') + '</div>' +
         metaHtml;
 
-      showStep(5);
+      const tokenPath = '/process/token/' + (t.collectionAddress || selectedCollection?.address || '') + '/' + t.tokenId;
+      document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+      document.getElementById('step5').classList.add('active');
+      history.pushState({ step: 5, token: t }, '', tokenPath);
     }
 
     // Route on initial load
