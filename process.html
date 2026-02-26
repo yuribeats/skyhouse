@@ -1391,14 +1391,11 @@
 
     // Route on initial load
     (function() {
-      const initStep = pathToStep[location.pathname];
+      const p = location.pathname;
+      const initStep = pathToStep[p];
       if (initStep !== undefined && initStep !== 0) {
-        if (initStep === 4) {
-          showStep(0, false);
-        } else {
-          showStep(0, false);
-        }
-      } else {
+        showStep(0, false);
+      } else if (p === '/process' || p === '/process/') {
         history.replaceState({ step: 0 }, '', '/process');
       }
     })();
