@@ -1,6 +1,7 @@
 {
   "cleanUrls": true,
   "rewrites": [
+    { "source": "/process/token/:address/:id", "destination": "/api/process/token-page?address=:address&id=:id" },
     { "source": "/process/:path*", "destination": "/process" }
   ]
 }
