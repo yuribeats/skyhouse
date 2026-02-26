@@ -1515,14 +1515,12 @@
           artistIndices[artist].push(i);
         }
 
-        // Build connection pairs
+        // Build connection pairs (chain: each token to the next by same artist)
         for (const artist in artistIndices) {
           const idx = artistIndices[artist];
           if (idx.length < 2) continue;
-          for (let i = 0; i < idx.length; i++) {
-            for (let j = i + 1; j < idx.length; j++) {
-              linePairs.push([idx[i], idx[j]]);
-            }
+          for (let i = 0; i < idx.length - 1; i++) {
+            linePairs.push([idx[i], idx[i + 1]]);
           }
         }
 
