@@ -1464,22 +1464,24 @@
       const sphereGroup = new THREE.Group();
       scene.add(sphereGroup);
 
-      // Token labels + connection lines (added after fetch)
+      // Token labels + dynamic connection lines
       const labelSprites = [];
-      const tokenPositions = []; // {pos, artist}
-      let connectionLines = null;
+      const basePositions = [];
+      const artistIndices = {};
+      let lineGeo = null;
+      let linePairs = [];
 
       function makeTextTexture(text) {
         const c = document.createElement('canvas');
         const ctx = c.getContext('2d');
-        const fontSize = 48;
-        ctx.font = fontSize + 'px Arial';
-        const w = Math.min(ctx.measureText(text).width + 20, 512);
-        c.width = w; c.height = fontSize + 16;
-        ctx.font = 'bold ' + fontSize + 'px Arial';
+        const fontSize = 36;
+        ctx.font = '900 ' + fontSize + 'px Arial';
+        const w = Math.min(ctx.measureText(text).width + 12, 512);
+        c.width = w; c.height = fontSize + 10;
+        ctx.font = '900 ' + fontSize + 'px Arial';
         ctx.fillStyle = '#fff';
         ctx.textBaseline = 'middle';
-        ctx.fillText(text, 10, c.height / 2);
+        ctx.fillText(text, 6, c.height / 2);
         const tex = new THREE.CanvasTexture(c);
         tex.minFilter = THREE.LinearFilter;
         return { tex, aspect: c.width / c.height };
@@ -1488,7 +1490,6 @@
       function buildTokenSphere(tokens) {
         if (!tokens || !tokens.length) return;
 
-        // Distribute tokens evenly on sphere using golden spiral
         const n = tokens.length;
         for (let i = 0; i < n; i++) {
           const y = 1 - (i / (n - 1 || 1)) * 2;
@@ -1496,47 +1497,65 @@
           const theta = ((Math.PI * (1 + Math.sqrt(5))) * i);
           const x = Math.cos(theta) * radiusAtY;
           const z = Math.sin(theta) * radiusAtY;
-          const pos = new THREE.Vector3(x * SPHERE_RADIUS, y * SPHERE_RADIUS, z * SPHERE_RADIUS);
+          const base = new THREE.Vector3(x * SPHERE_RADIUS, y * SPHERE_RADIUS, z * SPHERE_RADIUS);
 
           const label = tokens[i].name || 'UNTITLED';
           const { tex, aspect } = makeTextTexture(label.toUpperCase());
           const mat = new THREE.SpriteMaterial({ map: tex, transparent: true, opacity: 0.7, depthWrite: false, blending: THREE.AdditiveBlending });
           const sprite = new THREE.Sprite(mat);
-          sprite.position.copy(pos);
-          const scale = 0.6;
+          sprite.position.copy(base);
+          const scale = 0.06;
           sprite.scale.set(scale * aspect, scale, 1);
           sphereGroup.add(sprite);
           labelSprites.push(sprite);
-          tokenPositions.push({ pos: pos.clone(), artist: tokens[i].artist });
+          basePositions.push(base.clone());
+
+          const artist = tokens[i].artist;
+          if (!artistIndices[artist]) artistIndices[artist] = [];
+          artistIndices[artist].push(i);
         }
 
-        // Draw lines between tokens by same artist
-        const byArtist = {};
-        tokenPositions.forEach((t, i) => {
-          if (!byArtist[t.artist]) byArtist[t.artist] = [];
-          byArtist[t.artist].push(i);
-        });
-
-        const lineVerts = [];
-        for (const artist in byArtist) {
-          const indices = byArtist[artist];
-          if (indices.length < 2) continue;
-          for (let i = 0; i < indices.length; i++) {
-            for (let j = i + 1; j < indices.length; j++) {
-              const a = tokenPositions[indices[i]].pos;
-              const b = tokenPositions[indices[j]].pos;
-              lineVerts.push(a.x, a.y, a.z, b.x, b.y, b.z);
+        // Build connection pairs
+        for (const artist in artistIndices) {
+          const idx = artistIndices[artist];
+          if (idx.length < 2) continue;
+          for (let i = 0; i < idx.length; i++) {
+            for (let j = i + 1; j < idx.length; j++) {
+              linePairs.push([idx[i], idx[j]]);
             }
           }
         }
 
-        if (lineVerts.length) {
-          const lineGeo = new THREE.BufferGeometry();
-          lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(lineVerts, 3));
-          connectionLines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({
+        if (linePairs.length) {
+          lineGeo = new THREE.BufferGeometry();
+          lineGeo.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(linePairs.length * 6), 3));
+          const lines = new THREE.LineSegments(lineGeo, new THREE.LineBasicMaterial({
             color: 0x5555ff, transparent: true, opacity: 0.15, blending: THREE.AdditiveBlending
           }));
-          sphereGroup.add(connectionLines);
+          sphereGroup.add(lines);
+        }
+      }
+
+      function animateTokens(elapsed) {
+        if (!labelSprites.length) return;
+        for (let i = 0; i < labelSprites.length; i++) {
+          const b = basePositions[i];
+          const s = labelSprites[i];
+          const drift = 0.3;
+          s.position.x = b.x + Math.sin(elapsed * 0.3 + i * 1.7) * drift;
+          s.position.y = b.y + Math.cos(elapsed * 0.25 + i * 2.3) * drift;
+          s.position.z = b.z + Math.sin(elapsed * 0.35 + i * 0.9) * drift;
+        }
+        if (lineGeo && linePairs.length) {
+          const arr = lineGeo.attributes.position.array;
+          for (let i = 0; i < linePairs.length; i++) {
+            const a = labelSprites[linePairs[i][0]].position;
+            const b = labelSprites[linePairs[i][1]].position;
+            const o = i * 6;
+            arr[o] = a.x; arr[o+1] = a.y; arr[o+2] = a.z;
+            arr[o+3] = b.x; arr[o+4] = b.y; arr[o+5] = b.z;
+          }
+          lineGeo.attributes.position.needsUpdate = true;
         }
       }
 
@@ -1592,6 +1611,7 @@
         mouse.y += (mouse.targetY - mouse.y) * 0.08;
         sphereGroup.rotation.y = elapsed * 0.015;
         sphereGroup.rotation.x = Math.sin(elapsed * 0.008) * 0.08;
+        animateTokens(elapsed);
         camera.position.x = Math.sin(elapsed * 0.04) * 1.0 + mouse.x * 2;
         camera.position.y = Math.cos(elapsed * 0.03) * 0.8 + mouse.y * 1.5;
         camera.lookAt(0, 0, 0);
