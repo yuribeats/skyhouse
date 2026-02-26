@@ -1433,14 +1433,14 @@
   </script>
   <script>
     (function() {
-      const PARTICLE_COUNT = 18000;
-      const FIELD_SIZE = 35;
+      const PARTICLE_COUNT = 25000;
+      const FIELD_SIZE = 20;
       const BG_COLOR = 0x0000AA;
 
-      const COLOR_A = new THREE.Color(0x0000dd);
-      const COLOR_B = new THREE.Color(0x5555ff);
+      const COLOR_A = new THREE.Color(0x4444ff);
+      const COLOR_B = new THREE.Color(0x7777ff);
       const COLOR_C = new THREE.Color(0xffffff);
-      const COLOR_D = new THREE.Color(0x3333cc);
+      const COLOR_D = new THREE.Color(0x5555ff);
 
       const canvas = document.getElementById('meshCanvas');
       const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
@@ -1449,10 +1449,10 @@
       renderer.setClearColor(BG_COLOR, 0);
 
       const scene = new THREE.Scene();
-      scene.fog = new THREE.FogExp2(BG_COLOR, 0.016);
+      scene.fog = new THREE.FogExp2(BG_COLOR, 0.006);
 
-      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
-      camera.position.set(0, 0, 22);
+      const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 200);
+      camera.position.set(0, 0, 14);
 
       const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
       document.addEventListener('mousemove', (e) => {
@@ -1462,7 +1462,7 @@
 
       // Wireframe sphere
       const sphereGeo = new THREE.SphereGeometry(6, 32, 32);
-      const sphereMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.08 });
+      const sphereMat = new THREE.MeshBasicMaterial({ color: 0xffffff, wireframe: true, transparent: true, opacity: 0.12 });
       const sphere = new THREE.Mesh(sphereGeo, sphereMat);
       scene.add(sphere);
 
@@ -1487,7 +1487,7 @@
         else if (t < 0.66) color.lerpColors(COLOR_D, COLOR_C, (t - 0.33) / 0.33);
         else color.lerpColors(COLOR_C, COLOR_A, (t - 0.66) / 0.33);
         colors[i3] = color.r; colors[i3+1] = color.g; colors[i3+2] = color.b;
-        sizes[i] = Math.random() * 3 + 0.5;
+        sizes[i] = Math.random() * 5 + 1.5;
         velocities[i3] = (Math.random()-0.5)*0.01;
         velocities[i3+1] = (Math.random()-0.5)*0.01;
         velocities[i3+2] = (Math.random()-0.5)*0.01;
@@ -1538,24 +1538,24 @@
           }
           void main(){
             vColor=color;
-            float t=uTime*0.15;
+            float t=uTime*0.4;
             vec3 pos=position;
-            float nx=snoise(pos*0.08+t);float ny=snoise(pos*0.08+t+100.0);float nz=snoise(pos*0.08+t+200.0);
-            pos+=vec3(nx,ny,nz)*2.5;
+            float nx=snoise(pos*0.12+t);float ny=snoise(pos*0.12+t+100.0);float nz=snoise(pos*0.12+t+200.0);
+            pos+=vec3(nx,ny,nz)*4.0;
             vec4 mvPos=modelViewMatrix*vec4(pos,1.0);
             vec2 screenPos=mvPos.xy/-mvPos.z;
-            float mouseDist=length(screenPos-uMouse*1.5);
-            float mouseForce=smoothstep(1.2,0.0,mouseDist)*3.0;
-            pos.x+=(screenPos.x-uMouse.x)*mouseForce*0.8;
-            pos.y+=(screenPos.y-uMouse.y)*mouseForce*0.8;
-            pos.z+=mouseForce*1.5;
-            float breath=sin(uTime*0.3+length(position)*0.1)*0.5+0.5;
-            pos*=1.0+breath*0.05;
+            float mouseDist=length(screenPos-uMouse*2.0);
+            float mouseForce=smoothstep(2.5,0.0,mouseDist)*5.0;
+            pos.x+=(screenPos.x-uMouse.x)*mouseForce*1.5;
+            pos.y+=(screenPos.y-uMouse.y)*mouseForce*1.5;
+            pos.z+=mouseForce*3.0;
+            float breath=sin(uTime*0.5+length(position)*0.15)*0.5+0.5;
+            pos*=1.0+breath*0.08;
             gl_Position=projectionMatrix*modelViewMatrix*vec4(pos,1.0);
             float dist=length(mvPos.xyz);
-            gl_PointSize=size*uPixelRatio*(8.0/dist);
-            vAlpha=smoothstep(50.0,5.0,dist)*(0.35+mouseForce*0.35);
-            vAlpha*=0.35+breath*0.25;
+            gl_PointSize=size*uPixelRatio*(14.0/dist);
+            vAlpha=smoothstep(80.0,3.0,dist)*(0.7+mouseForce*0.5);
+            vAlpha*=0.6+breath*0.4;
           }
         `,
         fragmentShader: `
@@ -1564,13 +1564,14 @@
           void main(){
             vec2 center=gl_PointCoord-0.5;
             float dist=length(center);
-            float alpha=smoothstep(0.5,0.05,dist);
-            float core=exp(-dist*6.0)*0.4;
-            gl_FragColor=vec4(vColor,(alpha+core)*vAlpha);
+            float alpha=smoothstep(0.5,0.0,dist);
+            float core=exp(-dist*4.0)*0.8;
+            float glow=exp(-dist*2.0)*0.3;
+            gl_FragColor=vec4(vColor,(alpha+core+glow)*vAlpha);
           }
         `,
         transparent: true,
-        blending: THREE.NormalBlending,
+        blending: THREE.AdditiveBlending,
         depthWrite: false,
       });
 
@@ -1588,13 +1589,13 @@
         geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
         return new THREE.LineLoop(geo, new THREE.LineBasicMaterial({ color, transparent: true, opacity }));
       }
-      const ring1 = createRing(12, 128, 0x5555ff, 0.1);
+      const ring1 = createRing(10, 128, 0x5555ff, 0.2);
       ring1.rotation.x = Math.PI*0.4; ring1.rotation.y = Math.PI*0.2;
       scene.add(ring1);
-      const ring2 = createRing(15, 128, 0x3333cc, 0.06);
+      const ring2 = createRing(13, 128, 0x4444ee, 0.12);
       ring2.rotation.x = Math.PI*0.6; ring2.rotation.z = Math.PI*0.3;
       scene.add(ring2);
-      const ring3 = createRing(9, 64, 0xffffff, 0.05);
+      const ring3 = createRing(7, 64, 0xffffff, 0.1);
       ring3.rotation.x = Math.PI*0.15; ring3.rotation.y = Math.PI*0.7;
       scene.add(ring3);
 
@@ -1603,18 +1604,19 @@
       function animate() {
         requestAnimationFrame(animate);
         const elapsed = clock.getElapsedTime();
-        mouse.x += (mouse.targetX - mouse.x) * 0.05;
-        mouse.y += (mouse.targetY - mouse.y) * 0.05;
+        mouse.x += (mouse.targetX - mouse.x) * 0.12;
+        mouse.y += (mouse.targetY - mouse.y) * 0.12;
         particleMaterial.uniforms.uTime.value = elapsed;
         particleMaterial.uniforms.uMouse.value.set(mouse.x, mouse.y);
-        particles.rotation.y = elapsed * 0.02;
-        particles.rotation.x = Math.sin(elapsed * 0.01) * 0.1;
-        sphere.rotation.y = elapsed * 0.05;
-        ring1.rotation.z = elapsed * 0.05;
-        ring2.rotation.z = -elapsed * 0.03;
-        ring3.rotation.z = elapsed * 0.07;
-        camera.position.x = Math.sin(elapsed * 0.08) * 1.5 + mouse.x * 2;
-        camera.position.y = Math.cos(elapsed * 0.06) * 1 + mouse.y * 1.5;
+        particles.rotation.y = elapsed * 0.04;
+        particles.rotation.x = Math.sin(elapsed * 0.02) * 0.15;
+        sphere.rotation.y = elapsed * 0.08;
+        sphere.rotation.x = Math.sin(elapsed * 0.03) * 0.1;
+        ring1.rotation.z = elapsed * 0.08;
+        ring2.rotation.z = -elapsed * 0.05;
+        ring3.rotation.z = elapsed * 0.1;
+        camera.position.x = Math.sin(elapsed * 0.12) * 2.0 + mouse.x * 3;
+        camera.position.y = Math.cos(elapsed * 0.09) * 1.5 + mouse.y * 2.5;
         camera.lookAt(0, 0, 0);
         renderer.render(scene, camera);
       }
