@@ -1462,22 +1462,31 @@
       const sizes = new Float32Array(PARTICLE_COUNT);
       const velocities = new Float32Array(PARTICLE_COUNT * 3);
 
+      const SEGMENTS = 32;
+      const RINGS = 32;
       for (let i = 0; i < PARTICLE_COUNT; i++) {
         const i3 = i * 3;
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(2 * Math.random() - 1);
-        // Most particles on surface, some scattered nearby
-        const spread = 1.0 + (Math.random() - 0.5) * 0.4;
-        const r = SPHERE_RADIUS * spread;
-        positions[i3]     = r * Math.sin(phi) * Math.cos(theta);
-        positions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-        positions[i3 + 2] = r * Math.cos(phi);
-        // Color: white at poles, blue at equator
-        const lat = Math.abs(Math.cos(phi));
+        const r = SPHERE_RADIUS + (Math.random() - 0.5) * 0.15;
+        // Snap to nearest grid line with slight jitter
+        if (Math.random() < 0.5) {
+          // Longitude line: fixed theta, random phi
+          const theta = (Math.round(Math.random() * SEGMENTS) / SEGMENTS) * Math.PI * 2 + (Math.random()-0.5)*0.04;
+          const phi = Math.acos(2 * Math.random() - 1);
+          positions[i3]     = r * Math.sin(phi) * Math.cos(theta);
+          positions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+          positions[i3 + 2] = r * Math.cos(phi);
+        } else {
+          // Latitude ring: fixed phi, random theta
+          const theta = Math.random() * Math.PI * 2;
+          const phi = (Math.round(Math.random() * RINGS) / RINGS) * Math.PI + (Math.random()-0.5)*0.04;
+          positions[i3]     = r * Math.sin(phi) * Math.cos(theta);
+          positions[i3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+          positions[i3 + 2] = r * Math.cos(phi);
+        }
         const color = new THREE.Color();
-        color.lerpColors(new THREE.Color(0x5555ff), new THREE.Color(0xffffff), lat * 0.6 + Math.random() * 0.2);
+        color.lerpColors(new THREE.Color(0x5555ff), new THREE.Color(0xffffff), Math.random() * 0.5 + 0.3);
         colors[i3] = color.r; colors[i3+1] = color.g; colors[i3+2] = color.b;
-        sizes[i] = Math.random() * 3 + 1.0;
+        sizes[i] = Math.random() * 2.5 + 0.8;
         velocities[i3] = (Math.random()-0.5)*0.002;
         velocities[i3+1] = (Math.random()-0.5)*0.002;
         velocities[i3+2] = (Math.random()-0.5)*0.002;
