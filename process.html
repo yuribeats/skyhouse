@@ -1345,7 +1345,7 @@
         tokens.forEach(t => {
           const item = document.createElement('div');
           item.className = 'gallery-item';
-          const imageUrl = (t.image || '').replace('ar://', 'https://ar-io.net/');
+          const imageUrl = (t.image || '').replace('ar://', 'https://api.inprocess.world/api/arweave/');
           item.innerHTML =
             '<img src="' + imageUrl + '" onerror="this.style.display=\'none\'">' +
             '<div class="gallery-info">' +
@@ -1376,9 +1376,9 @@
     tokenBackBtn.addEventListener('click', () => showStep(4));
 
     function showTokenDetail(t) {
-      const imageUrl = (t.image || '').replace('ar://', 'https://ar-io.net/');
-      const animUrl = (t.animation_url || '').replace('ar://', 'https://ar-io.net/');
-      const contentUri = t.content?.uri ? t.content.uri.replace('ar://', 'https://ar-io.net/') : '';
+      const imageUrl = (t.image || '').replace('ar://', 'https://api.inprocess.world/api/arweave/');
+      const animUrl = (t.animation_url || '').replace('ar://', 'https://api.inprocess.world/api/arweave/');
+      const contentUri = t.content?.uri ? t.content.uri.replace('ar://', 'https://api.inprocess.world/api/arweave/') : '';
       const contentMime = t.content?.mime || '';
 
       let mediaHtml = '';

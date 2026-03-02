@@ -28,12 +28,12 @@ export default async function handler(req, res) {
       const uriHex = h.slice(128, 128 + len * 2);
       const uri = Buffer.from(uriHex, 'hex').toString();
       const arHash = uri.replace('ar://', '');
-      const metaRes = await fetch('https://ar-io.net/' + arHash);
+      const metaRes = await fetch('https://api.inprocess.world/api/arweave/' + arHash);
       const meta = await metaRes.json();
       title = meta.name || title;
       description = meta.description || '';
       if (meta.image) {
-        imageUrl = meta.image.replace('ar://', 'https://ar-io.net/');
+        imageUrl = meta.image.replace('ar://', 'https://api.inprocess.world/api/arweave/');
       }
     }
   } catch (e) {}

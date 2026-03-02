@@ -59,7 +59,7 @@ export default async function handler(req, res) {
     const metaPromises = uris.map((uri, idx) => {
       if (!uri) return Promise.resolve(null);
       const arHash = uri.replace('ar://', '');
-      return fetch(`https://ar-io.net/${arHash}`)
+      return fetch(`https://api.inprocess.world/api/arweave/${arHash}`)
         .then(r => r.json())
         .then(meta => ({ tokenId: idx + 1, uri, ...meta }))
         .catch(() => ({ tokenId: idx + 1, uri, name: 'TOKEN ' + (idx + 1) }));
