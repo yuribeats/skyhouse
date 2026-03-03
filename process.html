@@ -1314,9 +1314,17 @@
     }
 
     async function loadGalleryForAddress(addr) {
-      const res = await fetch('/api/process/gallery?address=' + encodeURIComponent(addr));
-      const data = await res.json();
-      return (data.tokens || []).map(t => ({ ...t, collectionAddress: addr }));
+      for (let attempt = 0; attempt < 2; attempt++) {
+        try {
+          const res = await fetch('/api/process/gallery?address=' + encodeURIComponent(addr));
+          if (!res.ok) throw new Error(res.status);
+          const data = await res.json();
+          return (data.tokens || []).map(t => ({ ...t, collectionAddress: addr }));
+        } catch (e) {
+          if (attempt === 1) return [];
+        }
+      }
+      return [];
     }
 
     async function loadGallery() {
@@ -1328,9 +1336,12 @@
         if (gallerySelectedAddr) {
           tokens = await loadGalleryForAddress(gallerySelectedAddr);
         } else {
-          const fetches = collections.map(c => loadGalleryForAddress(c.address));
-          const results = await Promise.all(fetches);
-          for (const r of results) tokens.push(...r);
+          const BATCH = 10;
+          for (let i = 0; i < collections.length; i += BATCH) {
+            const batch = collections.slice(i, i + BATCH);
+            const results = await Promise.all(batch.map(c => loadGalleryForAddress(c.address)));
+            for (const r of results) tokens.push(...r);
+          }
         }
 
         if (tokens.length === 0) {
@@ -1375,18 +1386,30 @@
 
     tokenBackBtn.addEventListener('click', () => showStep(4));
 
+    function arUrl(arUri) {
+      if (!arUri) return '';
+      return arUri.replace('ar://', 'https://api.inprocess.world/api/arweave/');
+    }
+    function arDirect(arUri) {
+      if (!arUri) return '';
+      return arUri.replace('ar://', 'https://arweave.net/');
+    }
+
     function showTokenDetail(t) {
-      const imageUrl = (t.image || '').replace('ar://', 'https://api.inprocess.world/api/arweave/');
-      const animUrl = (t.animation_url || '').replace('ar://', 'https://api.inprocess.world/api/arweave/');
-      const contentUri = t.content?.uri ? t.content.uri.replace('ar://', 'https://api.inprocess.world/api/arweave/') : '';
+      const imageUrl = arUrl(t.image || '');
+      const contentUri = t.content?.uri || '';
       const contentMime = t.content?.mime || '';
+      const isVideo = contentMime.startsWith('video/');
+      const isAudio = contentMime.startsWith('audio/');
+      const mediaUri = isVideo || isAudio ? arDirect(contentUri) : arUrl(contentUri);
+      const animUrl = arUrl(t.animation_url || '');
 
       let mediaHtml = '';
-      if (contentMime.startsWith('video/') && contentUri) {
-        mediaHtml = '<video src="' + contentUri + '" controls style="width:100%; border:2px solid #000;"></video>';
-      } else if (contentMime.startsWith('audio/') && contentUri) {
+      if (isVideo && mediaUri) {
+        mediaHtml = '<video src="' + mediaUri + '" controls playsinline poster="' + imageUrl + '" style="width:100%; border:2px solid #000;"></video>';
+      } else if (isAudio && mediaUri) {
         mediaHtml = '<img class="token-image" src="' + imageUrl + '" onerror="this.style.display=\'none\'">' +
-          '<audio src="' + contentUri + '" controls style="width:100%; margin-top:12px;"></audio>';
+          '<audio src="' + mediaUri + '" controls style="width:100%; margin-top:12px;"></audio>';
       } else if (animUrl && !contentMime) {
         mediaHtml = '<img class="token-image" src="' + animUrl + '" onerror="this.src=\'' + imageUrl + '\'">';
       } else {
