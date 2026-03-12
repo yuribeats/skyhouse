@@ -20,7 +20,6 @@ export default async function handler(req, res) {
       })),
       account,
     };
-    console.log('AIRDROP REQUEST:', JSON.stringify(payload));
 
     const response = await fetch(
       'https://api.inprocess.world/api/moment/airdrop',
@@ -30,17 +29,7 @@ export default async function handler(req, res) {
           'x-api-key': apiKey,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          moment: {
-            tokenId: String(tokenId),
-            collectionAddress,
-          },
-          recipients: recipients.map(addr => ({
-            recipientAddress: addr,
-            tokenId: String(tokenId),
-          })),
-          account,
-        }),
+        body: JSON.stringify(payload),
       }
     );
 
