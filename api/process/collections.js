@@ -33,14 +33,15 @@ export default async function handler(req, res) {
 
       let partialMatch = null;
       for (const c of allCols) {
-        const u = (c.default_admin?.username || '').toLowerCase();
-        if (u && c.default_admin?.address) {
-          walletCache.set(u, c.default_admin.address);
+        const u = (c.creator?.username || '').toLowerCase();
+        const addr = c.creator?.address;
+        if (u && addr) {
+          walletCache.set(u, addr);
         }
         if (u === username) {
-          adminWallet = c.default_admin.address;
+          adminWallet = addr;
         } else if (!partialMatch && (u.startsWith(username) || username.startsWith(u))) {
-          partialMatch = c.default_admin.address;
+          partialMatch = addr;
         }
       }
       if (!adminWallet && partialMatch) {

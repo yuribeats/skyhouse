@@ -28,7 +28,7 @@ export default async function handler(req, res) {
     // Filter to collections with on-chain addresses
     const contracts = allCols.filter(c => c.address).map(c => ({
       address: c.address,
-      artist: c.default_admin?.username || 'UNKNOWN',
+      artist: c.creator?.username || 'UNKNOWN',
       name: c.name || ''
     }));
 

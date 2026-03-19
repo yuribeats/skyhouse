@@ -1151,7 +1151,7 @@
           body: JSON.stringify({
             momentUri,
             collectionAddress,
-            account: selectedCollection.default_admin?.address,
+            account: selectedCollection.creator?.address,
             recipientCount: recipients.length,
             apiKey: artistApiKey,
           }),
@@ -1196,7 +1196,7 @@
             collectionAddress: mintedCollectionAddress,
             tokenId,
             recipients,
-            account: selectedCollection.default_admin?.address,
+            account: selectedCollection.creator?.address,
             apiKey: artistApiKey,
           }),
         });
