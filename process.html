@@ -1159,7 +1159,8 @@
 
         if (!mintRes.ok) {
           const err = await mintRes.json();
-          throw new Error('MINT FAILED: ' + (err.error || mintRes.status));
+          console.error('MINT ERROR FULL RESPONSE:', JSON.stringify(err, null, 2));
+          throw new Error('MINT FAILED: ' + (err.error || mintRes.status) + (err.sentPayload ? ' | SENT: ' + JSON.stringify(err.sentPayload) : ''));
         }
 
         const mintData = await mintRes.json();

@@ -55,6 +55,7 @@ export default async function handler(req, res) {
       account,
     };
     const bodyStr = JSON.stringify(payload);
+    console.log('[mint] sending to upstream:', bodyStr);
 
     const response = await postJSON(
       'https://api.inprocess.world/api/moment/create',
@@ -62,8 +63,15 @@ export default async function handler(req, res) {
       bodyStr
     );
 
+    console.log('[mint] upstream status:', response.status);
+    console.log('[mint] upstream body:', response.body);
+
     if (response.status < 200 || response.status >= 300) {
-      return res.status(response.status).json({ error: response.body });
+      return res.status(response.status).json({
+        error: response.body,
+        sentPayload: payload,
+        upstreamStatus: response.status,
+      });
     }
 
     try {
@@ -73,6 +81,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ raw: response.body });
     }
   } catch (err) {
+    console.log('[mint] caught error:', err.message);
     return res.status(500).json({ error: err.message });
   }
 }
