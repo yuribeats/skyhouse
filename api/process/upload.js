@@ -1,3 +1,12 @@
+export const config = {
+  maxDuration: 60,
+  api: {
+    bodyParser: {
+      sizeLimit: '20mb',
+    },
+  },
+};
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -10,15 +19,9 @@ export default async function handler(req, res) {
     }
 
     const buffer = Buffer.from(data, 'base64');
-
-    const boundary = '----FormBoundary' + Date.now();
-    const parts = [];
-    parts.push(`--${boundary}\r\n`);
-    parts.push(`Content-Disposition: form-data; name="file"; filename="${filename}"\r\n`);
-    parts.push(`Content-Type: ${contentType}\r\n\r\n`);
-    const header = Buffer.from(parts.join(''));
-    const footer = Buffer.from(`\r\n--${boundary}--\r\n`);
-    const body = Buffer.concat([header, buffer, footer]);
+    const formData = new FormData();
+    const blob = new Blob([buffer], { type: contentType });
+    formData.append('file', blob, filename);
 
     const response = await fetch(
       'https://api.inprocess.world/api/arweave',
@@ -26,9 +29,8 @@ export default async function handler(req, res) {
         method: 'POST',
         headers: {
           'x-api-key': apiKey,
-          'Content-Type': `multipart/form-data; boundary=${boundary}`,
         },
-        body,
+        body: formData,
       }
     );
 
