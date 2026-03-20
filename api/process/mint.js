@@ -1,6 +1,32 @@
+import https from 'https';
+
 export const config = {
   maxDuration: 60,
 };
+
+function postJSON(url, headers, body) {
+  return new Promise((resolve, reject) => {
+    const parsed = new URL(url);
+    const options = {
+      hostname: parsed.hostname,
+      path: parsed.pathname,
+      method: 'POST',
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body),
+      },
+    };
+    const request = https.request(options, (response) => {
+      let data = '';
+      response.on('data', (chunk) => { data += chunk; });
+      response.on('end', () => resolve({ status: response.statusCode, body: data }));
+    });
+    request.on('error', reject);
+    request.write(body);
+    request.end();
+  });
+}
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -30,31 +56,21 @@ export default async function handler(req, res) {
     };
     const bodyStr = JSON.stringify(payload);
 
-    const response = await fetch(
+    const response = await postJSON(
       'https://api.inprocess.world/api/moment/create',
-      {
-        method: 'POST',
-        headers: {
-          'x-api-key': apiKey,
-          'Content-Type': 'application/json',
-        },
-        body: bodyStr,
-      }
+      { 'x-api-key': apiKey },
+      bodyStr
     );
 
-    const text = await response.text();
-    if (!response.ok) {
-      return res.status(response.status).json({
-        error: text,
-        debug: { sentBytes: bodyStr.length, status: response.status },
-      });
+    if (response.status < 200 || response.status >= 300) {
+      return res.status(response.status).json({ error: response.body });
     }
 
     try {
-      const result = JSON.parse(text);
+      const result = JSON.parse(response.body);
       return res.status(200).json(result);
     } catch {
-      return res.status(200).json({ raw: text });
+      return res.status(200).json({ raw: response.body });
     }
   } catch (err) {
     return res.status(500).json({ error: err.message });
