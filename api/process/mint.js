@@ -48,7 +48,7 @@ export default async function handler(req, res) {
           type: 'fixedPrice',
           pricePerToken: '0',
           saleStart: '0',
-          saleEnd: '18446744073709551615',
+          saleEnd: '9999999999',
         },
         mintToCreatorCount: (recipientCount || 1) + 1,
       },
