@@ -30,21 +30,30 @@ export default async function handler(req, res) {
   try {
     const apiKey = req.query.key || 'fake';
 
-    const payload = {
-      contract: { address: '0x0000000000000000000000000000000000000001' },
-      token: {
-        tokenMetadataURI: 'ar://test123',
-        createReferral: '0x0000000000000000000000000000000000000000',
-        salesConfig: {
-          type: 'fixedPrice',
-          pricePerToken: '0',
-          saleStart: '0',
-          saleEnd: '9999999999',
-        },
-        mintToCreatorCount: 2,
-      },
-      account: '0x0000000000000000000000000000000000000001',
-    };
+    // Test multiple formats to find what the API accepts
+    const tests = [
+      { name: 'no_salesConfig', payload: {
+        contract: { address: '0x0000000000000000000000000000000000000001' },
+        token: { tokenMetadataURI: 'ar://test123', createReferral: '0x0000000000000000000000000000000000000000', mintToCreatorCount: 2 },
+        account: '0x0000000000000000000000000000000000000001',
+      }},
+      { name: 'numbers_not_strings', payload: {
+        contract: { address: '0x0000000000000000000000000000000000000001' },
+        token: { tokenMetadataURI: 'ar://test123', createReferral: '0x0000000000000000000000000000000000000000', salesConfig: { type: 'fixedPrice', pricePerToken: 0, saleStart: 0, saleEnd: 9999999999 }, mintToCreatorCount: 2 },
+        account: '0x0000000000000000000000000000000000000001',
+      }},
+      { name: 'all_strings', payload: {
+        contract: { address: '0x0000000000000000000000000000000000000001' },
+        token: { tokenMetadataURI: 'ar://test123', createReferral: '0x0000000000000000000000000000000000000000', salesConfig: { type: 'fixedPrice', pricePerToken: '0', saleStart: '0', saleEnd: '9999999999' }, mintToCreatorCount: '2' },
+        account: '0x0000000000000000000000000000000000000001',
+      }},
+    ];
+    const results = [];
+    for (const t of tests) {
+      const bodyStr = JSON.stringify(t.payload);
+      const r = await postJSON('https://api.inprocess.world/api/moment/create', { 'x-api-key': apiKey }, bodyStr);
+      results.push({ name: t.name, status: r.status, body: r.body });
+    }
     const bodyStr = JSON.stringify(payload);
 
     const response = await postJSON(
@@ -53,12 +62,7 @@ export default async function handler(req, res) {
       bodyStr
     );
 
-    return res.status(200).json({
-      upstreamStatus: response.status,
-      upstreamBody: response.body,
-      sentPayload: bodyStr,
-      sentBytes: Buffer.byteLength(bodyStr),
-    });
+    return res.status(200).json({ results });
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
