@@ -29,33 +29,29 @@ function postJSON(url, headers, body) {
 export default async function handler(req, res) {
   try {
     const apiKey = req.query.key || 'fake';
+    const base = {
+      contract: { address: '0x0000000000000000000000000000000000000001' },
+      account: '0x0000000000000000000000000000000000000001',
+    };
+    const baseToken = {
+      tokenMetadataURI: 'ar://test123',
+      createReferral: '0x0000000000000000000000000000000000000000',
+      mintToCreatorCount: 2,
+    };
 
     const tests = [
-      { name: 'no_salesConfig', payload: {
-        contract: { address: '0x0000000000000000000000000000000000000001' },
-        token: { tokenMetadataURI: 'ar://test123', createReferral: '0x0000000000000000000000000000000000000000', mintToCreatorCount: 2 },
-        account: '0x0000000000000000000000000000000000000001',
-      }},
-      { name: 'numbers_not_strings', payload: {
-        contract: { address: '0x0000000000000000000000000000000000000001' },
-        token: { tokenMetadataURI: 'ar://test123', createReferral: '0x0000000000000000000000000000000000000000', salesConfig: { type: 'fixedPrice', pricePerToken: 0, saleStart: 0, saleEnd: 9999999999 }, mintToCreatorCount: 2 },
-        account: '0x0000000000000000000000000000000000000001',
-      }},
-      { name: 'all_strings', payload: {
-        contract: { address: '0x0000000000000000000000000000000000000001' },
-        token: { tokenMetadataURI: 'ar://test123', createReferral: '0x0000000000000000000000000000000000000000', salesConfig: { type: 'fixedPrice', pricePerToken: '0', saleStart: '0', saleEnd: '9999999999' }, mintToCreatorCount: '2' },
-        account: '0x0000000000000000000000000000000000000001',
-      }},
-      { name: 'no_salesConfig_no_referral', payload: {
-        contract: { address: '0x0000000000000000000000000000000000000001' },
-        token: { tokenMetadataURI: 'ar://test123', mintToCreatorCount: 2 },
-        account: '0x0000000000000000000000000000000000000001',
-      }},
+      { name: 'correct_format_saleEnd_9999999999', salesConfig: { type: 'fixedPrice', pricePerToken: '0', saleStart: '0', saleEnd: '9999999999' } },
+      { name: 'saleEnd_0', salesConfig: { type: 'fixedPrice', pricePerToken: '0', saleStart: '0', saleEnd: '0' } },
+      { name: 'saleEnd_empty', salesConfig: { type: 'fixedPrice', pricePerToken: '0', saleStart: '0', saleEnd: '' } },
+      { name: 'saleEnd_max_safe', salesConfig: { type: 'fixedPrice', pricePerToken: '0', saleStart: '0', saleEnd: '9007199254740991' } },
+      { name: 'saleEnd_uint64_max', salesConfig: { type: 'fixedPrice', pricePerToken: '0', saleStart: '0', saleEnd: '18446744073709551615' } },
+      { name: 'type_allowlist', salesConfig: { type: 'allowlist', pricePerToken: '0', saleStart: '0', saleEnd: '9999999999' } },
     ];
 
     const results = [];
     for (const t of tests) {
-      const bodyStr = JSON.stringify(t.payload);
+      const payload = { ...base, token: { ...baseToken, salesConfig: t.salesConfig } };
+      const bodyStr = JSON.stringify(payload);
       const r = await postJSON('https://api.inprocess.world/api/moment/create', { 'x-api-key': apiKey }, bodyStr);
       results.push({ name: t.name, status: r.status, response: r.body });
     }
