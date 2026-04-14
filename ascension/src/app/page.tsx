@@ -11,19 +11,10 @@ const fadeUp = {
 export default function Home() {
   return (
     <>
-      {/* Hero */}
-      <section className="relative flex min-h-screen items-center justify-center">
-        <Image
-          src="/assets/performance-church-2.jpg"
-          alt="The Ascension Service — live performance"
-          fill
-          preload
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-black/50" />
-
+      {/* Hero — full screen logo on black */}
+      <section className="relative flex min-h-screen items-center justify-center bg-black">
         <motion.div
-          className="relative z-10 flex flex-col items-center gap-8 px-6 text-center"
+          className="relative z-10 flex flex-col items-center gap-10 px-6 text-center"
           initial="hidden"
           animate="visible"
           variants={{
@@ -34,10 +25,10 @@ export default function Home() {
             <Image
               src="/assets/Welcome_to_The_Ascension_Service__logo_.png"
               alt="The Ascension Service"
-              width={480}
-              height={200}
+              width={900}
+              height={400}
               preload
-              className="h-auto w-[300px] md:w-[480px]"
+              className="h-auto w-[80vw] max-w-[900px]"
             />
           </motion.div>
 

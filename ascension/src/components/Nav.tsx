@@ -41,15 +41,11 @@ export default function Nav() {
         }`}
       >
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-4 md:px-12">
-          <Link href="/">
-            <Image
-              src="/assets/Welcome_to_The_Ascension_Service__logo_.png"
-              alt="The Ascension Service"
-              width={160}
-              height={60}
-              preload
-              className="h-auto w-[120px] md:w-[160px]"
-            />
+          <Link
+            href="/"
+            className="font-body text-sm tracking-widest text-white transition-colors duration-200 hover:text-neptune-teal"
+          >
+            THE ASCENSION SERVICE
           </Link>
 
           {/* Desktop links */}
