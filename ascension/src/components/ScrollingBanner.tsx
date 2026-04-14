@@ -6,19 +6,21 @@ interface ScrollingBannerProps {
   images: string[];
   direction?: "left" | "right";
   speed?: number;
+  height?: number;
 }
 
 export default function ScrollingBanner({
   images,
   direction = "left",
   speed = 40,
+  height = 200,
 }: ScrollingBannerProps) {
   const doubled = [...images, ...images];
 
   return (
     <div className="overflow-hidden">
       <div
-        className="flex gap-4 whitespace-nowrap"
+        className="flex gap-2 whitespace-nowrap"
         style={{
           animation: `scroll-${direction} ${speed}s linear infinite`,
         }}
@@ -30,7 +32,8 @@ export default function ScrollingBanner({
             alt=""
             width={480}
             height={270}
-            className="h-[160px] w-auto flex-shrink-0 md:h-[200px]"
+            className="flex-shrink-0 w-auto"
+            style={{ height: `${height}px` }}
           />
         ))}
       </div>
