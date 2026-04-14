@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import PhotoGrid from "@/components/PhotoGrid";
 
@@ -8,7 +9,7 @@ const fadeUp = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
 };
 
-const photos = [
+const staticPhotos = [
   { src: "/assets/tdr1.png", alt: "Trans Day of Remembrance Ascension Service" },
   { src: "/assets/tdr2.png", alt: "Order of Service" },
   { src: "/assets/brochure-1.png", alt: "Why Make Art — The Ascension Service" },
@@ -22,6 +23,18 @@ const photos = [
 ];
 
 export default function Press() {
+  const [uploadedPhotos, setUploadedPhotos] = useState<{ src: string; alt: string }[]>([]);
+
+  useEffect(() => {
+    fetch("/api/images")
+      .then((r) => r.json())
+      .then((data: { id: string; url: string; alt: string }[]) => {
+        setUploadedPhotos(data.map((d) => ({ src: d.url, alt: d.alt })));
+      });
+  }, []);
+
+  const allPhotos = [...uploadedPhotos, ...staticPhotos];
+
   return (
     <motion.div
       className="mx-auto max-w-[1200px] px-6 py-24 md:px-12"
@@ -37,7 +50,7 @@ export default function Press() {
       </motion.div>
 
       <motion.div variants={fadeUp}>
-        <PhotoGrid photos={photos} />
+        <PhotoGrid photos={allPhotos} />
       </motion.div>
     </motion.div>
   );

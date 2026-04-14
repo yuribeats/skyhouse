@@ -1,25 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { list, put } from "@vercel/blob";
+import { getData, setData } from "@/lib/blob-store";
 
-const BLOB_KEY = "subscribers.json";
-
-async function getSubscribers(): Promise<string[]> {
-  try {
-    const { blobs } = await list({ prefix: BLOB_KEY });
-    if (blobs.length === 0) return [];
-    const res = await fetch(blobs[0].url);
-    return await res.json();
-  } catch {
-    return [];
-  }
-}
-
-async function saveSubscribers(emails: string[]) {
-  await put(BLOB_KEY, JSON.stringify(emails), {
-    access: "public",
-    addRandomSuffix: false,
-  });
-}
+const KEY = "subscribers.json";
 
 export async function POST(req: NextRequest) {
   const { email } = await req.json();
@@ -27,7 +9,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid email" }, { status: 400 });
   }
 
-  const subscribers = await getSubscribers();
+  const subscribers = await getData<string>(KEY);
   const normalized = email.toLowerCase().trim();
 
   if (subscribers.includes(normalized)) {
@@ -35,12 +17,12 @@ export async function POST(req: NextRequest) {
   }
 
   subscribers.push(normalized);
-  await saveSubscribers(subscribers);
+  await setData(KEY, subscribers);
 
   return NextResponse.json({ message: "Subscribed" });
 }
 
 export async function GET() {
-  const subscribers = await getSubscribers();
+  const subscribers = await getData<string>(KEY);
   return NextResponse.json({ subscribers, count: subscribers.length });
 }

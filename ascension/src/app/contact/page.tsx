@@ -13,9 +13,15 @@ const fadeUp = {
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: wire contact form to Resend / Formspree / email API
+    const form = e.target as HTMLFormElement;
+    const data = Object.fromEntries(new FormData(form));
+    await fetch("/api/contacts", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
     setSubmitted(true);
   };
 
@@ -43,24 +49,28 @@ export default function Contact() {
           ) : (
             <form onSubmit={handleSubmit} className="flex flex-col gap-5">
               <input
+                name="name"
                 type="text"
                 placeholder="NAME"
                 required
                 className="border border-neptune-blue/40 bg-transparent px-4 py-3 font-body text-sm tracking-wider text-white outline-none transition-colors focus:border-neptune-teal"
               />
               <input
+                name="email"
                 type="email"
                 placeholder="EMAIL"
                 required
                 className="border border-neptune-blue/40 bg-transparent px-4 py-3 font-body text-sm tracking-wider text-white outline-none transition-colors focus:border-neptune-teal"
               />
               <input
+                name="organization"
                 type="text"
                 placeholder="ORGANIZATION / VENUE"
                 className="border border-neptune-blue/40 bg-transparent px-4 py-3 font-body text-sm tracking-wider text-white outline-none transition-colors focus:border-neptune-teal"
               />
               <div className="relative border border-neptune-blue/40 transition-colors focus-within:border-neptune-teal">
                 <select
+                  name="eventType"
                   required
                   defaultValue=""
                   className="w-full appearance-none bg-transparent px-4 py-3 font-body text-sm tracking-wider text-white outline-none [&>option]:bg-black [&>option]:text-white"
@@ -78,6 +88,7 @@ export default function Contact() {
                 </div>
               </div>
               <textarea
+                name="message"
                 placeholder="MESSAGE"
                 rows={5}
                 required
