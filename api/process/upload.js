@@ -28,7 +28,7 @@ export default async function handler(req, res) {
       {
         method: 'POST',
         headers: {
-          'x-api-key': apiKey,
+          'Authorization': `Bearer ${apiKey}`,
         },
         body: formData,
       }

@@ -59,7 +59,7 @@ export default async function handler(req, res) {
 
     const response = await postJSON(
       'https://api.inprocess.world/api/moment/create',
-      { 'x-api-key': apiKey },
+      { 'Authorization': `Bearer ${apiKey}` },
       bodyStr
     );
 

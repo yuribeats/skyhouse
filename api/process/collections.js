@@ -6,14 +6,16 @@ export default async function handler(req, res) {
   }
 
   const username = (req.query.username || '').toLowerCase();
-  if (!username) {
-    return res.status(400).json({ error: 'Username required' });
+  const wallet = (req.query.wallet || '').toLowerCase();
+
+  if (!username && !wallet) {
+    return res.status(400).json({ error: 'Username or wallet required' });
   }
 
   try {
-    let adminWallet = walletCache.get(username);
+    let adminWallet = wallet || walletCache.get(username);
 
-    if (!adminWallet) {
+    if (!adminWallet && username) {
       const first = await fetch('https://api.inprocess.world/api/collections?page=1&limit=100');
       const firstData = await first.json();
       const totalPages = firstData.pagination?.total_pages || 1;

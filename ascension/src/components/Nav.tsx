@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import ScrollingBanner from "@/components/ScrollingBanner";
 
 const links = [
+  { href: "/feed", label: "FEED" },
   { href: "/events", label: "EVENTS" },
   { href: "/press", label: "IMAGES" },
   { href: "/shop", label: "SHOP" },

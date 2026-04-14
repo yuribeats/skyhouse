@@ -610,20 +610,23 @@
       <div class="step-label">WELCOME TO THE ©ASCENSION SERVICES™ CORP.</div>
 
       <div class="field">
-        <label>USERNAME</label>
-        <input type="text" class="text-input" id="usernameInput" placeholder="INPROCESS USERNAME - MUST APPEAR EXACTLY AS IT DOES ON INPROCESS">
+        <label>EMAIL</label>
+        <input type="email" class="text-input" id="emailInput" placeholder="YOUR INPROCESS EMAIL" style="text-transform: none;" autocomplete="email">
       </div>
 
-      <div class="field">
-        <label>API KEY</label>
-        <input type="text" class="text-input" id="apiKeyInput" placeholder="INPROCESS API KEY" style="text-transform: none;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-        <div class="help-tooltip" style="display:block; margin-top:6px;">YOUR API KEY AUTHENTICATES MINTING ACTIONS ON INPROCESS. <a href="https://www.inprocess.world/manage/api-keys" target="_blank" style="color:#228B22; text-decoration:underline;">GET YOUR API KEY HERE</a></div>
+      <div id="otpSection" style="display:none;">
+        <div class="field">
+          <label>VERIFICATION CODE</label>
+          <input type="text" class="text-input" id="otpInput" placeholder="6-DIGIT CODE FROM YOUR EMAIL" style="text-transform: none;" maxlength="6" autocomplete="one-time-code">
+          <div class="help-tooltip" style="display:block; margin-top:6px;">CHECK YOUR EMAIL FOR THE VERIFICATION CODE.</div>
+        </div>
       </div>
 
       <div id="authError" class="error-message" style="display:none"></div>
 
       <div class="btn-row">
-        <button class="btn" id="loginBtn" style="display:none">CREATE TOKEN</button>
+        <button class="btn" id="sendCodeBtn" style="display:none">SEND CODE</button>
+        <button class="btn" id="loginBtn" style="display:none">LOGIN</button>
         <button class="btn-outline" id="galleryLoginBtn" style="display:none">GALLERY</button>
       </div>
     </div>
@@ -752,6 +755,31 @@
     let artistUsername = null;
     let artistApiKey = null;
     let artistWallet = null;
+    let artistEmail = null;
+
+    function saveSession() {
+      localStorage.setItem('ascension_session', JSON.stringify({
+        token: artistApiKey, username: artistUsername,
+        wallet: artistWallet, email: artistEmail,
+        ts: Date.now(),
+      }));
+    }
+    function clearSession() {
+      localStorage.removeItem('ascension_session');
+    }
+    function restoreSession() {
+      try {
+        const raw = localStorage.getItem('ascension_session');
+        if (!raw) return false;
+        const s = JSON.parse(raw);
+        if (Date.now() - s.ts > 55 * 60 * 1000) { clearSession(); return false; }
+        artistApiKey = s.token;
+        artistUsername = s.username;
+        artistWallet = s.wallet;
+        artistEmail = s.email;
+        return true;
+      } catch { return false; }
+    }
     let selectedFile = null;
     let selectedFileData = null;
     let selectedCollection = null;
@@ -777,49 +805,114 @@
     const recipientList = document.getElementById('recipientList');
     const recipientCount = document.getElementById('recipientCount');
     const resetBtn = document.getElementById('resetBtn');
-    const usernameInput = document.getElementById('usernameInput');
-    const apiKeyInput = document.getElementById('apiKeyInput');
+    const emailInput = document.getElementById('emailInput');
+    const otpInput = document.getElementById('otpInput');
+    const otpSection = document.getElementById('otpSection');
+    const sendCodeBtn = document.getElementById('sendCodeBtn');
     const loginBtn = document.getElementById('loginBtn');
     const galleryLoginBtn = document.getElementById('galleryLoginBtn');
     const authError = document.getElementById('authError');
+    let codeSent = false;
 
-    // Login validation
     function validateLogin() {
-      const hasUsername = !!usernameInput.value.trim();
-      const hasApiKey = !!apiKeyInput.value.trim();
-      galleryLoginBtn.style.display = hasUsername ? '' : 'none';
-      galleryLoginBtn.disabled = !hasUsername;
-      loginBtn.style.display = hasApiKey ? '' : 'none';
-      loginBtn.disabled = !(hasUsername && hasApiKey);
+      const hasEmail = !!emailInput.value.trim() && emailInput.value.includes('@');
+      const hasOtp = !!otpInput.value.trim() && otpInput.value.trim().length === 6;
+      sendCodeBtn.style.display = (hasEmail && !codeSent) ? '' : 'none';
+      loginBtn.style.display = (codeSent && hasOtp) ? '' : 'none';
+      galleryLoginBtn.style.display = (codeSent && hasOtp) ? '' : 'none';
     }
-    usernameInput.addEventListener('input', validateLogin);
-    apiKeyInput.addEventListener('input', validateLogin);
+    emailInput.addEventListener('input', () => {
+      if (codeSent) { codeSent = false; otpSection.style.display = 'none'; otpInput.value = ''; }
+      validateLogin();
+    });
+    otpInput.addEventListener('input', validateLogin);
+
+    if (restoreSession()) {
+      showStep(1);
+      loadCollections();
+    }
+
+    sendCodeBtn.addEventListener('click', async () => {
+      sendCodeBtn.disabled = true;
+      authError.style.display = 'none';
+      try {
+        const res = await fetch('https://api.inprocess.world/api/oauth/code', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: emailInput.value.trim() }),
+        });
+        if (!res.ok) throw new Error('FAILED TO SEND CODE');
+        codeSent = true;
+        otpSection.style.display = '';
+        otpInput.focus();
+      } catch (err) {
+        authError.textContent = err.message;
+        authError.style.display = '';
+      }
+      sendCodeBtn.disabled = false;
+      validateLogin();
+    });
+
+    async function doOAuthLogin() {
+      authError.style.display = 'none';
+      const email = emailInput.value.trim();
+      const code = otpInput.value.trim();
+      const res = await fetch('https://api.inprocess.world/api/oauth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, code }),
+      });
+      if (!res.ok) throw new Error('INVALID CODE');
+      const data = await res.json();
+      artistApiKey = data.token;
+      artistEmail = email;
+
+      const meRes = await fetch('https://api.inprocess.world/api/oauth', {
+        headers: { 'Authorization': 'Bearer ' + artistApiKey },
+      });
+      if (meRes.ok) {
+        const me = await meRes.json();
+        artistUsername = (me.profile && me.profile.username) || email.split('@')[0];
+        artistWallet = me.artistAddress || null;
+        console.log('[oauth] username:', artistUsername, 'wallet:', artistWallet);
+      } else {
+        console.log('[oauth] /oauth/get failed:', meRes.status);
+        artistUsername = email.split('@')[0];
+      }
+      saveSession();
+    }
 
     loginBtn.addEventListener('click', async () => {
       loginBtn.disabled = true;
-      authError.style.display = 'none';
-
-      artistUsername = usernameInput.value.trim().toLowerCase();
-      artistApiKey = apiKeyInput.value.trim();
-      showStep(1);
-      loadCollections();
+      try {
+        await doOAuthLogin();
+        showStep(1);
+        loadCollections();
+      } catch (err) {
+        authError.textContent = err.message;
+        authError.style.display = '';
+      }
+      loginBtn.disabled = false;
     });
 
     galleryLoginBtn.addEventListener('click', async () => {
       galleryLoginBtn.disabled = true;
-      authError.style.display = 'none';
-
-      artistUsername = usernameInput.value.trim().toLowerCase();
-      artistApiKey = apiKeyInput.value.trim();
-      galleryReturnStep = 0;
-      gallerySelectedAddr = null;
-      galleryDropLabel.textContent = 'ALL COLLECTIONS';
-      showStep(4);
-      galleryContent.className = 'gallery-loading';
-      galleryContent.innerHTML = 'LOADING COLLECTIONS...';
-      await loadCollections();
-      buildGalleryDropdown();
-      loadGallery();
+      try {
+        await doOAuthLogin();
+        galleryReturnStep = 0;
+        gallerySelectedAddr = null;
+        galleryDropLabel.textContent = 'ALL COLLECTIONS';
+        showStep(4);
+        galleryContent.className = 'gallery-loading';
+        galleryContent.textContent = 'LOADING COLLECTIONS...';
+        await loadCollections();
+        buildGalleryDropdown();
+        loadGallery();
+      } catch (err) {
+        authError.textContent = err.message;
+        authError.style.display = '';
+      }
+      galleryLoginBtn.disabled = false;
     });
 
     // Steps
@@ -952,7 +1045,10 @@
     async function loadCollections() {
       collectionLabel.textContent = 'LOADING COLLECTIONS...';
       try {
-        const res = await fetch('/api/process/collections?username=' + encodeURIComponent(artistUsername));
+        const params = artistWallet
+          ? 'wallet=' + encodeURIComponent(artistWallet)
+          : 'username=' + encodeURIComponent(artistUsername);
+        const res = await fetch('/api/process/collections?' + params);
         const data = await res.json();
         collections = Array.isArray(data) ? data : (data.collections || []);
         if (data.wallet) artistWallet = data.wallet;
@@ -1254,9 +1350,13 @@
       artistUsername = null;
       artistApiKey = null;
       artistWallet = null;
-      usernameInput.value = '';
-      apiKeyInput.value = '';
+      artistEmail = null;
+      codeSent = false;
+      emailInput.value = '';
+      otpInput.value = '';
+      otpSection.style.display = 'none';
       authError.style.display = 'none';
+      clearSession();
       validateLogin();
     });
 
