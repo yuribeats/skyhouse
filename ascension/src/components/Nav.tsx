@@ -37,24 +37,24 @@ export default function Nav() {
 
       {/* Nav bar */}
       <nav className="relative border-b border-neptune-blue/30 bg-white">
-        <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-8 md:px-12">
+        <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-4 md:px-12 md:py-8">
           <Link
             href="/"
-            className="font-display text-3xl text-neptune-blue transition-colors duration-200 hover:text-neptune-teal md:text-4xl"
+            className="font-display text-xl text-neptune-blue transition-colors duration-200 hover:text-neptune-teal md:text-4xl"
           >
             The Ascension Service
           </Link>
 
-          {/* Neptune globe */}
-          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          {/* Neptune globe — desktop only, links home */}
+          <Link href="/" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
             <Image
               src="/assets/neptune-globe-cropped.png"
               alt="Neptune"
               width={80}
               height={80}
-              className="h-[60px] w-[60px] rounded-full object-cover md:h-[80px] md:w-[80px]"
+              className="h-[80px] w-[80px] rounded-full object-cover"
             />
-          </div>
+          </Link>
 
           {/* Desktop links */}
           <div className="hidden gap-8 md:flex">
