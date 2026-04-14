@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
       image: resolveUri(m.metadata?.image || ""),
       contentUri: resolveUri(m.metadata?.content?.uri || ""),
       contentMime: m.metadata?.content?.mime || "",
-      inprocessUrl: `https://www.inprocess.world/${m.address}/${m.token_id}`,
+      inprocessUrl: `https://www.inprocess.world/collect/base:${m.address}/${m.token_id}`,
     })
   );
 
