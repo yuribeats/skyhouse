@@ -10,29 +10,29 @@ const fadeUp = {
 
 export default function Home() {
   return (
-    <section className="relative flex min-h-screen items-center justify-center bg-black">
+    <section className="flex min-h-screen flex-col items-center justify-center bg-black">
       <motion.div
-        className="relative z-10 flex w-full flex-col items-center gap-10 text-center"
+        className="flex w-screen flex-col items-center"
         initial="hidden"
         animate="visible"
         variants={{
           visible: { transition: { staggerChildren: 0.15 } },
         }}
       >
-        <motion.div variants={fadeUp}>
+        <motion.div variants={fadeUp} className="w-full">
           <Image
-            src="/assets/Welcome_to_The_Ascension_Service__logo_.png"
+            src="/assets/logo-cropped.png"
             alt="The Ascension Service"
-            width={900}
-            height={400}
+            width={1920}
+            height={800}
             preload
-            className="h-auto w-full"
+            className="h-auto w-screen"
           />
         </motion.div>
 
         <motion.p
           variants={fadeUp}
-          className="font-display text-2xl text-white md:text-3xl"
+          className="mt-10 font-display text-2xl text-white md:text-3xl"
         >
           A ritual for the living
         </motion.p>
