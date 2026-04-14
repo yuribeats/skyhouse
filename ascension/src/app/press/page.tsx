@@ -9,6 +9,10 @@ const fadeUp = {
 };
 
 const photos = [
+  { src: "/assets/tdr1.png", alt: "Trans Day of Remembrance Ascension Service" },
+  { src: "/assets/tdr2.png", alt: "Order of Service" },
+  { src: "/assets/brochure-1.png", alt: "Why Make Art — The Ascension Service" },
+  { src: "/assets/brochure-2.png", alt: "Ask Yourself — The Ascension Service" },
   { src: "/assets/performance-church-1.jpg", alt: "The Ascension Service — church performance" },
   { src: "/assets/performance-church-2.jpg", alt: "The Ascension Service — church ceremony" },
   { src: "/assets/performance-gallery.jpg", alt: "The Ascension Service — gallery performance" },

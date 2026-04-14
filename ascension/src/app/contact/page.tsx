@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import SubscribeForm from "@/components/SubscribeForm";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -97,12 +98,6 @@ export default function Contact() {
           <h2 className="font-display text-3xl text-white">
             Bookings & Press
           </h2>
-          <a
-            href="mailto:info@theascensionservice.com"
-            className="font-body text-sm tracking-wider text-neptune-teal transition-colors hover:text-neptune-glow"
-          >
-            INFO@THEASCENSIONSERVICE.COM
-          </a>
           <p className="font-body text-sm leading-relaxed text-neptune-muted">
             For press inquiries, licensing, and private engagements.
           </p>
@@ -123,16 +118,8 @@ export default function Contact() {
         <p className="mb-6 font-display text-3xl text-white">
           Stay in the current
         </p>
-        <div className="mx-auto flex max-w-md gap-2">
-          <input
-            type="email"
-            placeholder="YOUR EMAIL"
-            className="flex-1 border border-neptune-blue/40 bg-transparent px-4 py-2 font-body text-sm tracking-wider text-white outline-none transition-colors focus:border-neptune-teal"
-          />
-          {/* TODO: wire mailing list to Mailchimp / ConvertKit / Resend */}
-          <button className="bg-neptune-blue px-6 py-2 font-body text-sm tracking-wider text-white transition-colors hover:bg-neptune-teal">
-            SUBSCRIBE
-          </button>
+        <div className="mx-auto max-w-md">
+          <SubscribeForm />
         </div>
       </motion.div>
     </motion.div>

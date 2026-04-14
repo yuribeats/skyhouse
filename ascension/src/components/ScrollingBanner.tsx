@@ -15,17 +15,18 @@ export default function ScrollingBanner({
   speed = 40,
   height = 200,
 }: ScrollingBannerProps) {
-  const doubled = [...images, ...images];
+  // Repeat enough times to guarantee seamless wrap
+  const repeated = [...images, ...images, ...images, ...images];
 
   return (
     <div className="overflow-hidden">
       <div
-        className="flex gap-2 whitespace-nowrap"
+        className="flex whitespace-nowrap"
         style={{
           animation: `scroll-${direction} ${speed}s linear infinite`,
         }}
       >
-        {doubled.map((src, i) => (
+        {repeated.map((src, i) => (
           <Image
             key={`${src}-${i}`}
             src={src}

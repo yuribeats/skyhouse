@@ -8,7 +8,7 @@ import ScrollingBanner from "@/components/ScrollingBanner";
 
 const links = [
   { href: "/events", label: "EVENTS" },
-  { href: "/press", label: "PRESS" },
+  { href: "/press", label: "IMAGES" },
   { href: "/shop", label: "SHOP" },
   { href: "/contact", label: "CONTACT" },
 ];
@@ -31,22 +31,29 @@ export default function Nav() {
     <header className="fixed top-0 left-0 right-0 z-50">
       {/* Banner above nav */}
       <div className="overflow-hidden bg-black">
-        <ScrollingBanner images={row1} direction="left" speed={60} height={36} />
+        <ScrollingBanner images={row1} direction="left" speed={60} height={72} />
       </div>
 
       {/* Nav bar */}
-      <nav
-        className={`border-b border-neptune-blue/30 transition-colors duration-300 ${
-          scrolled ? "bg-black/80 backdrop-blur-sm" : "bg-black/80 backdrop-blur-sm"
-        }`}
-      >
-        <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-4 md:px-12">
+      <nav className="relative border-b border-neptune-blue/30 bg-white">
+        <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-8 md:px-12">
           <Link
             href="/"
-            className="font-body text-sm tracking-widest text-white transition-colors duration-200 hover:text-neptune-teal"
+            className="font-display text-3xl text-neptune-blue transition-colors duration-200 hover:text-neptune-teal md:text-4xl"
           >
-            THE ASCENSION SERVICE
+            The Ascension Service
           </Link>
+
+          {/* Neptune globe */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+            <Image
+              src="/assets/neptune-globe-cropped.png"
+              alt="Neptune"
+              width={80}
+              height={80}
+              className="h-[60px] w-[60px] rounded-full object-cover md:h-[80px] md:w-[80px]"
+            />
+          </div>
 
           {/* Desktop links */}
           <div className="hidden gap-8 md:flex">
@@ -54,10 +61,10 @@ export default function Nav() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`font-body text-sm tracking-widest transition-colors duration-200 hover:text-neptune-teal ${
+                className={`font-body text-sm font-black tracking-widest transition-colors duration-200 hover:text-neptune-teal ${
                   pathname === link.href
                     ? "text-neptune-teal"
-                    : "text-white"
+                    : "text-neptune-blue"
                 }`}
               >
                 {link.label}
@@ -72,17 +79,17 @@ export default function Nav() {
             aria-label="Toggle menu"
           >
             <span
-              className={`block h-[2px] w-6 bg-white transition-transform duration-200 ${
+              className={`block h-[2px] w-6 bg-neptune-blue transition-transform duration-200 ${
                 menuOpen ? "translate-y-[5px] rotate-45" : ""
               }`}
             />
             <span
-              className={`block h-[2px] w-6 bg-white transition-opacity duration-200 ${
+              className={`block h-[2px] w-6 bg-neptune-blue transition-opacity duration-200 ${
                 menuOpen ? "opacity-0" : ""
               }`}
             />
             <span
-              className={`block h-[2px] w-6 bg-white transition-transform duration-200 ${
+              className={`block h-[2px] w-6 bg-neptune-blue transition-transform duration-200 ${
                 menuOpen ? "-translate-y-[5px] -rotate-45" : ""
               }`}
             />
@@ -92,7 +99,7 @@ export default function Nav() {
 
       {/* Banner below nav */}
       <div className="overflow-hidden bg-black">
-        <ScrollingBanner images={row2} direction="right" speed={50} height={36} />
+        <ScrollingBanner images={row2} direction="right" speed={50} height={72} />
       </div>
 
       {/* Mobile overlay */}
