@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "BrushScript";
+  src: url("/fonts/Brush_Script.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --color-neptune-void: #000000;
+  --color-neptune-deep: #001060;
+  --color-neptune-blue: #0030a0;
+  --color-neptune-mid: #0070a0;
+  --color-neptune-teal: #00a080;
+  --color-neptune-green: #00c060;
+  --color-neptune-glow: #00a0e0;
+  --color-neptune-white: #ffffff;
+  --color-neptune-muted: #8899aa;
+
+  --font-display: "BrushScript", cursive;
+  --font-body: system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #000;
+  color: #fff;
+  font-family: system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #00a080;
+  color: #000;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: #0030a0;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00a080;
+}
