@@ -3,11 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import ScrollingBanner from "@/components/ScrollingBanner";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.4, ease: "easeOut" as const } },
 };
+
+const row1 = Array.from({ length: 13 }, (_, i) => `/assets/panels/panel-${25 + i}.jpg`);
+const row2 = Array.from({ length: 12 }, (_, i) => `/assets/panels/panel-${38 + i}.jpg`);
 
 export default function Home() {
   return (
@@ -66,15 +70,10 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Star divider */}
-      <div className="flex justify-center bg-black py-8">
-        <Image
-          src="/assets/Stars__No_BG_Graphic_.png"
-          alt=""
-          width={800}
-          height={120}
-          className="h-[80px] w-auto mix-blend-screen md:h-[120px]"
-        />
+      {/* Scrolling banners */}
+      <div className="space-y-4 py-8">
+        <ScrollingBanner images={row1} direction="left" speed={60} />
+        <ScrollingBanner images={row2} direction="right" speed={50} />
       </div>
 
       {/* Intro text */}
@@ -99,13 +98,14 @@ export default function Home() {
       </motion.section>
 
       {/* Neptune teaser */}
-      <section className="relative bg-[#00060f] py-24">
+      <section className="relative py-24">
         <Image
-          src="/assets/15_Neptunes__No_BG_Graphic_.png"
+          src="/assets/neptune-particles.png"
           alt=""
           fill
-          className="object-cover opacity-40"
+          className="object-cover"
         />
+        <div className="absolute inset-0 bg-black/40" />
         <motion.div
           className="relative z-10 text-center"
           initial="hidden"
