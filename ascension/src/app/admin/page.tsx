@@ -43,7 +43,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
   );
 }
 
-type Tab = "events" | "shop" | "images" | "contacts" | "subscribers";
+type Tab = "events" | "shop" | "images" | "contacts" | "subscribers" | "mint";
 
 interface EventItem {
   id: string; date: string; city: string; venue: string;
@@ -65,6 +65,7 @@ const tabs: { key: Tab; label: string }[] = [
   { key: "images", label: "IMAGES" },
   { key: "contacts", label: "INQUIRIES" },
   { key: "subscribers", label: "SUBSCRIBERS" },
+  { key: "mint", label: "MINT" },
 ];
 
 const inputClass =
@@ -105,6 +106,15 @@ export default function Admin() {
       {tab === "images" && <ImagesPanel />}
       {tab === "contacts" && <ContactsPanel />}
       {tab === "subscribers" && <SubscribersPanel />}
+      {tab === "mint" && (
+        <div className="relative" style={{ height: "calc(100vh - 200px)" }}>
+          <iframe
+            src="https://neptune.christmas/process"
+            className="h-full w-full border-0"
+            allow="clipboard-write"
+          />
+        </div>
+      )}
     </div>
     </AuthGate>
   );
