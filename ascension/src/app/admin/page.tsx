@@ -2,6 +2,47 @@
 
 import { useEffect, useState, useCallback } from "react";
 
+const ADMIN_PASS = "bigvibessss";
+
+function AuthGate({ children }: { children: React.ReactNode }) {
+  const [authed, setAuthed] = useState(false);
+  const [input, setInput] = useState("");
+
+  useEffect(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem("admin_auth") === "1") {
+      setAuthed(true);
+    }
+  }, []);
+
+  if (authed) return <>{children}</>;
+
+  return (
+    <div className="flex min-h-[60vh] items-center justify-center">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          if (input === ADMIN_PASS) {
+            sessionStorage.setItem("admin_auth", "1");
+            setAuthed(true);
+          }
+        }}
+        className="flex gap-2"
+      >
+        <input
+          type="password"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          placeholder="PASSWORD"
+          className="border border-neptune-blue/40 bg-transparent px-4 py-3 font-body text-sm tracking-wider text-white outline-none focus:border-neptune-teal"
+        />
+        <button type="submit" className="bg-neptune-blue px-6 py-3 font-body text-sm tracking-wider text-white hover:bg-neptune-teal">
+          ENTER
+        </button>
+      </form>
+    </div>
+  );
+}
+
 type Tab = "events" | "shop" | "images" | "contacts" | "subscribers";
 
 interface EventItem {
@@ -37,6 +78,7 @@ export default function Admin() {
   const [tab, setTab] = useState<Tab>("events");
 
   return (
+    <AuthGate>
     <div className="mx-auto max-w-[1200px] px-6 py-12 md:px-12">
       <h1 className="mb-8 font-body text-2xl font-bold tracking-wider text-white">
         ADMIN
@@ -64,6 +106,7 @@ export default function Admin() {
       {tab === "contacts" && <ContactsPanel />}
       {tab === "subscribers" && <SubscribersPanel />}
     </div>
+    </AuthGate>
   );
 }
 
