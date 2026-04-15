@@ -21,13 +21,6 @@ const row2 = Array.from({ length: 12 }, (_, i) => `/assets/panels/panel-${38 + i
 export default function Nav() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -46,28 +39,62 @@ export default function Nav() {
             The Ascension Service
           </Link>
 
-          {/* Hamburger button — all screen sizes */}
-          <button
-            onClick={() => setMenuOpen(!menuOpen)}
-            className="flex flex-col gap-1.5"
-            aria-label="Toggle menu"
-          >
-            <span
-              className={`block h-[2px] w-6 bg-neptune-blue transition-transform duration-200 ${
-                menuOpen ? "translate-y-[5px] rotate-45" : ""
-              }`}
+          {/* Neptune globe — center */}
+          <Link href="/" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
+            <Image
+              src="/assets/neptune-globe-cropped.png"
+              alt="Neptune"
+              width={80}
+              height={80}
+              className="h-[80px] w-[80px] rounded-full object-cover"
             />
-            <span
-              className={`block h-[2px] w-6 bg-neptune-blue transition-opacity duration-200 ${
-                menuOpen ? "opacity-0" : ""
-              }`}
-            />
-            <span
-              className={`block h-[2px] w-6 bg-neptune-blue transition-transform duration-200 ${
-                menuOpen ? "-translate-y-[5px] -rotate-45" : ""
-              }`}
-            />
-          </button>
+          </Link>
+
+          {/* Hamburger button */}
+          <div className="relative">
+            <button
+              onClick={() => setMenuOpen(!menuOpen)}
+              className="flex flex-col gap-1.5"
+              aria-label="Toggle menu"
+            >
+              <span
+                className={`block h-[2px] w-6 bg-neptune-blue transition-transform duration-200 ${
+                  menuOpen ? "translate-y-[5px] rotate-45" : ""
+                }`}
+              />
+              <span
+                className={`block h-[2px] w-6 bg-neptune-blue transition-opacity duration-200 ${
+                  menuOpen ? "opacity-0" : ""
+                }`}
+              />
+              <span
+                className={`block h-[2px] w-6 bg-neptune-blue transition-transform duration-200 ${
+                  menuOpen ? "-translate-y-[5px] -rotate-45" : ""
+                }`}
+              />
+            </button>
+
+            {/* Dropdown menu */}
+            {menuOpen && (
+              <div
+                className="absolute right-0 top-full mt-4 z-50 border border-neptune-blue/30 bg-white shadow-lg"
+                style={{ minWidth: '200px' }}
+              >
+                {links.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`block px-6 py-3 font-body text-sm font-black tracking-widest transition-colors duration-200 hover:bg-neptune-blue/5 hover:text-neptune-teal border-b border-neptune-blue/10 last:border-b-0 ${
+                      pathname === link.href ? "text-neptune-teal" : "text-neptune-blue"
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </nav>
 
@@ -75,31 +102,6 @@ export default function Nav() {
       <div className="overflow-hidden bg-black">
         <ScrollingBanner images={row2} direction="right" speed={50} height={72} />
       </div>
-
-      {/* Mobile overlay */}
-      {menuOpen && (
-        <div className="fixed inset-0 top-0 z-40 flex flex-col items-center justify-center gap-10 bg-black">
-          <button
-            onClick={() => setMenuOpen(false)}
-            className="absolute top-6 right-6 text-2xl text-white"
-            aria-label="Close menu"
-          >
-            X
-          </button>
-          {links.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              onClick={() => setMenuOpen(false)}
-              className={`font-body text-2xl tracking-widest transition-colors duration-200 hover:text-neptune-teal ${
-                pathname === link.href ? "text-neptune-teal" : "text-white"
-              }`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </div>
-      )}
     </header>
   );
 }

@@ -109,7 +109,7 @@ export default function CommunityGallery() {
 
       await Promise.allSettled(
         members.map(async (m) => {
-          const res = await fetch(`/api/nfts?wallet=${m.wallet}&chain=base&mode=newest&limit=50`);
+          const res = await fetch(`/api/nfts?wallet=${m.wallet}&chain=base`);
           const data = await res.json();
           if (!cancelled && data.tokens) {
             results[m.wallet] = data.tokens;
