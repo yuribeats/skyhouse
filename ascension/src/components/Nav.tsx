@@ -46,9 +46,9 @@ export default function Nav() {
             <Image
               src="/assets/neptune-globe-cropped.png"
               alt="Neptune"
-              width={200}
-              height={200}
-              className="h-[200px] w-[200px] rounded-full object-cover"
+              width={120}
+              height={120}
+              className="h-[120px] w-[120px] rounded-full object-cover"
             />
           </Link>
 
