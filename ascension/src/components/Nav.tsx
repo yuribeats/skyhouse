@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -10,7 +10,10 @@ const links = [
   { href: "/events", label: "EVENTS" },
   { href: "/press", label: "PRESS" },
   { href: "/shop", label: "SHOP" },
-  { href: "/community", label: "COMMUNITY" },
+  { href: "/community", label: "COMMUNITY", children: [
+    { href: "/community?view=gallery", label: "GALLERY" },
+    { href: "/community?view=mint", label: "JOIN / MINT" },
+  ]},
   { href: "/contact", label: "CONTACT" },
 ];
 
@@ -77,19 +80,32 @@ export default function Nav() {
             {menuOpen && (
               <div
                 className="absolute right-0 top-full mt-4 z-50 border border-neptune-blue/30 bg-white shadow-lg"
-                style={{ minWidth: '160px' }}
+                style={{ minWidth: '200px' }}
               >
                 {links.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setMenuOpen(false)}
-                    className={`block px-6 py-3 font-body text-sm font-black tracking-widest transition-colors duration-200 hover:bg-neptune-blue/5 hover:text-neptune-teal border-b border-neptune-blue/10 last:border-b-0 ${
-                      pathname === link.href ? "text-neptune-teal" : "text-neptune-blue"
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
+                  <div key={link.href}>
+                    <Link
+                      href={link.href}
+                      onClick={() => setMenuOpen(false)}
+                      className={`block px-6 py-3 font-body text-sm font-black tracking-widest transition-colors duration-200 hover:bg-neptune-blue/5 hover:text-neptune-teal border-b border-neptune-blue/10 ${
+                        pathname === link.href || pathname.startsWith(link.href + "?")
+                          ? "text-neptune-teal"
+                          : "text-neptune-blue"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                    {link.children && link.children.map((child) => (
+                      <Link
+                        key={child.href}
+                        href={child.href}
+                        onClick={() => setMenuOpen(false)}
+                        className="block px-6 py-2 pl-10 font-body text-xs font-black tracking-widest text-neptune-blue/60 transition-colors duration-200 hover:bg-neptune-blue/5 hover:text-neptune-teal border-b border-neptune-blue/10"
+                      >
+                        {child.label}
+                      </Link>
+                    ))}
+                  </div>
                 ))}
               </div>
             )}
