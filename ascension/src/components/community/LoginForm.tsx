@@ -140,7 +140,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
         fontWeight: 'bold',
         textTransform: 'uppercase',
         letterSpacing: '0.2em',
-        color: '#666',
+        color: '#fff',
         marginBottom: '8px',
       }}>
         {step === 'email' ? 'JOIN THE COMMUNITY' : 'ENTER VERIFICATION CODE'}
@@ -148,7 +148,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
 
       <p style={{
         fontSize: '11px',
-        color: '#555',
+        color: '#fff',
         letterSpacing: '0.05em',
         maxWidth: '400px',
         lineHeight: '1.6',
