@@ -210,14 +210,7 @@ export default function CommunityGallery() {
 
   return (
     <div style={{ padding: '40px 0' }}>
-      <h2 style={{
-        fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase',
-        letterSpacing: '0.15em', color: '#fff', textAlign: 'center', marginBottom: '32px',
-      }}>
-        COMMUNITY TOKENS
-      </h2>
-
-      {loading && members.length > 0 && (
+{loading && members.length > 0 && (
         <p style={{ textAlign: 'center', fontSize: '11px', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
           LOADING...
         </p>
