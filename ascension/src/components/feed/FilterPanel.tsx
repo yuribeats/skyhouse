@@ -1,0 +1,311 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useStore } from '@/hooks/useStore';
+import { CHAINS, CHAIN_KEYS } from '@/lib/constants';
+import type { ChainKey } from '@/lib/constants';
+
+const STANDARDS = ['ERC721', 'ERC1155'];
+const MEDIA_TYPES = ['image', 'video', 'audio'];
+
+const labelStyle: React.CSSProperties = {
+  fontSize: '10px',
+  fontWeight: 'bold',
+  textTransform: 'uppercase' as const,
+  color: '#666',
+  letterSpacing: '0.1em',
+  marginBottom: '6px',
+  display: 'block',
+};
+
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+  return mobile;
+}
+
+function ToggleButton({ active, label, color, onClick }: {
+  active: boolean;
+  label: string;
+  color?: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        background: active ? (color || 'rgba(255,255,255,0.15)') : 'transparent',
+        border: `1px solid ${active ? (color || 'rgba(255,255,255,0.3)') : 'rgba(255,255,255,0.1)'}`,
+        color: active ? '#fff' : '#555',
+        padding: '6px 10px',
+        fontSize: '10px',
+        fontWeight: 'bold',
+        fontFamily: 'inherit',
+        textTransform: 'uppercase' as const,
+        marginRight: '4px',
+        marginBottom: '4px',
+        letterSpacing: '0.05em',
+      }}
+    >
+      {label}
+    </button>
+  );
+}
+
+export default function FilterPanel() {
+  const filters = useStore((s) => s.filters);
+  const setFilter = useStore((s) => s.setFilter);
+  const activeChains = useStore((s) => s.activeChains);
+  const toggleChain = useStore((s) => s.toggleChain);
+  const openPlaylist = useStore((s) => s.openPlaylist);
+  const isMobile = useIsMobile();
+  const [collapsed, setCollapsed] = useState(true);
+
+  function toggleArrayFilter(key: 'standards' | 'mediaTypes', value: string) {
+    const current = filters[key];
+    const next = current.includes(value)
+      ? current.filter((v) => v !== value)
+      : [...current, value];
+    setFilter(key, next);
+  }
+
+  if (collapsed) {
+    return (
+      <div style={{
+        position: 'fixed',
+        top: isMobile ? '10px' : '20px',
+        left: isMobile ? '10px' : '20px',
+        zIndex: 50,
+        display: 'flex',
+        gap: '4px',
+      }}>
+        <button
+          onClick={() => setCollapsed(false)}
+          style={{
+            background: 'rgba(10, 10, 15, 0.85)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            color: '#fff',
+            padding: isMobile ? '10px 14px' : '8px 12px',
+            fontSize: '10px',
+            fontWeight: 'bold',
+            fontFamily: 'inherit',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+          }}
+        >
+          FILTERS
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{
+      position: 'fixed',
+      top: isMobile ? 0 : '20px',
+      left: isMobile ? 0 : '20px',
+      right: isMobile ? 0 : 'auto',
+      bottom: isMobile ? 0 : 'auto',
+      zIndex: 50,
+      background: 'rgba(10, 10, 15, 0.95)',
+      backdropFilter: 'blur(12px)',
+      border: isMobile ? 'none' : '1px solid rgba(255,255,255,0.08)',
+      padding: isMobile ? '16px 16px 80px' : '16px',
+      fontFamily: 'inherit',
+      color: '#fff',
+      minWidth: isMobile ? undefined : '240px',
+      overflowY: 'auto',
+      WebkitOverflowScrolling: 'touch',
+    }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
+        <button
+          onClick={() => setCollapsed(true)}
+          style={{
+            background: 'none',
+            border: '1px solid rgba(255,255,255,0.15)',
+            color: '#666',
+            padding: isMobile ? '6px 12px' : '3px 8px',
+            fontSize: isMobile ? '10px' : '9px',
+            fontWeight: 'bold',
+            fontFamily: 'inherit',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+          }}
+        >
+          {isMobile ? 'CLOSE' : 'MINIMIZE'}
+        </button>
+      </div>
+
+      <div style={{ marginBottom: '12px' }}>
+        <span style={labelStyle}>VIEW</span>
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', marginRight: '4px', marginBottom: '4px' }}>
+            <button
+              onClick={() => setFilter('useNewest', !filters.useNewest)}
+              style={{
+                background: filters.useNewest ? 'rgba(255,255,255,0.15)' : 'transparent',
+                border: `1px solid ${filters.useNewest ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                borderRight: 'none',
+                color: filters.useNewest ? '#fff' : '#555',
+                padding: '6px 10px',
+                fontSize: '10px',
+                fontWeight: 'bold',
+                fontFamily: 'inherit',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+              }}
+            >
+              NEWEST
+            </button>
+            <input
+              type="number"
+              min={1}
+              max={9999}
+              value={filters.newestCount}
+              onChange={(e) => {
+                const v = parseInt(e.target.value) || 100;
+                setFilter('newestCount', Math.max(1, v));
+                if (!filters.useNewest) setFilter('useNewest', true);
+              }}
+              style={{
+                width: '48px',
+                background: filters.useNewest ? 'rgba(255,255,255,0.15)' : 'transparent',
+                border: `1px solid ${filters.useNewest ? 'rgba(255,255,255,0.3)' : 'rgba(255,255,255,0.1)'}`,
+                color: filters.useNewest ? '#fff' : '#555',
+                padding: '6px',
+                fontSize: '10px',
+                fontWeight: 'bold',
+                fontFamily: 'inherit',
+                textAlign: 'center',
+                outline: 'none',
+              }}
+            />
+          </div>
+          {CHAIN_KEYS.map((chain) => (
+            <ToggleButton
+              key={chain}
+              active={activeChains.includes(chain)}
+              label={CHAINS[chain].name}
+              color={activeChains.includes(chain) ? CHAINS[chain].color + '40' : undefined}
+              onClick={() => toggleChain(chain)}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div style={{ marginBottom: '12px' }}>
+        <span style={labelStyle}>TYPE</span>
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          {STANDARDS.map((s) => (
+            <ToggleButton
+              key={s}
+              active={filters.standards.includes(s)}
+              label={s.replace('ERC', '')}
+              onClick={() => toggleArrayFilter('standards', s)}
+            />
+          ))}
+        </div>
+      </div>
+
+      <div style={{ marginBottom: '12px' }}>
+        <span style={labelStyle}>MEDIA</span>
+        <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+          {MEDIA_TYPES.map((m) => (
+            <ToggleButton
+              key={m}
+              active={filters.mediaTypes.includes(m)}
+              label={m.toUpperCase()}
+              onClick={() => toggleArrayFilter('mediaTypes', m)}
+            />
+          ))}
+        </div>
+      </div>
+
+      {filters.selectedCollection && (
+        <div style={{ marginBottom: '12px' }}>
+          <span style={labelStyle}>COLLECTION</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span style={{
+              fontSize: '10px',
+              fontWeight: 'bold',
+              textTransform: 'uppercase',
+              color: '#00a080',
+              flex: 1,
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}>
+              {filters.selectedCollection}
+            </span>
+            <button
+              onClick={() => setFilter('selectedCollection', undefined)}
+              style={{
+                background: 'none',
+                border: '1px solid rgba(255,255,255,0.15)',
+                color: '#666',
+                padding: '3px 8px',
+                fontSize: '9px',
+                fontWeight: 'bold',
+                fontFamily: 'inherit',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                flexShrink: 0,
+              }}
+            >
+              CLEAR
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div style={{ marginBottom: '12px' }}>
+        <span style={labelStyle}>SEARCH</span>
+        <input
+          type="text"
+          value={filters.searchQuery}
+          onChange={(e) => setFilter('searchQuery', e.target.value)}
+          placeholder="TOKEN NAME..."
+          style={{
+            width: '100%',
+            background: 'transparent',
+            border: '1px solid rgba(255,255,255,0.1)',
+            color: '#fff',
+            padding: '8px',
+            fontSize: '11px',
+            fontFamily: 'inherit',
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            outline: 'none',
+            boxSizing: 'border-box',
+          }}
+        />
+      </div>
+
+      <div style={{ marginTop: '16px', borderTop: '1px solid rgba(255,255,255,0.08)', paddingTop: '12px' }}>
+        <button
+          onClick={openPlaylist}
+          style={{
+            width: '100%',
+            background: 'transparent',
+            border: '1px solid rgba(255,255,255,0.15)',
+            color: '#fff',
+            padding: '8px',
+            fontSize: '10px',
+            fontWeight: 'bold',
+            fontFamily: 'inherit',
+            textTransform: 'uppercase',
+            letterSpacing: '0.05em',
+          }}
+        >
+          PLAY MEDIA
+        </button>
+      </div>
+    </div>
+  );
+}

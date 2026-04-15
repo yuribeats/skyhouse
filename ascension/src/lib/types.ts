@@ -1,0 +1,60 @@
+export interface UnifiedToken {
+  id: string;
+  chain: 'ethereum' | 'base' | 'optimism' | 'zora';
+  contractAddress: string;
+  tokenId?: string;
+  standard: 'ERC721' | 'ERC1155';
+  name: string;
+  description?: string;
+  creator?: string;
+  collectionName?: string;
+
+  media: {
+    image?: string;
+    thumbnail?: string;
+    video?: string;
+    audio?: string;
+    model?: string;
+    originalUrl?: string;
+    mediaType: 'image' | 'video' | 'audio' | 'model' | 'text' | 'html' | 'unknown';
+  };
+
+  balance?: string;
+  attributes?: Array<{ trait_type: string; value: string }>;
+  rawMetadata?: Record<string, unknown>;
+  lastUpdated?: string;
+  acquiredAt?: string;
+  mintedAt?: string;
+
+  isOwned?: boolean;
+  createdByWallet?: boolean;
+  creationSource?: 'minted' | 'contract_deployer' | 'owned_deployer_match';
+  sourceWallet?: string;
+
+  position?: [number, number, number];
+}
+
+export interface WalletConnection {
+  address: string;
+  transferCount: number;
+  chains: string[];
+  tokenTypes: string[];
+}
+
+export type FilterState = {
+  standards: string[];
+  mediaTypes: string[];
+  layout: 'grid' | 'chain' | 'creator' | 'mediaType' | 'date' | 'tokenType';
+  useNewest: boolean;
+  sortDirection: 'asc' | 'desc';
+  searchQuery: string;
+  selectedCreator?: string;
+  selectedCollection?: string;
+  density: number;
+  newestCount: number;
+  thumbnailSize: number;
+  gridCols: number;
+  showOwned: boolean;
+  showCreated: boolean;
+  selectedWallets: string[];
+};

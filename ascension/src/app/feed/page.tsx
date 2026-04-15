@@ -1,203 +1,83 @@
-"use client";
+'use client';
 
-import { useEffect, useState, useCallback } from "react";
-import { motion } from "framer-motion";
+import { useMemo } from 'react';
+import { useWalletData } from '@/hooks/useWalletData';
+import { useStore } from '@/hooks/useStore';
+import TokenGrid from '@/components/feed/TokenGrid';
+import TokenDetail from '@/components/feed/TokenDetail';
+import FilterPanel from '@/components/feed/FilterPanel';
+import HUD from '@/components/feed/HUD';
+import dynamic from 'next/dynamic';
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 16 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: "easeOut" as const },
-  },
-};
-
-interface Moment {
-  tokenId: string;
-  collection: string;
-  createdAt: string;
-  name: string;
-  description: string;
-  image: string;
-  contentUri: string;
-  contentMime: string;
-  inprocessUrl: string;
-}
+const PlaylistPlayer = dynamic(() => import('@/components/feed/PlaylistPlayer'), { ssr: false });
 
 export default function Feed() {
-  const [moments, setMoments] = useState<Moment[]>([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState<Moment | null>(null);
+  useWalletData();
 
-  const load = useCallback(async (p: number) => {
-    setLoading(true);
-    const res = await fetch(`/api/feed?page=${p}&limit=20`);
-    const data = await res.json();
-    setMoments(data.moments || []);
-    setTotalPages(data.pagination?.total_pages || 1);
-    setLoading(false);
-  }, []);
+  const selectedToken = useStore((s) => s.selectedToken);
+  const setSelectedToken = useStore((s) => s.setSelectedToken);
+  const playlistOpen = useStore((s) => s.playlistOpen);
+  const isLoading = useStore((s) => s.isLoading);
+  const loadProgress = useStore((s) => s.loadProgress);
+  const error = useStore((s) => s.error);
+  const tokens = useStore((s) => s.tokens);
+  const filters = useStore((s) => s.filters);
+  const getFilteredTokens = useStore((s) => s.getFilteredTokens);
 
-  useEffect(() => {
-    load(page);
-  }, [page, load]);
-
-  const isVideo = (mime: string) => mime.startsWith("video/");
-  const isAudio = (mime: string) => mime.startsWith("audio/");
+  const filteredTokens = useMemo(() => getFilteredTokens(), [tokens, filters, getFilteredTokens]);
 
   return (
-    <motion.div
-      className="mx-auto max-w-[1200px] px-6 py-24 md:px-12"
-      initial="hidden"
-      animate="visible"
-      variants={{ visible: { transition: { staggerChildren: 0.05 } } }}
-    >
-      <motion.div variants={fadeUp}>
-        <h1 className="mb-2 font-display text-5xl text-white md:text-6xl">
-          Forrest&apos;s Feed
-        </h1>
-        <p className="mb-12 font-body text-sm text-neptune-muted">
-          TOKENS ON INPROCESS
-        </p>
-      </motion.div>
+    <div style={{ position: 'relative', width: '100%', minHeight: 'calc(100vh - 272px)' }}>
+      <TokenGrid tokens={filteredTokens} onSelect={setSelectedToken} />
 
-      {loading ? (
-        <p className="text-neptune-muted">LOADING...</p>
-      ) : (
-        <>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {moments.map((m) => (
-              <motion.div
-                key={`${m.collection}-${m.tokenId}`}
-                variants={fadeUp}
-                className="group border border-neptune-blue/30 bg-[#050505] transition-colors hover:border-neptune-teal"
-              >
-                {/* Media */}
-                <button
-                  onClick={() => setSelected(m)}
-                  className="block w-full"
-                >
-                  {m.image && (
-                    <img
-                      src={m.image}
-                      alt={m.name}
-                      className="aspect-square w-full object-cover"
-                      loading="lazy"
-                    />
-                  )}
-                </button>
-
-                {/* Info */}
-                <div className="p-4">
-                  <h3 className="mb-1 font-body text-sm font-bold text-white">
-                    {m.name || "UNTITLED"}
-                  </h3>
-                  {m.description && (
-                    <p className="mb-3 line-clamp-2 font-body text-xs leading-relaxed text-neptune-muted">
-                      {m.description}
-                    </p>
-                  )}
-                  <div className="flex items-center justify-between">
-                    <span className="font-body text-xs text-neptune-muted">
-                      {new Date(m.createdAt).toLocaleDateString()}
-                    </span>
-                    <a
-                      href={m.inprocessUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-body text-xs text-neptune-teal transition-colors hover:text-neptune-glow"
-                    >
-                      VIEW ON INPROCESS
-                    </a>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <div className="mt-12 flex items-center justify-center gap-4">
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={page === 1}
-                className="border border-neptune-blue px-4 py-2 font-body text-xs text-white transition-colors hover:border-neptune-teal disabled:opacity-30"
-              >
-                PREV
-              </button>
-              <span className="font-body text-xs text-neptune-muted">
-                {page} / {totalPages}
-              </span>
-              <button
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={page === totalPages}
-                className="border border-neptune-blue px-4 py-2 font-body text-xs text-white transition-colors hover:border-neptune-teal disabled:opacity-30"
-              >
-                NEXT
-              </button>
-            </div>
-          )}
-        </>
-      )}
-
-      {/* Lightbox */}
-      {selected && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4"
-          onClick={() => setSelected(null)}
-        >
-          <div
-            className="max-h-[90vh] max-w-[900px] overflow-auto bg-[#050505] border border-neptune-blue/30"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {isVideo(selected.contentMime) ? (
-              <video
-                src={selected.contentUri}
-                controls
-                autoPlay
-                className="w-full"
-              />
-            ) : isAudio(selected.contentMime) ? (
-              <div className="p-8">
-                {selected.image && (
-                  <img
-                    src={selected.image}
-                    alt={selected.name}
-                    className="mb-4 w-full"
-                  />
-                )}
-                <audio src={selected.contentUri} controls className="w-full" />
-              </div>
-            ) : (
-              <img
-                src={selected.contentUri || selected.image}
-                alt={selected.name}
-                className="w-full"
-              />
-            )}
-            <div className="p-6">
-              <h2 className="mb-2 font-body text-lg font-bold text-white">
-                {selected.name || "UNTITLED"}
-              </h2>
-              {selected.description && (
-                <p className="mb-4 font-body text-sm leading-relaxed text-neptune-muted whitespace-pre-line">
-                  {selected.description}
-                </p>
-              )}
-              <a
-                href={selected.inprocessUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block border border-neptune-teal px-6 py-2 font-body text-xs tracking-wider text-neptune-teal transition-colors hover:bg-neptune-teal hover:text-black"
-              >
-                VIEW ON INPROCESS
-              </a>
-            </div>
-          </div>
+      {isLoading && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '2px',
+          zIndex: 300,
+          background: 'rgba(255,255,255,0.05)',
+        }}>
+          <div style={{
+            height: '100%',
+            background: '#00a080',
+            width: `${Math.max(loadProgress * 100, 5)}%`,
+            transition: 'width 0.3s ease',
+          }} />
         </div>
       )}
-    </motion.div>
+
+      <FilterPanel />
+      <HUD />
+
+      {selectedToken && (
+        <TokenDetail
+          token={selectedToken}
+          onClose={() => setSelectedToken(null)}
+        />
+      )}
+
+      {playlistOpen && <PlaylistPlayer />}
+
+      {error && (
+        <div style={{
+          position: 'fixed',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          zIndex: 200,
+          fontWeight: 'bold',
+          fontSize: '12px',
+          textTransform: 'uppercase',
+          color: '#FF0420',
+          textAlign: 'center',
+          maxWidth: '400px',
+        }}>
+          {error}
+        </div>
+      )}
+    </div>
   );
 }
