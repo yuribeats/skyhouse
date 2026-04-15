@@ -81,10 +81,17 @@ export default function CommunityGallery() {
   }, []);
 
   useEffect(() => {
+    const FORREST: Member = {
+      wallet: '0x081bc58a9538b1313e93f6bbc6119ac6434fbe05',
+      username: 'forrest',
+      joinedAt: '2026-01-01T00:00:00.000Z',
+    };
     fetch('/api/community/members')
       .then((r) => r.json())
       .then((data: Member[]) => {
-        setMembers(Array.isArray(data) ? data : []);
+        const list = Array.isArray(data) ? data : [];
+        const hasForrest = list.some((m) => m.wallet.toLowerCase() === FORREST.wallet);
+        setMembers(hasForrest ? list : [FORREST, ...list]);
       });
   }, []);
 

@@ -46,38 +46,10 @@ export default function Nav() {
             The Ascension Service
           </Link>
 
-          {/* Neptune globe — desktop only, links home */}
-          <Link href="/" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
-            <Image
-              src="/assets/neptune-globe-cropped.png"
-              alt="Neptune"
-              width={80}
-              height={80}
-              className="h-[80px] w-[80px] rounded-full object-cover"
-            />
-          </Link>
-
-          {/* Desktop links */}
-          <div className="hidden gap-5 md:flex">
-            {links.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`font-body text-xs font-black tracking-widest transition-colors duration-200 hover:text-neptune-teal ${
-                  pathname === link.href
-                    ? "text-neptune-teal"
-                    : "text-neptune-blue"
-                }`}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Mobile hamburger */}
+          {/* Hamburger button — all screen sizes */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="flex flex-col gap-1.5 md:hidden"
+            className="flex flex-col gap-1.5"
             aria-label="Toggle menu"
           >
             <span
@@ -106,7 +78,7 @@ export default function Nav() {
 
       {/* Mobile overlay */}
       {menuOpen && (
-        <div className="fixed inset-0 top-0 z-40 flex flex-col items-center justify-center gap-10 bg-black md:hidden">
+        <div className="fixed inset-0 top-0 z-40 flex flex-col items-center justify-center gap-10 bg-black">
           <button
             onClick={() => setMenuOpen(false)}
             className="absolute top-6 right-6 text-2xl text-white"
