@@ -32,7 +32,7 @@ export default function Nav() {
       </div>
 
       {/* Nav bar */}
-      <nav className="relative border-b border-neptune-blue/30 bg-white" style={{ overflow: 'visible', zIndex: 5 }}>
+      <nav className="relative border-b border-neptune-blue/30 bg-white">
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-4 md:px-12 md:py-8">
           <Link
             href="/"
@@ -42,13 +42,13 @@ export default function Nav() {
           </Link>
 
           {/* Neptune globe — center, overlaps banners */}
-          <Link href="/" className="absolute left-1/2 -translate-x-1/2 hidden md:block" style={{ top: '50%', transform: 'translate(-50%, -50%)', zIndex: 10 }}>
+          <Link href="/" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
             <Image
               src="/assets/neptune-globe-cropped.png"
               alt="Neptune"
-              width={120}
-              height={120}
-              className="h-[120px] w-[120px] rounded-full object-cover"
+              width={80}
+              height={80}
+              className="h-[80px] w-[80px] rounded-full object-cover"
             />
           </Link>
 
