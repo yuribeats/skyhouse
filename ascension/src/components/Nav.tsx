@@ -23,6 +23,7 @@ const row2 = Array.from({ length: 12 }, (_, i) => `/assets/panels/panel-${38 + i
 export default function Nav() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [communityOpen, setCommunityOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
@@ -55,7 +56,7 @@ export default function Nav() {
           {/* Hamburger button */}
           <div className="relative">
             <button
-              onClick={() => setMenuOpen(!menuOpen)}
+              onClick={() => { setMenuOpen(!menuOpen); setCommunityOpen(false); }}
               className="flex flex-col gap-1.5"
               aria-label="Toggle menu"
             >
@@ -83,25 +84,38 @@ export default function Nav() {
                 style={{ minWidth: '200px' }}
               >
                 {links.map((link) => (
-                  <div key={link.href} className="group/nav relative">
-                    <Link
-                      href={link.href}
-                      onClick={() => setMenuOpen(false)}
-                      className={`block px-6 py-3 font-body text-sm font-black tracking-widest transition-colors duration-200 hover:bg-neptune-blue/5 hover:text-neptune-teal border-b border-neptune-blue/10 ${
-                        pathname === link.href || pathname.startsWith(link.href + "?")
-                          ? "text-neptune-teal"
-                          : "text-neptune-blue"
-                      }`}
-                    >
-                      {link.label}
-                    </Link>
-                    {link.children && (
-                      <div className="hidden group-hover/nav:block">
+                  <div key={link.href}>
+                    {link.children ? (
+                      <button
+                        onClick={() => setCommunityOpen(!communityOpen)}
+                        className={`block w-full text-left px-6 py-3 font-body text-sm font-black tracking-widest transition-colors duration-200 hover:bg-neptune-blue/5 hover:text-neptune-teal border-b border-neptune-blue/10 ${
+                          pathname.startsWith(link.href)
+                            ? "text-neptune-teal"
+                            : "text-neptune-blue"
+                        }`}
+                      >
+                        {link.label}
+                      </button>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        onClick={() => setMenuOpen(false)}
+                        className={`block px-6 py-3 font-body text-sm font-black tracking-widest transition-colors duration-200 hover:bg-neptune-blue/5 hover:text-neptune-teal border-b border-neptune-blue/10 ${
+                          pathname === link.href
+                            ? "text-neptune-teal"
+                            : "text-neptune-blue"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    )}
+                    {link.children && communityOpen && (
+                      <div>
                         {link.children.map((child) => (
                           <Link
                             key={child.href}
                             href={child.href}
-                            onClick={() => setMenuOpen(false)}
+                            onClick={() => { setMenuOpen(false); setCommunityOpen(false); }}
                             className="block px-6 py-2 pl-10 font-body text-xs font-black tracking-widest text-neptune-blue/60 transition-colors duration-200 hover:bg-neptune-blue/5 hover:text-neptune-teal border-b border-neptune-blue/10"
                           >
                             {child.label}
