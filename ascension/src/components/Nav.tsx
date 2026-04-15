@@ -58,12 +58,12 @@ export default function Nav() {
           </Link>
 
           {/* Desktop links */}
-          <div className="hidden gap-8 md:flex">
+          <div className="hidden gap-5 md:flex">
             {links.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className={`font-body text-sm font-black tracking-widest transition-colors duration-200 hover:text-neptune-teal ${
+                className={`font-body text-xs font-black tracking-widest transition-colors duration-200 hover:text-neptune-teal ${
                   pathname === link.href
                     ? "text-neptune-teal"
                     : "text-neptune-blue"
