@@ -32,7 +32,7 @@ export default function Nav() {
       </div>
 
       {/* Nav bar */}
-      <nav className="relative border-b border-neptune-blue/30 bg-white">
+      <nav className="relative border-b border-neptune-blue/30 bg-white" style={{ overflow: 'visible', zIndex: 5 }}>
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-4 py-4 md:px-12 md:py-8">
           <Link
             href="/"
@@ -41,14 +41,14 @@ export default function Nav() {
             The Ascension Service
           </Link>
 
-          {/* Neptune globe — center */}
-          <Link href="/" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
+          {/* Neptune globe — center, overlaps banners */}
+          <Link href="/" className="absolute left-1/2 -translate-x-1/2 hidden md:block" style={{ top: '50%', transform: 'translate(-50%, -50%)', zIndex: 10 }}>
             <Image
               src="/assets/neptune-globe-cropped.png"
               alt="Neptune"
-              width={80}
-              height={80}
-              className="h-[80px] w-[80px] rounded-full object-cover"
+              width={200}
+              height={200}
+              className="h-[200px] w-[200px] rounded-full object-cover"
             />
           </Link>
 
