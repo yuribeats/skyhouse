@@ -130,7 +130,7 @@ export default function CommunityGallery() {
         fontWeight: 'bold',
         textTransform: 'uppercase',
         letterSpacing: '0.15em',
-        color: '#666',
+        color: '#fff',
         textAlign: 'center',
         marginBottom: '32px',
       }}>
@@ -138,13 +138,13 @@ export default function CommunityGallery() {
       </h2>
 
       {loading && members.length > 0 && (
-        <p style={{ textAlign: 'center', fontSize: '11px', color: '#444', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+        <p style={{ textAlign: 'center', fontSize: '11px', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
           LOADING...
         </p>
       )}
 
       {members.length === 0 && !loading && (
-        <p style={{ textAlign: 'center', fontSize: '11px', color: '#444', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+        <p style={{ textAlign: 'center', fontSize: '11px', color: '#fff', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
           NO COMMUNITY MEMBERS YET
         </p>
       )}
@@ -171,7 +171,7 @@ export default function CommunityGallery() {
                 {getMemberName(m.wallet)}
               </span>
               <span style={{ fontSize: '9px', color: '#333' }}>|</span>
-              <span style={{ fontSize: '9px', color: '#444', fontWeight: 'bold', letterSpacing: '0.05em' }}>
+              <span style={{ fontSize: '9px', color: '#fff', fontWeight: 'bold', letterSpacing: '0.05em' }}>
                 {tokens.length} TOKENS
               </span>
             </div>

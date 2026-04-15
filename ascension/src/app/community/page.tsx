@@ -56,7 +56,7 @@ export default function Community() {
   const tabStyle = (active: boolean): React.CSSProperties => ({
     background: active ? 'rgba(255,255,255,0.1)' : 'transparent',
     border: `1px solid ${active ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.08)'}`,
-    color: active ? '#fff' : '#555',
+    color: '#fff',
     padding: '8px 20px',
     fontSize: '11px',
     fontWeight: 'bold',

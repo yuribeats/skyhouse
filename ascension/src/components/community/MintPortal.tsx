@@ -195,7 +195,7 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
     fontSize: '10px',
     fontWeight: 'bold',
     textTransform: 'uppercase' as const,
-    color: '#666',
+    color: '#fff',
     letterSpacing: '0.1em',
     marginBottom: '6px',
     display: 'block',
@@ -262,14 +262,14 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
     <div style={{ padding: '40px 20px', maxWidth: '500px', margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <div>
-          <span style={{ fontSize: '10px', color: '#666', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+          <span style={{ fontSize: '10px', color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
             {session.username}
           </span>
         </div>
         <button onClick={onLogout} style={{
           background: 'none',
           border: '1px solid rgba(255,255,255,0.15)',
-          color: '#555',
+          color: '#fff',
           padding: '4px 10px',
           fontSize: '9px',
           fontWeight: 'bold',
@@ -319,7 +319,7 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
             padding: '40px',
             border: '1px dashed rgba(255,255,255,0.15)',
             background: 'transparent',
-            color: '#555',
+            color: '#fff',
             fontSize: '11px',
             fontWeight: 'bold',
             fontFamily: 'inherit',
