@@ -4,9 +4,6 @@ import { useState, useEffect } from 'react';
 import LoginForm from '@/components/community/LoginForm';
 import MintPortal from '@/components/community/MintPortal';
 import CommunityGallery from '@/components/community/CommunityGallery';
-import dynamic from 'next/dynamic';
-
-const ForrestFeed = dynamic(() => import('@/components/community/ForrestGallery'), { ssr: false });
 
 interface Session {
   token: string;
@@ -18,7 +15,7 @@ interface Session {
 const SESSION_KEY = 'ascension-community-session';
 const SESSION_TTL = 55 * 60 * 1000;
 
-type View = 'community' | 'mint' | 'forrest';
+type View = 'gallery' | 'mint';
 
 function loadSession(): Session | null {
   try {
@@ -41,7 +38,7 @@ function saveSession(session: Session) {
 
 export default function Community() {
   const [session, setSession] = useState<Session | null>(null);
-  const [view, setView] = useState<View>('community');
+  const [view, setView] = useState<View>('gallery');
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -57,13 +54,12 @@ export default function Community() {
   function handleLogout() {
     localStorage.removeItem(SESSION_KEY);
     setSession(null);
-    setView('community');
+    setView('gallery');
   }
 
   const labels: Record<View, string> = {
-    community: 'COMMUNITY GALLERY',
+    gallery: 'GALLERY',
     mint: session ? 'MINT' : 'JOIN',
-    forrest: "FORREST'S GALLERY",
   };
 
   return (
@@ -90,7 +86,7 @@ export default function Community() {
               display: 'flex',
               alignItems: 'center',
               gap: '10px',
-              minWidth: '220px',
+              minWidth: '180px',
               justifyContent: 'space-between',
             }}
           >
@@ -108,7 +104,7 @@ export default function Community() {
               border: '1px solid rgba(255,255,255,0.15)',
               zIndex: 20,
             }}>
-              {(['community', 'forrest', 'mint'] as View[]).map((v) => (
+              {(['gallery', 'mint'] as View[]).map((v) => (
                 <button
                   key={v}
                   onClick={() => { setView(v); setMenuOpen(false); }}
@@ -138,8 +134,7 @@ export default function Community() {
 
       {view === 'mint' && !session && <LoginForm onLogin={handleLogin} />}
       {view === 'mint' && session && <MintPortal session={session} onLogout={handleLogout} />}
-      {view === 'community' && <CommunityGallery />}
-      {view === 'forrest' && <ForrestFeed />}
+      {view === 'gallery' && <CommunityGallery />}
     </div>
   );
 }
