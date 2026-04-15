@@ -121,9 +121,14 @@ function MomentDetail({ moment, onClose }: { moment: Moment; onClose: () => void
   );
 }
 
+const PAGE_SIZE = 100;
+
 export default function CommunityGallery() {
   const [members, setMembers] = useState<Member[]>([]);
   const [momentsByWallet, setMomentsByWallet] = useState<Record<string, Moment[]>>({});
+  const [pageByWallet, setPageByWallet] = useState<Record<string, number>>({});
+  const [totalByWallet, setTotalByWallet] = useState<Record<string, number>>({});
+  const [loadingMore, setLoadingMore] = useState<Record<string, boolean>>({});
   const [loading, setLoading] = useState(true);
   const [selectedMoment, setSelectedMoment] = useState<Moment | null>(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -163,10 +168,13 @@ export default function CommunityGallery() {
 
       await Promise.allSettled(
         members.map(async (m) => {
-          const res = await fetch(`/api/community/timeline?wallet=${m.wallet}&limit=200`);
+          const res = await fetch(`/api/community/timeline?wallet=${m.wallet}&limit=${PAGE_SIZE}&page=1`);
           const data = await res.json();
           if (!cancelled && data.moments) {
             setMomentsByWallet((prev) => ({ ...prev, [m.wallet]: data.moments }));
+            setPageByWallet((prev) => ({ ...prev, [m.wallet]: 1 }));
+            const totalPages = data.pagination?.total_pages || 1;
+            setTotalByWallet((prev) => ({ ...prev, [m.wallet]: totalPages }));
           }
         })
       );
@@ -177,6 +185,23 @@ export default function CommunityGallery() {
     loadMoments();
     return () => { cancelled = true; };
   }, [members]);
+
+  async function loadMore(wallet: string) {
+    const currentPage = pageByWallet[wallet] || 1;
+    const nextPage = currentPage + 1;
+    setLoadingMore((prev) => ({ ...prev, [wallet]: true }));
+
+    const res = await fetch(`/api/community/timeline?wallet=${wallet}&limit=${PAGE_SIZE}&page=${nextPage}`);
+    const data = await res.json();
+    if (data.moments) {
+      setMomentsByWallet((prev) => ({
+        ...prev,
+        [wallet]: [...(prev[wallet] || []), ...data.moments],
+      }));
+      setPageByWallet((prev) => ({ ...prev, [wallet]: nextPage }));
+    }
+    setLoadingMore((prev) => ({ ...prev, [wallet]: false }));
+  }
 
   const getMemberName = useCallback((wallet: string) => {
     const m = members.find((m) => m.wallet.toLowerCase() === wallet.toLowerCase());
@@ -234,6 +259,28 @@ export default function CommunityGallery() {
                 <MomentCard key={`${mo.collection}-${mo.tokenId}`} moment={mo} onSelect={setSelectedMoment} />
               ))}
             </div>
+            {(pageByWallet[m.wallet] || 1) < (totalByWallet[m.wallet] || 1) && (
+              <div style={{ textAlign: 'center', padding: '16px 0' }}>
+                <button
+                  onClick={() => loadMore(m.wallet)}
+                  disabled={loadingMore[m.wallet]}
+                  style={{
+                    background: 'transparent',
+                    border: '1px solid rgba(255,255,255,0.15)',
+                    color: '#fff',
+                    padding: '10px 32px',
+                    fontSize: '11px',
+                    fontWeight: 'bold',
+                    fontFamily: 'inherit',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    opacity: loadingMore[m.wallet] ? 0.5 : 1,
+                  }}
+                >
+                  {loadingMore[m.wallet] ? 'LOADING...' : 'LOAD MORE'}
+                </button>
+              </div>
+            )}
           </div>
         );
       })}
