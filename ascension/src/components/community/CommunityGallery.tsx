@@ -1,9 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import type { UnifiedToken } from '@/lib/types';
-import { CHAINS, type ChainKey } from '@/lib/constants';
-import TokenDetail from '@/components/feed/TokenDetail';
 
 interface Member {
   wallet: string;
@@ -11,27 +8,33 @@ interface Member {
   joinedAt: string;
 }
 
-function truncate(addr: string) {
-  return `${addr.slice(0, 6)}...${addr.slice(-4)}`;
+interface Moment {
+  tokenId: string;
+  collection: string;
+  createdAt: string;
+  name: string;
+  description: string;
+  image: string;
+  contentUri: string;
+  contentMime: string;
+  inprocessUrl: string;
 }
 
-function TokenCard({ token, onSelect }: { token: UnifiedToken; onSelect: (t: UnifiedToken) => void }) {
-  const chain = CHAINS[token.chain as ChainKey];
-  const imageUrl = token.media.thumbnail || token.media.image;
+function MomentCard({ moment, onSelect }: { moment: Moment; onSelect: (m: Moment) => void }) {
   const [imgFailed, setImgFailed] = useState(false);
 
   return (
-    <div onClick={() => onSelect(token)} style={{
+    <div onClick={() => onSelect(moment)} style={{
       position: 'relative',
       aspectRatio: '1',
       background: '#111',
       border: '1px solid rgba(255,255,255,0.06)',
       overflow: 'hidden',
     }}>
-      {imageUrl && !imgFailed ? (
+      {moment.image && !imgFailed ? (
         <img
-          src={imageUrl}
-          alt={token.name}
+          src={moment.image}
+          alt={moment.name}
           loading="lazy"
           onError={() => setImgFailed(true)}
           style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
@@ -43,24 +46,76 @@ function TokenCard({ token, onSelect }: { token: UnifiedToken; onSelect: (t: Uni
           fontSize: '9px', fontWeight: 'bold', color: '#333', textTransform: 'uppercase',
           padding: '8px', textAlign: 'center',
         }}>
-          {token.name}
+          {moment.name || 'UNTITLED'}
         </div>
       )}
       <div style={{
         position: 'absolute', bottom: 0, left: 0, right: 0,
         background: 'linear-gradient(transparent, rgba(0,0,0,0.85))',
         padding: '16px 6px 4px',
-        display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
       }}>
         <div style={{
           fontSize: '8px', fontWeight: 'bold', color: '#aaa', textTransform: 'uppercase',
-          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: '70%',
+          overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
         }}>
-          {token.name}
+          {moment.name || 'UNTITLED'}
         </div>
-        <div style={{ fontSize: '7px', fontWeight: 'bold', color: chain?.color || '#666', textTransform: 'uppercase' }}>
-          {chain?.name || token.chain}
-        </div>
+      </div>
+    </div>
+  );
+}
+
+function MomentDetail({ moment, onClose }: { moment: Moment; onClose: () => void }) {
+  const isVideo = moment.contentMime.startsWith('video/');
+  const isAudio = moment.contentMime.startsWith('audio/');
+
+  return (
+    <div style={{
+      position: 'fixed', top: 0, right: 0, bottom: 0,
+      width: window.innerWidth < 768 ? '100%' : '420px',
+      background: 'rgba(10, 10, 15, 0.95)',
+      backdropFilter: 'blur(20px)',
+      borderLeft: '1px solid rgba(255,255,255,0.08)',
+      overflowY: 'auto',
+      zIndex: 100, padding: '24px',
+      fontFamily: 'inherit', color: '#fff',
+    }}>
+      <button onClick={onClose} style={{
+        position: 'sticky', top: 0, float: 'right',
+        background: 'rgba(10,10,15,0.9)', border: '1px solid rgba(255,255,255,0.2)',
+        color: '#fff', padding: '6px 12px', fontFamily: 'inherit',
+        fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', zIndex: 10,
+      }}>CLOSE</button>
+
+      <div style={{ marginTop: '48px', marginBottom: '20px' }}>
+        {isVideo ? (
+          <video src={moment.contentUri} controls autoPlay style={{ width: '100%', maxHeight: '400px', objectFit: 'contain' }} />
+        ) : isAudio ? (
+          <div>
+            {moment.image && <img src={moment.image} alt={moment.name} style={{ width: '100%', maxHeight: '300px', objectFit: 'contain' }} />}
+            <audio src={moment.contentUri} controls autoPlay style={{ width: '100%', marginTop: '8px' }} />
+          </div>
+        ) : (
+          <img src={moment.contentUri || moment.image} alt={moment.name} style={{ width: '100%', maxHeight: '400px', objectFit: 'contain' }} />
+        )}
+      </div>
+
+      <h2 style={{ fontSize: '16px', fontWeight: 'bold', textTransform: 'uppercase', margin: '0 0 16px', letterSpacing: '0.05em' }}>
+        {moment.name || 'UNTITLED'}
+      </h2>
+
+      {moment.description && (
+        <p style={{ fontSize: '12px', color: '#999', lineHeight: '1.6', marginTop: '16px' }}>
+          {moment.description}
+        </p>
+      )}
+
+      <div style={{ marginTop: '24px' }}>
+        <a href={moment.inprocessUrl} target="_blank" rel="noopener noreferrer" style={{
+          border: '1px solid rgba(255,255,255,0.2)', color: '#fff', padding: '8px 14px',
+          fontSize: '11px', fontWeight: 'bold', fontFamily: 'inherit',
+          textTransform: 'uppercase', textDecoration: 'none', letterSpacing: '0.05em',
+        }}>VIEW ON INPROCESS</a>
       </div>
     </div>
   );
@@ -68,9 +123,9 @@ function TokenCard({ token, onSelect }: { token: UnifiedToken; onSelect: (t: Uni
 
 export default function CommunityGallery() {
   const [members, setMembers] = useState<Member[]>([]);
-  const [tokensByWallet, setTokensByWallet] = useState<Record<string, UnifiedToken[]>>({});
+  const [momentsByWallet, setMomentsByWallet] = useState<Record<string, Moment[]>>({});
   const [loading, setLoading] = useState(true);
-  const [selectedToken, setSelectedToken] = useState<UnifiedToken | null>(null);
+  const [selectedMoment, setSelectedMoment] = useState<Moment | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -103,17 +158,15 @@ export default function CommunityGallery() {
 
     let cancelled = false;
 
-    async function loadTokens() {
+    async function loadMoments() {
       setLoading(true);
-      const results: Record<string, UnifiedToken[]> = {};
 
       await Promise.allSettled(
         members.map(async (m) => {
-          const res = await fetch(`/api/nfts?wallet=${m.wallet}&chain=base`);
+          const res = await fetch(`/api/community/timeline?wallet=${m.wallet}&limit=200`);
           const data = await res.json();
-          if (!cancelled && data.tokens) {
-            results[m.wallet] = data.tokens;
-            setTokensByWallet((prev) => ({ ...prev, [m.wallet]: data.tokens }));
+          if (!cancelled && data.moments) {
+            setMomentsByWallet((prev) => ({ ...prev, [m.wallet]: data.moments }));
           }
         })
       );
@@ -121,25 +174,20 @@ export default function CommunityGallery() {
       if (!cancelled) setLoading(false);
     }
 
-    loadTokens();
+    loadMoments();
     return () => { cancelled = true; };
   }, [members]);
 
   const getMemberName = useCallback((wallet: string) => {
     const m = members.find((m) => m.wallet.toLowerCase() === wallet.toLowerCase());
-    return m?.username || truncate(wallet);
+    return m?.username || `${wallet.slice(0, 6)}...${wallet.slice(-4)}`;
   }, [members]);
 
   return (
     <div style={{ padding: '40px 0' }}>
       <h2 style={{
-        fontSize: '12px',
-        fontWeight: 'bold',
-        textTransform: 'uppercase',
-        letterSpacing: '0.15em',
-        color: '#fff',
-        textAlign: 'center',
-        marginBottom: '32px',
+        fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase',
+        letterSpacing: '0.15em', color: '#fff', textAlign: 'center', marginBottom: '32px',
       }}>
         COMMUNITY TOKENS
       </h2>
@@ -157,29 +205,24 @@ export default function CommunityGallery() {
       )}
 
       {members.map((m) => {
-        const tokens = tokensByWallet[m.wallet] || [];
-        if (tokens.length === 0 && loading) return null;
+        const moments = momentsByWallet[m.wallet] || [];
+        if (moments.length === 0 && loading) return null;
+        if (moments.length === 0) return null;
         return (
           <div key={m.wallet} style={{ marginBottom: '40px' }}>
             <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '0 20px',
-              marginBottom: '12px',
+              display: 'flex', alignItems: 'center', gap: '8px',
+              padding: '0 20px', marginBottom: '12px',
             }}>
               <span style={{
-                fontSize: '11px',
-                fontWeight: 'bold',
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                color: '#00a080',
+                fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase',
+                letterSpacing: '0.08em', color: '#00a080',
               }}>
                 {getMemberName(m.wallet)}
               </span>
               <span style={{ fontSize: '9px', color: '#333' }}>|</span>
               <span style={{ fontSize: '9px', color: '#fff', fontWeight: 'bold', letterSpacing: '0.05em' }}>
-                {tokens.length} TOKENS
+                {moments.length} MOMENTS
               </span>
             </div>
             <div style={{
@@ -187,16 +230,16 @@ export default function CommunityGallery() {
               gridTemplateColumns: isMobile ? 'repeat(3, 1fr)' : 'repeat(auto-fill, minmax(180px, 1fr))',
               gap: '2px',
             }}>
-              {tokens.map((t) => (
-                <TokenCard key={t.id} token={t} onSelect={setSelectedToken} />
+              {moments.map((mo) => (
+                <MomentCard key={`${mo.collection}-${mo.tokenId}`} moment={mo} onSelect={setSelectedMoment} />
               ))}
             </div>
           </div>
         );
       })}
 
-      {selectedToken && (
-        <TokenDetail token={selectedToken} onClose={() => setSelectedToken(null)} />
+      {selectedMoment && (
+        <MomentDetail moment={selectedMoment} onClose={() => setSelectedMoment(null)} />
       )}
     </div>
   );
