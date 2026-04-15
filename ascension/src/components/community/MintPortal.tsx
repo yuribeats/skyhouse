@@ -36,7 +36,10 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
   const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    fetch(`/api/community/collections?wallet=${session.wallet}`)
+    const params = session.wallet
+      ? `wallet=${encodeURIComponent(session.wallet)}`
+      : `username=${encodeURIComponent(session.username)}`;
+    fetch(`/api/community/collections?${params}`)
       .then((r) => r.json())
       .then((data) => {
         const cols = (data.collections || []).map((c: Record<string, string>) => ({
@@ -46,7 +49,7 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
         setCollections(cols);
         if (cols.length > 0) setSelectedCollection(cols[0]);
       });
-  }, [session.wallet]);
+  }, [session.wallet, session.username]);
 
   function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];

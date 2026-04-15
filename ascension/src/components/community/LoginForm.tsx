@@ -73,8 +73,8 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
 
       const session: Session = {
         token: apiKey,
-        wallet: profile.wallet || profile.address || '',
-        username: profile.username || profile.name || email.split('@')[0],
+        wallet: profile.artistAddress || profile.wallet || profile.address || '',
+        username: profile.profile?.username || profile.username || email.split('@')[0],
         email,
       };
 
