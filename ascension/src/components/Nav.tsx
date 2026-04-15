@@ -83,7 +83,7 @@ export default function Nav() {
                 style={{ minWidth: '200px' }}
               >
                 {links.map((link) => (
-                  <div key={link.href}>
+                  <div key={link.href} className="group/nav relative">
                     <Link
                       href={link.href}
                       onClick={() => setMenuOpen(false)}
@@ -95,16 +95,20 @@ export default function Nav() {
                     >
                       {link.label}
                     </Link>
-                    {link.children && link.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        onClick={() => setMenuOpen(false)}
-                        className="block px-6 py-2 pl-10 font-body text-xs font-black tracking-widest text-neptune-blue/60 transition-colors duration-200 hover:bg-neptune-blue/5 hover:text-neptune-teal border-b border-neptune-blue/10"
-                      >
-                        {child.label}
-                      </Link>
-                    ))}
+                    {link.children && (
+                      <div className="hidden group-hover/nav:block">
+                        {link.children.map((child) => (
+                          <Link
+                            key={child.href}
+                            href={child.href}
+                            onClick={() => setMenuOpen(false)}
+                            className="block px-6 py-2 pl-10 font-body text-xs font-black tracking-widest text-neptune-blue/60 transition-colors duration-200 hover:bg-neptune-blue/5 hover:text-neptune-teal border-b border-neptune-blue/10"
+                          >
+                            {child.label}
+                          </Link>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>
