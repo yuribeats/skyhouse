@@ -10,10 +10,6 @@ const fadeUp = {
 };
 
 const staticPhotos = [
-  { src: "/assets/tdr1.png", alt: "Trans Day of Remembrance Ascension Service" },
-  { src: "/assets/tdr2.png", alt: "Order of Service" },
-  { src: "/assets/brochure-1.png", alt: "Why Make Art — The Ascension Service" },
-  { src: "/assets/brochure-2.png", alt: "Ask Yourself — The Ascension Service" },
   { src: "/assets/performance-church-1.jpg", alt: "The Ascension Service — church performance" },
   { src: "/assets/performance-church-2.jpg", alt: "The Ascension Service — church ceremony" },
   { src: "/assets/performance-gallery.jpg", alt: "The Ascension Service — gallery performance" },
@@ -44,7 +40,7 @@ export default function Press() {
     >
       <motion.div variants={fadeUp}>
         <h1 className="mb-2 font-display text-5xl text-white md:text-6xl">
-          Images
+          Press
         </h1>
         <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />
       </motion.div>
