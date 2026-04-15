@@ -81,9 +81,9 @@ function MomentDetail({ moment, onClose }: { moment: Moment; onClose: () => void
       fontFamily: 'inherit', color: '#fff',
     }}>
       <button onClick={onClose} style={{
-        position: 'sticky', top: 0, float: 'right',
+        position: 'absolute', top: '16px', right: '16px',
         background: 'rgba(10,10,15,0.9)', border: '1px solid rgba(255,255,255,0.2)',
-        color: '#fff', padding: '6px 12px', fontFamily: 'inherit',
+        color: '#fff', padding: '8px 14px', fontFamily: 'inherit',
         fontWeight: 'bold', fontSize: '12px', textTransform: 'uppercase', zIndex: 10,
       }}>CLOSE</button>
 

@@ -33,13 +33,13 @@ export default function Contact() {
       variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
     >
       <motion.div variants={fadeUp}>
-        <h1 className="mb-2 font-display text-5xl text-white md:text-6xl">
+        <h1 className="mb-2 font-display text-3xl text-white md:text-6xl">
           Get in Touch
         </h1>
         <div className="mb-16 h-[2px] w-16 bg-neptune-blue" />
       </motion.div>
 
-      <div className="grid gap-16 md:grid-cols-2">
+      <div className="grid gap-8 md:gap-16 md:grid-cols-2">
         {/* Booking form */}
         <motion.div variants={fadeUp}>
           {submitted ? (

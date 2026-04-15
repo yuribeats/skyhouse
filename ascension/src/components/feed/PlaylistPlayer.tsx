@@ -160,7 +160,6 @@ export default function PlaylistPlayer() {
           fontWeight: 'bold',
           textTransform: 'uppercase',
           letterSpacing: '0.05em',
-          whiteSpace: 'nowrap',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
         }}>

@@ -206,7 +206,7 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
 
   if (mintSteps.length > 0) {
     return (
-      <div style={{ padding: '40px 20px', maxWidth: '500px', margin: '0 auto' }}>
+      <div style={{ padding: '40px 20px', maxWidth: 'min(500px, 90vw)', margin: '0 auto' }}>
         <h3 style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.15em', color: '#666', marginBottom: '24px', textAlign: 'center' }}>
           {mintDone ? 'MOMENT CREATED' : 'MINTING...'}
         </h3>
@@ -262,7 +262,7 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
   }
 
   return (
-    <div style={{ padding: '40px 20px', maxWidth: '500px', margin: '0 auto' }}>
+    <div style={{ padding: '40px 20px', maxWidth: 'min(500px, 90vw)', margin: '0 auto' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '32px' }}>
         <div>
           <span style={{ fontSize: '10px', color: '#fff', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
@@ -319,7 +319,7 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
         ) : (
           <button onClick={() => fileRef.current?.click()} style={{
             width: '100%',
-            padding: '40px',
+            padding: '24px',
             border: '1px dashed rgba(255,255,255,0.15)',
             background: 'transparent',
             color: '#fff',

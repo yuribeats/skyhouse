@@ -39,7 +39,7 @@ export default function Press() {
       variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
     >
       <motion.div variants={fadeUp}>
-        <h1 className="mb-2 font-display text-5xl text-white md:text-6xl">
+        <h1 className="mb-2 font-display text-3xl text-white md:text-6xl">
           Press
         </h1>
         <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />

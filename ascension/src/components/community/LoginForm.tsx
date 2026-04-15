@@ -100,7 +100,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
 
   const inputStyle: React.CSSProperties = {
     width: '100%',
-    maxWidth: '400px',
+    maxWidth: 'min(400px, 90vw)',
     background: 'transparent',
     border: '1px solid rgba(255,255,255,0.15)',
     color: '#fff',
@@ -150,7 +150,7 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
         fontSize: '11px',
         color: '#fff',
         letterSpacing: '0.05em',
-        maxWidth: '400px',
+        maxWidth: 'min(400px, 90vw)',
         lineHeight: '1.6',
         textTransform: 'uppercase',
       }}>

@@ -77,7 +77,7 @@ export default function Nav() {
             {menuOpen && (
               <div
                 className="absolute right-0 top-full mt-4 z-50 border border-neptune-blue/30 bg-white shadow-lg"
-                style={{ minWidth: '200px' }}
+                style={{ minWidth: '160px' }}
               >
                 {links.map((link) => (
                   <Link

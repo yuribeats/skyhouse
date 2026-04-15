@@ -33,7 +33,7 @@ export default function Shop() {
         animate="visible"
         variants={fadeUp}
       >
-        <h1 className="font-display text-5xl text-white md:text-6xl">
+        <h1 className="font-display text-3xl text-white md:text-6xl">
           Coming Soon
         </h1>
       </motion.div>
@@ -50,7 +50,7 @@ export default function Shop() {
       variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
     >
       <motion.div variants={fadeUp}>
-        <h1 className="mb-2 font-display text-5xl text-white md:text-6xl">
+        <h1 className="mb-2 font-display text-3xl text-white md:text-6xl">
           The Ascension Store
         </h1>
         <div className="mb-16 h-[2px] w-16 bg-neptune-blue" />
