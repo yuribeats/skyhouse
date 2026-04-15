@@ -9,7 +9,7 @@ import ScrollingBanner from "@/components/ScrollingBanner";
 const links = [
   { href: "/feed", label: "FEED" },
   { href: "/events", label: "EVENTS" },
-  { href: "/press", label: "IMAGES" },
+  { href: "/press", label: "PRESS" },
   { href: "/shop", label: "SHOP" },
   { href: "/contact", label: "CONTACT" },
 ];
