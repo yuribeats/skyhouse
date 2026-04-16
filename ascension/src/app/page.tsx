@@ -21,14 +21,14 @@ export default function Home() {
             visible: { transition: { staggerChildren: 0.15 } },
           }}
         >
-          <motion.div variants={fadeUp} className="w-full">
+          <motion.div variants={fadeUp} className="flex w-full justify-center">
             <Image
               src="/assets/logo-cropped.png"
               alt="The Ascension Service"
-              width={1920}
-              height={800}
+              width={960}
+              height={400}
               preload
-              className="h-auto w-screen"
+              className="h-auto w-[50vw]"
             />
           </motion.div>
 
