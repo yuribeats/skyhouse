@@ -16,5 +16,14 @@
     "status": "available",
     "ticketUrl": "",
     "id": "1777055234938"
+  },
+  {
+    "date": "JUN 7",
+    "city": "NYC",
+    "venue": "Roundtest",
+    "country": "USA",
+    "status": "available",
+    "ticketUrl": "",
+    "id": "1777055699117"
   }
 ]
