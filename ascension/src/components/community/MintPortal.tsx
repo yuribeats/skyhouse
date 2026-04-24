@@ -28,6 +28,8 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
   const [showCollectionMenu, setShowCollectionMenu] = useState(false);
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [price, setPrice] = useState('');
+  const [recipientsText, setRecipientsText] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState('');
   const [minting, setMinting] = useState(false);
@@ -68,11 +70,18 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
     setMinting(true);
     setMintDone(false);
 
+    const recipients = recipientsText
+      .split(/[\s,]+/)
+      .map((s) => s.trim())
+      .filter((s) => /^0x[a-fA-F0-9]{40}$/.test(s));
+    const willAirdrop = recipients.length > 0;
+
     const steps: MintStep[] = [
       { label: 'UPLOAD MEDIA', status: 'pending' },
       { label: 'UPLOAD METADATA', status: 'pending' },
       { label: 'CREATE MOMENT', status: 'pending' },
       { label: 'CONFIRMING', status: 'pending' },
+      ...(willAirdrop ? [{ label: `AIRDROP (${recipients.length})`, status: 'pending' as const }] : []),
     ];
     setMintSteps([...steps]);
 
@@ -151,11 +160,15 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
           momentUri,
           collectionAddress: selectedCollection!.address,
           account: session.wallet,
-          recipientCount: 1,
+          recipientCount: recipients.length || 1,
+          priceEth: price.trim() || '0',
           apiKey: session.token,
         }),
       });
       if (!mintRes.ok) throw new Error('Mint failed');
+      const mintData = await mintRes.json();
+      const tokenId = mintData?.tokenId;
+      const mintedCollection = mintData?.contractAddress || selectedCollection!.address;
       steps[2].status = 'done';
       setMintSteps([...steps]);
 
@@ -165,6 +178,29 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
       await new Promise((r) => setTimeout(r, 3000));
       steps[3].status = 'done';
       setMintSteps([...steps]);
+
+      // Step 5: Airdrop (optional)
+      if (willAirdrop) {
+        steps[4].status = 'active';
+        setMintSteps([...steps]);
+        const airdropRes = await fetch('/api/community/airdrop', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            collectionAddress: mintedCollection,
+            tokenId,
+            recipients,
+            account: session.wallet,
+            apiKey: session.token,
+          }),
+        });
+        if (!airdropRes.ok) {
+          const errBody = await airdropRes.json().catch(() => ({}));
+          throw new Error('Airdrop failed: ' + (errBody.error || airdropRes.status));
+        }
+        steps[4].status = 'done';
+        setMintSteps([...steps]);
+      }
 
       setMintDone(true);
     } catch (err) {
@@ -184,6 +220,8 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
     setPreview('');
     setName('');
     setDescription('');
+    setPrice('');
+    setRecipientsText('');
     setMintSteps([]);
     setMintDone(false);
   }
@@ -344,12 +382,35 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
 
       <div style={{ marginBottom: '20px' }}>
         <span style={labelStyle}>NAME</span>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="MOMENT NAME" style={inputStyle} />
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="MOMENT NAME" style={{ ...inputStyle, textTransform: 'none' as const }} />
       </div>
 
       <div style={{ marginBottom: '20px' }}>
         <span style={labelStyle}>DESCRIPTION</span>
-        <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="DESCRIBE THIS MOMENT" rows={3} style={{ ...inputStyle, resize: 'vertical' as const, minHeight: '80px' }} />
+        <textarea value={description} onChange={(e) => setDescription(e.target.value)} placeholder="DESCRIBE THIS MOMENT" rows={3} style={{ ...inputStyle, resize: 'vertical' as const, minHeight: '80px', textTransform: 'none' as const }} />
+      </div>
+
+      <div style={{ marginBottom: '20px' }}>
+        <span style={labelStyle}>PRICE (ETH)</span>
+        <input
+          type="text"
+          value={price}
+          onChange={(e) => setPrice(e.target.value)}
+          placeholder="0"
+          inputMode="decimal"
+          style={{ ...inputStyle, textTransform: 'none' as const }}
+        />
+      </div>
+
+      <div style={{ marginBottom: '20px' }}>
+        <span style={labelStyle}>AIRDROP RECIPIENTS</span>
+        <textarea
+          value={recipientsText}
+          onChange={(e) => setRecipientsText(e.target.value)}
+          placeholder="0x... addresses, comma or newline separated (optional)"
+          rows={3}
+          style={{ ...inputStyle, resize: 'vertical' as const, minHeight: '70px', textTransform: 'none' as const, fontSize: '11px' }}
+        />
       </div>
 
       <div style={{ marginBottom: '24px', position: 'relative' }}>

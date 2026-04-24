@@ -11,22 +11,25 @@ const token = () => {
 const apiUrl = (path: string) =>
   `https://api.github.com/repos/${REPO}/contents/${path}?ref=${BRANCH}`;
 
-const rawUrl = (path: string) =>
-  `https://raw.githubusercontent.com/${REPO}/${BRANCH}/${path}`;
-
 const path = (key: string) => `${DIR}/${key}`;
 
 export async function getData<T>(key: string): Promise<T[]> {
-  const url = `${rawUrl(path(key))}?t=${Date.now()}`;
   let res: Response;
   try {
-    res = await fetch(url, { cache: "no-store" });
+    res = await fetch(apiUrl(path(key)), {
+      headers: {
+        Authorization: `Bearer ${token()}`,
+        Accept: "application/vnd.github.raw+json",
+      },
+      cache: "no-store",
+    });
   } catch (err) {
     console.error(`[getData] fetch threw for ${key}:`, err);
     return [];
   }
+  if (res.status === 404) return [];
   if (!res.ok) {
-    console.error(`[getData] ${key} status=${res.status} url=${url}`);
+    console.error(`[getData] ${key} status=${res.status}`);
     return [];
   }
   const text = await res.text();
@@ -34,7 +37,7 @@ export async function getData<T>(key: string): Promise<T[]> {
     const data = JSON.parse(text);
     return Array.isArray(data) ? data : [];
   } catch (err) {
-    console.error(`[getData] parse failed for ${key}: ${(err as Error).message}; body: ${text.slice(0, 200)}`);
+    console.error(`[getData] parse failed for ${key}: ${(err as Error).message}`);
     return [];
   }
 }

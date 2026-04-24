@@ -2,8 +2,18 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export const maxDuration = 60;
 
+function ethToWei(eth: string): string {
+  const s = String(eth || '0').trim();
+  if (!s || isNaN(Number(s))) return '0';
+  const [wholeRaw, fracRaw = ''] = s.split('.');
+  const whole = wholeRaw.replace(/^0+/, '') || '0';
+  const frac = (fracRaw + '0'.repeat(18)).slice(0, 18);
+  const combined = (whole + frac).replace(/^0+/, '');
+  return combined || '0';
+}
+
 export async function POST(req: NextRequest) {
-  const { momentUri, collectionAddress, account, recipientCount, apiKey } = await req.json();
+  const { momentUri, collectionAddress, account, recipientCount, priceEth, apiKey } = await req.json();
   if (!apiKey) return NextResponse.json({ error: 'API key required' }, { status: 400 });
 
   const payload = {
@@ -13,7 +23,7 @@ export async function POST(req: NextRequest) {
       createReferral: '0x0000000000000000000000000000000000000000',
       salesConfig: {
         type: 'fixedPrice',
-        pricePerToken: '0',
+        pricePerToken: ethToWei(priceEth),
         saleStart: '0',
         saleEnd: '9999999999',
       },
