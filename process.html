@@ -1324,7 +1324,32 @@
           }
         });
 
-        resultArea.innerHTML = '<div class="error-message">' + err.message + '</div>';
+        resultArea.textContent = '';
+
+        const msg = document.createElement('div');
+        msg.className = 'error-message';
+        msg.textContent = (err && err.message) ? err.message : String(err);
+        resultArea.appendChild(msg);
+
+        const trace = document.createElement('pre');
+        trace.style.cssText =
+          'margin-top:12px;padding:12px;border:1px solid #ff4b00;background:rgba(0,0,0,0.4);' +
+          'color:#ff9d77;font-family:Courier New,monospace;font-size:11px;white-space:pre-wrap;' +
+          'word-break:break-all;text-transform:none;max-height:300px;overflow:auto;';
+        trace.textContent = (err && err.stack) ? String(err.stack) : 'no stack available';
+        resultArea.appendChild(trace);
+
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'btn-outline';
+        copyBtn.style.cssText = 'margin-top:12px;padding:8px 16px;font-size:11px;';
+        copyBtn.textContent = 'COPY TRACE';
+        copyBtn.addEventListener('click', () => {
+          navigator.clipboard.writeText(trace.textContent || '').then(() => {
+            copyBtn.textContent = 'COPIED';
+          });
+        });
+        resultArea.appendChild(copyBtn);
+
         resetRow.style.display = 'flex';
       }
     }
