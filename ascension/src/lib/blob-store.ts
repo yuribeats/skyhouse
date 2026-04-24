@@ -1,4 +1,4 @@
-import { list, put } from "@vercel/blob";
+import { get, list, put } from "@vercel/blob";
 
 export async function getData<T>(key: string): Promise<T[]> {
   try {
@@ -7,9 +7,9 @@ export async function getData<T>(key: string): Promise<T[]> {
     const latest = blobs.reduce((a, b) =>
       new Date(a.uploadedAt) > new Date(b.uploadedAt) ? a : b
     );
-    const bust = new Date(latest.uploadedAt).getTime();
-    const res = await fetch(`${latest.url}?t=${bust}`, { cache: "no-store" });
-    return await res.json();
+    const res = await get(latest.url, { access: "private" });
+    if (!res || res.statusCode !== 200) return [];
+    return await new Response(res.stream).json();
   } catch {
     return [];
   }
@@ -17,7 +17,7 @@ export async function getData<T>(key: string): Promise<T[]> {
 
 export async function setData<T>(key: string, data: T[]) {
   await put(key, JSON.stringify(data), {
-    access: "public",
+    access: "private",
     addRandomSuffix: false,
     allowOverwrite: true,
     cacheControlMaxAge: 60,
