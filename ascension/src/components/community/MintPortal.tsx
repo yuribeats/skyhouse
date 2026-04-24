@@ -33,6 +33,10 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState('');
   const [minting, setMinting] = useState(false);
+  const [showCreateCollection, setShowCreateCollection] = useState(false);
+  const [newCollectionName, setNewCollectionName] = useState('');
+  const [creatingCollection, setCreatingCollection] = useState(false);
+  const [createCollectionError, setCreateCollectionError] = useState('');
   const [mintSteps, setMintSteps] = useState<MintStep[]>([]);
   const [mintDone, setMintDone] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
@@ -63,6 +67,59 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
 
   function canMint() {
     return file && name && description && selectedCollection && !minting;
+  }
+
+  async function handleCreateCollection() {
+    const trimmed = newCollectionName.trim();
+    if (!trimmed || creatingCollection) return;
+    setCreateCollectionError('');
+    setCreatingCollection(true);
+    try {
+      const metadata = { name: trimmed, description: '' };
+      const metaJson = JSON.stringify(metadata);
+      const metaBase64 = btoa(unescape(encodeURIComponent(metaJson)));
+      const upRes = await fetch('/api/community/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          data: metaBase64,
+          contentType: 'application/json',
+          filename: 'collection.json',
+          apiKey: session.token,
+        }),
+      });
+      if (!upRes.ok) throw new Error('Metadata upload failed');
+      const { uri } = await upRes.json();
+
+      const createRes = await fetch('/api/community/create-collection', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: trimmed,
+          uri,
+          account: session.wallet,
+          apiKey: session.token,
+        }),
+      });
+      if (!createRes.ok) {
+        const errBody = await createRes.json().catch(() => ({}));
+        throw new Error(errBody.error || `HTTP ${createRes.status}`);
+      }
+      const result = await createRes.json();
+      const newCol: Collection = {
+        name: trimmed,
+        address: result.contractAddress,
+        contractAddress: result.contractAddress,
+      };
+      setCollections((prev) => [...prev, newCol]);
+      setSelectedCollection(newCol);
+      setShowCreateCollection(false);
+      setNewCollectionName('');
+      setShowCollectionMenu(false);
+    } catch (err) {
+      setCreateCollectionError(err instanceof Error ? err.message : 'Unknown error');
+    }
+    setCreatingCollection(false);
   }
 
   async function handleMint() {
@@ -434,9 +491,26 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
             background: '#111',
             border: '1px solid rgba(255,255,255,0.15)',
             zIndex: 10,
-            maxHeight: '200px',
+            maxHeight: '240px',
             overflowY: 'auto',
           }}>
+            <button onClick={() => { setShowCreateCollection(true); setShowCollectionMenu(false); }} style={{
+              display: 'block',
+              width: '100%',
+              padding: '10px 14px',
+              background: 'transparent',
+              border: 'none',
+              borderBottom: '1px solid rgba(255,75,0,0.4)',
+              color: '#ff4b00',
+              fontSize: '11px',
+              fontWeight: 'bold',
+              fontFamily: 'inherit',
+              textTransform: 'uppercase',
+              textAlign: 'left',
+              letterSpacing: '0.05em',
+            }}>
+              + NEW COLLECTION
+            </button>
             {collections.map((c) => (
               <button key={c.address} onClick={() => { setSelectedCollection(c); setShowCollectionMenu(false); }} style={{
                 display: 'block',
@@ -461,6 +535,60 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
                 NO COLLECTIONS FOUND
               </div>
             )}
+          </div>
+        )}
+        {showCreateCollection && (
+          <div style={{ marginTop: '12px', padding: '14px', border: '1px solid rgba(255,75,0,0.4)', background: 'rgba(255,75,0,0.05)' }}>
+            <span style={{ ...labelStyle, color: '#ff4b00' }}>NEW COLLECTION NAME</span>
+            <input
+              type="text"
+              value={newCollectionName}
+              onChange={(e) => setNewCollectionName(e.target.value)}
+              placeholder="MY COLLECTION"
+              autoFocus
+              style={{ ...inputStyle, textTransform: 'none' as const }}
+              onKeyDown={(e) => { if (e.key === 'Enter') handleCreateCollection(); }}
+            />
+            {createCollectionError && (
+              <div style={{ marginTop: '8px', fontSize: '10px', color: '#FF0420', wordBreak: 'break-all', textTransform: 'none' }}>
+                {createCollectionError}
+              </div>
+            )}
+            <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+              <button
+                onClick={handleCreateCollection}
+                disabled={!newCollectionName.trim() || creatingCollection}
+                style={{
+                  flex: 1,
+                  background: creatingCollection ? 'rgba(255,75,0,0.3)' : '#ff4b00',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '10px',
+                  fontSize: '11px',
+                  fontWeight: 'bold',
+                  fontFamily: 'inherit',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                }}>
+                {creatingCollection ? 'CREATING...' : 'CREATE'}
+              </button>
+              <button
+                onClick={() => { setShowCreateCollection(false); setNewCollectionName(''); setCreateCollectionError(''); }}
+                disabled={creatingCollection}
+                style={{
+                  background: 'transparent',
+                  border: '1px solid rgba(255,255,255,0.15)',
+                  color: '#fff',
+                  padding: '10px 16px',
+                  fontSize: '11px',
+                  fontWeight: 'bold',
+                  fontFamily: 'inherit',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em',
+                }}>
+                CANCEL
+              </button>
+            </div>
           </div>
         )}
       </div>
