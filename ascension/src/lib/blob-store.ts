@@ -17,15 +17,24 @@ const rawUrl = (path: string) =>
 const path = (key: string) => `${DIR}/${key}`;
 
 export async function getData<T>(key: string): Promise<T[]> {
-  const res = await fetch(`${rawUrl(path(key))}?t=${Date.now()}`, {
-    cache: "no-store",
-  });
-  if (res.status === 404) return [];
-  if (!res.ok) return [];
+  const url = `${rawUrl(path(key))}?t=${Date.now()}`;
+  let res: Response;
   try {
-    const data = await res.json();
+    res = await fetch(url, { cache: "no-store" });
+  } catch (err) {
+    console.error(`[getData] fetch threw for ${key}:`, err);
+    return [];
+  }
+  if (!res.ok) {
+    console.error(`[getData] ${key} status=${res.status} url=${url}`);
+    return [];
+  }
+  const text = await res.text();
+  try {
+    const data = JSON.parse(text);
     return Array.isArray(data) ? data : [];
-  } catch {
+  } catch (err) {
+    console.error(`[getData] parse failed for ${key}: ${(err as Error).message}; body: ${text.slice(0, 200)}`);
     return [];
   }
 }
