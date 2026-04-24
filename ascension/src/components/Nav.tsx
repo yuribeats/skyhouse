@@ -61,17 +61,17 @@ export default function Nav() {
               aria-label="Toggle menu"
             >
               <span
-                className={`block h-[2px] w-6 bg-neptune-blue transition-transform duration-200 ${
+                className={`block h-[2px] w-6 bg-neptune-teal transition-transform duration-200 ${
                   menuOpen ? "translate-y-[5px] rotate-45" : ""
                 }`}
               />
               <span
-                className={`block h-[2px] w-6 bg-neptune-blue transition-opacity duration-200 ${
+                className={`block h-[2px] w-6 bg-neptune-teal transition-opacity duration-200 ${
                   menuOpen ? "opacity-0" : ""
                 }`}
               />
               <span
-                className={`block h-[2px] w-6 bg-neptune-blue transition-transform duration-200 ${
+                className={`block h-[2px] w-6 bg-neptune-teal transition-transform duration-200 ${
                   menuOpen ? "-translate-y-[5px] -rotate-45" : ""
                 }`}
               />

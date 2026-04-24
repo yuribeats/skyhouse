@@ -10,12 +10,12 @@
 
 @theme {
   --color-neptune-void: #000000;
-  --color-neptune-deep: #001060;
-  --color-neptune-blue: #0030a0;
-  --color-neptune-mid: #0070a0;
-  --color-neptune-teal: #00a080;
-  --color-neptune-green: #00c060;
-  --color-neptune-glow: #00a0e0;
+  --color-neptune-deep: #000bff;
+  --color-neptune-blue: #000bff;
+  --color-neptune-mid: #000bff;
+  --color-neptune-teal: #ff4b00;
+  --color-neptune-green: #ff4b00;
+  --color-neptune-glow: #000bff;
   --color-neptune-white: #ffffff;
   --color-neptune-muted: #8899aa;
 
@@ -39,7 +39,7 @@ body {
 }
 
 ::selection {
-  background: #00a080;
+  background: #ff4b00;
   color: #000;
 }
 
@@ -50,11 +50,11 @@ body {
   background: #000;
 }
 ::-webkit-scrollbar-thumb {
-  background: #0030a0;
+  background: #000bff;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00a080;
+  background: #ff4b00;
 }
 
 @keyframes scroll-left {
@@ -72,5 +72,23 @@ body {
   }
   100% {
     transform: translateX(0);
+  }
+}
+
+@keyframes banner-shift-left {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(calc(-1 * var(--banner-shift)), 0, 0);
+  }
+}
+
+@keyframes banner-shift-right {
+  from {
+    transform: translate3d(calc(-1 * var(--banner-shift)), 0, 0);
+  }
+  to {
+    transform: translate3d(0, 0, 0);
   }
 }

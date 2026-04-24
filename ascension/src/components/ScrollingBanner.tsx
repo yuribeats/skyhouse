@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 interface ScrollingBannerProps {
   images: string[];
   direction?: "left" | "right";
@@ -15,40 +13,49 @@ export default function ScrollingBanner({
   speed = 40,
   height = 200,
 }: ScrollingBannerProps) {
-  // Only need 2 copies for seamless loop — animation shifts exactly one copy width
-  const set1 = images;
-  const set2 = images;
+  const imgWidth = Math.round((height * 16) / 9);
+  const setWidth = imgWidth * images.length;
 
   return (
-    <div className="overflow-hidden">
+    <div className="overflow-hidden" style={{ height: `${height}px` }}>
       <div
         className="flex"
         style={{
-          animation: `scroll-${direction} ${speed}s linear infinite`,
-          willChange: 'transform',
+          width: `${setWidth * 2}px`,
+          animationName: direction === "left" ? "banner-shift-left" : "banner-shift-right",
+          animationDuration: `${speed}s`,
+          animationTimingFunction: "linear",
+          animationIterationCount: "infinite",
+          willChange: "transform",
+          transform: "translate3d(0,0,0)",
+          backfaceVisibility: "hidden",
+          ["--banner-shift" as string]: `${setWidth}px`,
         }}
       >
-        {set1.map((src, i) => (
-          <Image
-            key={`a-${i}`}
-            src={src}
-            alt=""
-            width={480}
-            height={270}
-            className="flex-shrink-0 w-auto"
-            style={{ height: `${height}px` }}
-          />
-        ))}
-        {set2.map((src, i) => (
-          <Image
-            key={`b-${i}`}
-            src={src}
-            alt=""
-            width={480}
-            height={270}
-            className="flex-shrink-0 w-auto"
-            style={{ height: `${height}px` }}
-          />
+        {[0, 1].map((copy) => (
+          <div
+            key={copy}
+            className="flex flex-shrink-0"
+            style={{ width: `${setWidth}px` }}
+            aria-hidden={copy === 1}
+          >
+            {images.map((src, i) => (
+              <img
+                key={`${copy}-${i}`}
+                src={src}
+                alt=""
+                width={imgWidth}
+                height={height}
+                style={{
+                  width: `${imgWidth}px`,
+                  height: `${height}px`,
+                  display: "block",
+                  flexShrink: 0,
+                }}
+                draggable={false}
+              />
+            ))}
+          </div>
         ))}
       </div>
     </div>

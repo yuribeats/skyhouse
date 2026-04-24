@@ -235,7 +235,7 @@ export default function FilterPanel() {
               fontSize: '10px',
               fontWeight: 'bold',
               textTransform: 'uppercase',
-              color: '#00a080',
+              color: '#ff4b00',
               flex: 1,
               overflow: 'hidden',
               textOverflow: 'ellipsis',

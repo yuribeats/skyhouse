@@ -234,7 +234,7 @@ export default function CommunityGallery() {
             }}>
               <span style={{
                 fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase',
-                letterSpacing: '0.08em', color: '#00a080',
+                letterSpacing: '0.08em', color: '#ff4b00',
               }}>
                 {getMemberName(m.wallet)}
               </span>

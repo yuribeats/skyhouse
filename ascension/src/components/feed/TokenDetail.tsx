@@ -78,8 +78,8 @@ export default function TokenDetail({ token, onClose }: TokenDetailProps) {
       {token.createdByWallet && (
         <div style={{
           display: 'inline-block',
-          border: '1px solid #00a080',
-          color: '#00a080',
+          border: '1px solid #ff4b00',
+          color: '#ff4b00',
           padding: '4px 10px',
           fontSize: '10px',
           fontWeight: 'bold',
@@ -106,7 +106,7 @@ export default function TokenDetail({ token, onClose }: TokenDetailProps) {
                 useStore.getState().setFilter('selectedCollection', token.collectionName);
                 onClose();
               }}
-              style={{ color: '#00a080', textDecoration: 'none' }}
+              style={{ color: '#ff4b00', textDecoration: 'none' }}
             >
               {token.collectionName}
             </span>

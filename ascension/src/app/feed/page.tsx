@@ -42,7 +42,7 @@ export default function Feed() {
         }}>
           <div style={{
             height: '100%',
-            background: '#00a080',
+            background: '#ff4b00',
             width: `${Math.max(loadProgress * 100, 5)}%`,
             transition: 'width 0.3s ease',
           }} />

@@ -222,7 +222,7 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
               <span style={{
                 fontSize: '11px',
                 fontWeight: 'bold',
-                color: s.status === 'done' ? '#00a080' : s.status === 'error' ? '#FF0420' : s.status === 'active' ? '#fff' : '#444',
+                color: s.status === 'done' ? '#ff4b00' : s.status === 'error' ? '#FF0420' : s.status === 'active' ? '#fff' : '#444',
               }}>
                 {s.status === 'done' ? '\u2713' : s.status === 'error' ? '\u2717' : s.status === 'active' ? '\u25CB' : '\u2014'}
               </span>
@@ -231,7 +231,7 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
                 fontWeight: 'bold',
                 textTransform: 'uppercase',
                 letterSpacing: '0.05em',
-                color: s.status === 'done' ? '#00a080' : s.status === 'error' ? '#FF0420' : s.status === 'active' ? '#fff' : '#444',
+                color: s.status === 'done' ? '#ff4b00' : s.status === 'error' ? '#FF0420' : s.status === 'active' ? '#fff' : '#444',
               }}>
                 {s.label}
               </span>

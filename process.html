@@ -15,7 +15,7 @@
     }
 
     body {
-      background: #0000AA;
+      background: #000bff;
       color: #fff;
       min-height: 100vh;
       padding: 40px 20px;
@@ -116,12 +116,12 @@
     }
 
     .drop-zone.dragover {
-      border-color: #228B22;
-      color: #228B22;
+      border-color: #ff4b00;
+      color: #ff4b00;
     }
 
     .drop-zone.has-file {
-      border-color: #228B22;
+      border-color: #ff4b00;
       color: #fff;
     }
 
@@ -150,7 +150,7 @@
     }
 
     textarea:focus {
-      border-color: #228B22;
+      border-color: #ff4b00;
     }
 
     /* Custom text input */
@@ -168,7 +168,7 @@
     }
 
     .text-input:focus {
-      border-color: #228B22;
+      border-color: #ff4b00;
     }
 
     /* Custom dropdown */
@@ -198,7 +198,7 @@
     }
 
     .dropdown.open .dropdown-trigger {
-      border-color: #228B22;
+      border-color: #ff4b00;
     }
 
     .dropdown.open .dropdown-trigger .arrow {
@@ -239,7 +239,7 @@
     }
 
     .dropdown-item.selected {
-      color: #228B22;
+      color: #ff4b00;
     }
 
     /* Name input */
@@ -257,13 +257,13 @@
     }
 
     .name-input:focus {
-      border-color: #228B22;
+      border-color: #ff4b00;
     }
 
     /* Buttons */
     .btn {
       background: #fff;
-      color: #0000AA;
+      color: #000bff;
       border: none;
       padding: 14px 32px;
       font-size: 14px;
@@ -366,7 +366,7 @@
     }
 
     .status-list li.done {
-      color: #228B22;
+      color: #ff4b00;
     }
 
     .status-list li.error {
@@ -387,7 +387,7 @@
     }
 
     .checkmark {
-      color: #228B22;
+      color: #ff4b00;
       flex-shrink: 0;
       font-size: 14px;
     }
@@ -410,8 +410,8 @@
     .success-message {
       margin-top: 20px;
       padding: 16px;
-      border: 2px solid #228B22;
-      color: #228B22;
+      border: 2px solid #ff4b00;
+      color: #ff4b00;
       font-size: 13px;
     }
 
@@ -611,7 +611,7 @@
 
       <div class="field">
         <label>EMAIL</label>
-        <input type="email" class="text-input" id="emailInput" placeholder="YOUR INPROCESS EMAIL" style="text-transform: none;" autocomplete="email">
+        <input type="email" class="text-input" id="emailInput" placeholder="YOUR EMAIL" style="text-transform: none;" autocomplete="email">
       </div>
 
       <div id="otpSection" style="display:none;">
@@ -651,12 +651,17 @@
 
       <div class="field">
         <label>NAME</label>
-        <input type="text" class="name-input" id="nameInput" placeholder="MOMENT NAME">
+        <input type="text" class="name-input" id="nameInput" placeholder="MOMENT NAME" style="text-transform: none;">
       </div>
 
       <div class="field">
         <label>DESCRIPTION</label>
-        <textarea id="descInput" placeholder="DESCRIBE THIS MOMENT"></textarea>
+        <textarea id="descInput" placeholder="DESCRIBE THIS MOMENT" style="text-transform: none;"></textarea>
+      </div>
+
+      <div class="field">
+        <label>PRICE (ETH)</label>
+        <input type="text" class="text-input" id="priceInput" placeholder="0" style="text-transform: none;" inputmode="decimal">
       </div>
 
       <div class="field">
@@ -793,6 +798,7 @@
     const dropText = document.getElementById('dropText');
     const nameInput = document.getElementById('nameInput');
     const descInput = document.getElementById('descInput');
+    const priceInput = document.getElementById('priceInput');
     const collectionDropdown = document.getElementById('collectionDropdown');
     const collectionTrigger = document.getElementById('collectionTrigger');
     const collectionLabel = document.getElementById('collectionLabel');
@@ -1249,6 +1255,7 @@
             collectionAddress,
             account: selectedCollection.creator?.address,
             recipientCount: recipients.length,
+            priceEth: priceInput.value.trim() || '0',
             apiKey: artistApiKey,
           }),
         });
@@ -1332,6 +1339,7 @@
       fileInput.value = '';
       nameInput.value = '';
       descInput.value = '';
+      priceInput.value = '';
       dropText.textContent = 'DROP FILE HERE OR CLICK TO SELECT';
       dropZone.classList.remove('has-file');
       document.getElementById('imagePreview').style.display = 'none';
@@ -1559,7 +1567,7 @@
   <script>
     (function() {
       const SPHERE_RADIUS = 5.0;
-      const BG_COLOR = 0x0000AA;
+      const BG_COLOR = 0x000bff;
 
       const canvas = document.getElementById('meshCanvas');
       const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
