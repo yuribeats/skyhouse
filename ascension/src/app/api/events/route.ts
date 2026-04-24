@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getData, setData } from "@/lib/blob-store";
 
+export const dynamic = "force-dynamic";
+
 export interface EventItem {
   id: string;
   date: string;

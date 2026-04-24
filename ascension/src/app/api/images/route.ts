@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { getData, setData } from "@/lib/blob-store";
 import { put, del } from "@vercel/blob";
 
+export const dynamic = "force-dynamic";
+
 export interface ImageItem {
   id: string;
   url: string;
