@@ -81,8 +81,16 @@ export default function MintPortal({ session, onLogout }: MintPortalProps) {
       steps[0].status = 'active';
       setMintSteps([...steps]);
 
-      const buffer = await file!.arrayBuffer();
-      const base64 = btoa(String.fromCharCode(...new Uint8Array(buffer)));
+      const base64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const result = reader.result as string;
+          const comma = result.indexOf(',');
+          resolve(comma >= 0 ? result.slice(comma + 1) : result);
+        };
+        reader.onerror = () => reject(reader.error || new Error('FileReader failed'));
+        reader.readAsDataURL(file!);
+      });
 
       const uploadRes = await fetch('/api/community/upload', {
         method: 'POST',
