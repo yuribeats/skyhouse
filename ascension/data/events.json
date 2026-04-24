@@ -1,1 +1,11 @@
-[]
+[
+  {
+    "date": "MAY 1",
+    "city": "Brooklyn",
+    "venue": "Test Venue",
+    "country": "USA",
+    "status": "available",
+    "ticketUrl": "",
+    "id": "1777055048318"
+  }
+]
