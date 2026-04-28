@@ -50,15 +50,20 @@ export default function Home() {
         variants={{ visible: { transition: { staggerChildren: 0.08 } } }}
       >
         <div className="mx-auto max-w-[1000px]">
-          {/* Neptune globe + intro */}
+          {/* Neptune globes + intro */}
           <motion.div variants={fadeUp} className="mb-16 flex flex-col items-center text-center">
-            <Image
-              src="/assets/neptune-globe-cropped.png"
-              alt="Neptune"
-              width={300}
-              height={300}
-              className="mb-8 h-auto w-[200px] rounded-full md:w-[300px]"
-            />
+            <div className="mb-8 flex items-center justify-center gap-4 md:gap-8">
+              {[1, 10, 12].map((n) => (
+                <Image
+                  key={n}
+                  src={`/assets/neptune-grid-${String(n).padStart(2, "0")}.png`}
+                  alt="Neptune"
+                  width={224}
+                  height={224}
+                  className="h-auto w-[28vw] max-w-[180px]"
+                />
+              ))}
+            </div>
             <p className="font-display text-3xl text-white md:text-4xl">
               A Secular Spiritual Gathering
             </p>
