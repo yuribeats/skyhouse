@@ -34,7 +34,7 @@ export default function Nav() {
 
       {/* Nav bar */}
       <nav className="relative border-b border-neptune-blue/30 bg-white">
-        <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-6 md:px-12 md:py-8">
+        <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-1 md:px-12 md:py-1">
           <Link href="/" className="block">
             <Image
               src="/assets/logo-cropped.png"
@@ -42,7 +42,7 @@ export default function Nav() {
               width={1920}
               height={1080}
               priority
-              className="h-[70px] w-auto md:h-[120px]"
+              className="h-[72px] w-auto md:h-[96px]"
             />
           </Link>
 
