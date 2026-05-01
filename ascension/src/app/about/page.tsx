@@ -18,7 +18,7 @@ const staticPhotos = [
   { src: "/assets/performance-projection.jpg", alt: "The Ascension Service — projection" },
 ];
 
-export default function Press() {
+export default function About() {
   const [uploadedPhotos, setUploadedPhotos] = useState<{ src: string; alt: string }[]>([]);
 
   useEffect(() => {
@@ -40,12 +40,32 @@ export default function Press() {
     >
       <motion.div variants={fadeUp}>
         <h1 className="mb-2 font-display text-3xl text-white md:text-6xl">
-          Press
+          About
         </h1>
         <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />
       </motion.div>
 
+      <motion.div variants={fadeUp} className="mb-20 max-w-[820px]">
+        <p className="font-body text-base leading-relaxed text-white md:text-lg">
+          ©The Ascension Service™ is a live performance ritual blending music, philosophy and prayer with collective participation. Guided by human steward Forrest Mortifee, this post-religious spiritual technology invites us to breathe, reflect, and reconnect with our most benevolent Future Selves, and with one another.
+        </p>
+      </motion.div>
+
+      <motion.div variants={fadeUp} className="mb-20">
+        <h2 className="mb-2 font-display text-2xl text-white md:text-4xl">
+          Written About
+        </h2>
+        <div className="mb-8 h-[2px] w-12 bg-neptune-blue" />
+        <p className="font-body text-sm tracking-wider text-neptune-muted">
+          Press and writings forthcoming.
+        </p>
+      </motion.div>
+
       <motion.div variants={fadeUp}>
+        <h2 className="mb-2 font-display text-2xl text-white md:text-4xl">
+          Performances
+        </h2>
+        <div className="mb-8 h-[2px] w-12 bg-neptune-blue" />
         <PhotoGrid photos={allPhotos} />
       </motion.div>
     </motion.div>

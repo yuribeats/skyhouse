@@ -46,7 +46,7 @@ function AuthGate({ children }: { children: React.ReactNode }) {
 type Tab = "events" | "shop" | "images" | "contacts" | "subscribers" | "mint";
 
 interface EventItem {
-  id: string; date: string; city: string; venue: string;
+  id: string; name: string; date: string; startTime: string; city: string; venue: string;
   country: string; status: string; ticketUrl: string;
 }
 interface ShopItem {
@@ -120,9 +120,11 @@ export default function Admin() {
   );
 }
 
+const emptyEvent = { id: "", name: "", date: "", startTime: "", city: "", venue: "", country: "", status: "announced", ticketUrl: "" };
+
 function EventsPanel() {
   const [items, setItems] = useState<EventItem[]>([]);
-  const [form, setForm] = useState({ date: "", city: "", venue: "", country: "", status: "announced", ticketUrl: "" });
+  const [form, setForm] = useState<EventItem>(emptyEvent);
 
   const load = useCallback(() => {
     fetch("/api/events").then((r) => r.json()).then(setItems);
@@ -130,13 +132,29 @@ function EventsPanel() {
   useEffect(() => { load(); }, [load]);
 
   const save = async () => {
+    const payload = form.id ? form : { ...form, id: undefined };
     await fetch("/api/events", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
+      body: JSON.stringify(payload),
     });
-    setForm({ date: "", city: "", venue: "", country: "", status: "announced", ticketUrl: "" });
+    setForm(emptyEvent);
     load();
+  };
+
+  const edit = (e: EventItem) => {
+    setForm({
+      id: e.id,
+      name: e.name || "",
+      date: e.date || "",
+      startTime: e.startTime || "",
+      city: e.city || "",
+      venue: e.venue || "",
+      country: e.country || "",
+      status: e.status || "announced",
+      ticketUrl: e.ticketUrl || "",
+    });
+    if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const del = async (id: string) => {
@@ -145,13 +163,16 @@ function EventsPanel() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ _action: "delete", id }),
     });
+    if (form.id === id) setForm(emptyEvent);
     load();
   };
 
   return (
     <div>
       <div className="mb-6 grid grid-cols-2 gap-3 md:grid-cols-4">
+        <input className={inputClass} placeholder="EVENT NAME" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} />
         <input className={inputClass} placeholder="DATE" value={form.date} onChange={(e) => setForm({ ...form, date: e.target.value })} />
+        <input className={inputClass} placeholder="START TIME" value={form.startTime} onChange={(e) => setForm({ ...form, startTime: e.target.value })} />
         <input className={inputClass} placeholder="CITY" value={form.city} onChange={(e) => setForm({ ...form, city: e.target.value })} />
         <input className={inputClass} placeholder="VENUE" value={form.venue} onChange={(e) => setForm({ ...form, venue: e.target.value })} />
         <input className={inputClass} placeholder="COUNTRY" value={form.country} onChange={(e) => setForm({ ...form, country: e.target.value })} />
@@ -161,15 +182,22 @@ function EventsPanel() {
           <option value="sold-out">SOLD OUT</option>
         </select>
         <input className={inputClass} placeholder="TICKET URL" value={form.ticketUrl} onChange={(e) => setForm({ ...form, ticketUrl: e.target.value })} />
-        <button onClick={save} className={btnClass}>ADD EVENT</button>
+        <button onClick={save} className={btnClass}>{form.id ? "UPDATE EVENT" : "ADD EVENT"}</button>
+        {form.id && (
+          <button onClick={() => setForm(emptyEvent)} className={btnClass}>CANCEL</button>
+        )}
       </div>
       <div className="space-y-2">
         {items.map((e) => (
           <div key={e.id} className="flex items-center justify-between border border-neptune-blue/20 px-4 py-3">
             <span className="font-body text-sm text-white">
-              {e.date} — {e.city}, {e.venue} ({e.country}) [{e.status}]
+              {e.name && <span className="text-orange-400">{e.name} — </span>}
+              {e.date}{e.startTime ? ` ${e.startTime}` : ""} — {e.city}, {e.venue} ({e.country}) [{e.status}]
             </span>
-            <button onClick={() => del(e.id)} className={delClass}>DELETE</button>
+            <div className="flex gap-2">
+              <button onClick={() => edit(e)} className={btnClass}>EDIT</button>
+              <button onClick={() => del(e.id)} className={delClass}>DELETE</button>
+            </div>
           </div>
         ))}
         {items.length === 0 && <p className="text-neptune-muted">NO EVENTS</p>}

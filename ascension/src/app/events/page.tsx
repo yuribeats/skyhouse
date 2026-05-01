@@ -10,7 +10,7 @@ const fadeUp = {
 };
 
 interface EventItem {
-  id: string; date: string; city: string; venue: string;
+  id: string; name: string; date: string; startTime: string; city: string; venue: string;
   country: string; status: string; ticketUrl: string;
 }
 
@@ -49,7 +49,12 @@ export default function Events() {
           {events.map((e) => (
             <div key={e.id} className="flex flex-col gap-3 border-b border-neptune-blue/30 py-6 md:flex-row md:items-center md:justify-between md:gap-6">
               <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-6">
-                <span className="font-body text-sm tracking-wider text-neptune-muted md:w-[140px]">{e.date}</span>
+                {e.name && (
+                  <span className="font-body text-base font-bold tracking-wider text-orange-400">{e.name}</span>
+                )}
+                <span className="font-body text-sm tracking-wider text-neptune-muted md:w-[180px]">
+                  {e.date}{e.startTime ? ` · ${e.startTime}` : ""}
+                </span>
                 <span className="font-body text-base text-white">{e.city} — {e.venue}</span>
                 <span className="font-body text-xs tracking-wider text-neptune-muted">{e.country}</span>
               </div>
@@ -57,10 +62,16 @@ export default function Events() {
                 <span className={`inline-block px-3 py-1 font-body text-xs tracking-wider ${statusStyles[e.status] || ""}`}>
                   {e.status.toUpperCase()}
                 </span>
-                {e.status !== "sold-out" && e.ticketUrl && (
-                  <a href={e.ticketUrl} className="border border-neptune-blue px-5 py-2 font-body text-xs tracking-wider text-white transition-colors duration-200 hover:border-neptune-teal hover:text-neptune-teal">
-                    TICKETS
-                  </a>
+                {e.status !== "sold-out" && (
+                  e.ticketUrl ? (
+                    <a href={e.ticketUrl} className="border border-neptune-blue px-5 py-2 font-body text-xs tracking-wider text-white transition-colors duration-200 hover:border-neptune-teal hover:text-neptune-teal">
+                      TICKETS
+                    </a>
+                  ) : (
+                    <span className="border border-neptune-blue/30 px-5 py-2 font-body text-xs tracking-wider text-neptune-muted">
+                      JUST SHOW UP
+                    </span>
+                  )
                 )}
               </div>
             </div>

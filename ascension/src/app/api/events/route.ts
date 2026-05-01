@@ -5,7 +5,9 @@ export const dynamic = "force-dynamic";
 
 export interface EventItem {
   id: string;
+  name: string;
   date: string;
+  startTime: string;
   city: string;
   venue: string;
   country: string;

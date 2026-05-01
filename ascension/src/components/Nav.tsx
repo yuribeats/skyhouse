@@ -8,7 +8,7 @@ import ScrollingBanner from "@/components/ScrollingBanner";
 
 const links = [
   { href: "/events", label: "EVENTS" },
-  { href: "/press", label: "PRESS" },
+  { href: "/about", label: "ABOUT" },
   { href: "/shop", label: "SHOP" },
   { href: "/community", label: "COMMUNITY", children: [
     { href: "/community?view=gallery", label: "GALLERY" },

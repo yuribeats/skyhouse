@@ -68,25 +68,6 @@ export default function Contact() {
                 placeholder="ORGANIZATION / VENUE"
                 className="border border-neptune-blue/40 bg-transparent px-4 py-3 font-body text-sm tracking-wider text-white outline-none transition-colors focus:border-neptune-teal"
               />
-              <div className="relative border border-neptune-blue/40 transition-colors focus-within:border-neptune-teal">
-                <select
-                  name="eventType"
-                  required
-                  defaultValue=""
-                  className="w-full appearance-none bg-transparent px-4 py-3 font-body text-sm tracking-wider text-white outline-none [&>option]:bg-black [&>option]:text-white"
-                >
-                  <option value="" disabled>
-                    EVENT TYPE
-                  </option>
-                  <option value="performance">PERFORMANCE</option>
-                  <option value="workshop">WORKSHOP</option>
-                  <option value="private">PRIVATE SESSION</option>
-                  <option value="other">OTHER</option>
-                </select>
-                <div className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-neptune-muted">
-                  V
-                </div>
-              </div>
               <textarea
                 name="message"
                 placeholder="MESSAGE"
