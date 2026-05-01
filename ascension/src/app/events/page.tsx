@@ -59,16 +59,16 @@ export default function Events() {
                 <span className="font-body text-xs tracking-wider text-neptune-muted">{e.country}</span>
               </div>
               <div className="flex items-stretch self-start md:self-auto">
-                <span className={`inline-flex shrink-0 items-center px-3 py-1 font-body text-xs tracking-wider ${statusStyles[e.status] || ""}`}>
+                <span className={`inline-flex w-[110px] shrink-0 items-center justify-center px-3 py-1 font-body text-xs tracking-wider ${statusStyles[e.status] || ""}`}>
                   {e.status.toUpperCase()}
                 </span>
                 {e.status !== "sold-out" && (
                   e.ticketUrl ? (
-                    <a href={e.ticketUrl} className="inline-flex shrink-0 items-center border border-neptune-blue px-3 py-1 font-body text-xs tracking-wider text-white transition-colors duration-200 hover:border-neptune-teal hover:text-neptune-teal">
+                    <a href={e.ticketUrl} className="inline-flex w-[140px] shrink-0 items-center justify-center border border-neptune-blue px-3 py-1 font-body text-xs tracking-wider text-white transition-colors duration-200 hover:border-neptune-teal hover:text-neptune-teal">
                       TICKETS
                     </a>
                   ) : (
-                    <span className="inline-flex shrink-0 items-center border border-neptune-blue/30 px-3 py-1 font-body text-xs tracking-wider text-neptune-muted">
+                    <span className="inline-flex w-[140px] shrink-0 items-center justify-center border border-neptune-blue/30 px-3 py-1 font-body text-xs tracking-wider text-neptune-muted">
                       JUST SHOW UP
                     </span>
                   )
