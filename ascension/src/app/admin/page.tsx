@@ -368,9 +368,31 @@ function SubscribersPanel() {
     fetch("/api/subscribe").then((r) => r.json()).then((d) => setSubscribers(d.subscribers || []));
   }, []);
 
+  const downloadCsv = () => {
+    const csv = "email\n" + subscribers.map((e) => `"${e.replace(/"/g, '""')}"`).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `subscribers-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div>
-      <p className="mb-4 font-body text-sm text-neptune-muted">{subscribers.length} TOTAL</p>
+      <div className="mb-4 flex items-center justify-between">
+        <p className="font-body text-sm text-neptune-muted">{subscribers.length} TOTAL</p>
+        <button
+          onClick={downloadCsv}
+          disabled={subscribers.length === 0}
+          className={btnClass + " disabled:opacity-40"}
+        >
+          DOWNLOAD CSV
+        </button>
+      </div>
       <div className="space-y-2">
         {subscribers.map((email) => (
           <div key={email} className="border border-neptune-blue/20 px-4 py-3 font-body text-sm text-white">

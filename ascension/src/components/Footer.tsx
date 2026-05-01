@@ -7,8 +7,11 @@ export default function Footer() {
 
   return (
     <footer className="border-t border-neptune-blue/30">
-      <div className="mx-auto max-w-[1200px] px-6 py-12 text-center md:px-12">
-        <div className="mx-auto mb-8 max-w-md">
+      <div className="mx-auto max-w-[1200px] px-6 py-16 text-center md:px-12">
+        <p className="mb-6 font-display text-3xl text-white">
+          Stay in the current
+        </p>
+        <div className="mx-auto mb-10 max-w-md">
           <SubscribeForm />
         </div>
 

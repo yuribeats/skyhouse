@@ -35,11 +35,15 @@ export default function Nav() {
       {/* Nav bar */}
       <nav className="relative border-b border-neptune-blue/30 bg-white">
         <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-6 md:px-12 md:py-8">
-          <Link
-            href="/"
-            className="font-display text-2xl text-neptune-blue transition-colors duration-200 hover:text-neptune-teal md:text-4xl"
-          >
-            The Ascension Service
+          <Link href="/" className="block">
+            <Image
+              src="/assets/logo-cropped.png"
+              alt="The Ascension Service"
+              width={1920}
+              height={1080}
+              priority
+              className="h-[40px] w-auto md:h-[60px]"
+            />
           </Link>
 
           {/* Neptune globes — center */}

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import SubscribeForm from "@/components/SubscribeForm";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -104,16 +103,6 @@ export default function Contact() {
           </div>
         </motion.div>
       </div>
-
-      {/* Mailing list */}
-      <motion.div variants={fadeUp} className="mt-24 border-t border-neptune-blue/30 pt-16 text-center">
-        <p className="mb-6 font-display text-3xl text-white">
-          Stay in the current
-        </p>
-        <div className="mx-auto max-w-md">
-          <SubscribeForm />
-        </div>
-      </motion.div>
     </motion.div>
   );
 }
