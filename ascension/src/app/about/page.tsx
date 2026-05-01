@@ -51,16 +51,6 @@ export default function About() {
         </p>
       </motion.div>
 
-      <motion.div variants={fadeUp} className="mb-20">
-        <h2 className="mb-2 font-display text-2xl text-white md:text-4xl">
-          Written About
-        </h2>
-        <div className="mb-8 h-[2px] w-12 bg-neptune-blue" />
-        <p className="font-body text-sm tracking-wider text-neptune-muted">
-          Press and writings forthcoming.
-        </p>
-      </motion.div>
-
       <motion.div variants={fadeUp}>
         <h2 className="mb-2 font-display text-2xl text-white md:text-4xl">
           Performances
