@@ -42,15 +42,18 @@ export default function Nav() {
             The Ascension Service
           </Link>
 
-          {/* Neptune globe — center */}
-          <Link href="/" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:block">
-            <Image
-              src="/assets/neptune-globe-cropped.png"
-              alt="Neptune"
-              width={80}
-              height={80}
-              className="h-[50px] w-[50px] md:h-[80px] md:w-[80px] rounded-full object-cover"
-            />
+          {/* Neptune globes — center */}
+          <Link href="/" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center gap-2">
+            {[1, 5, 8, 11].map((n) => (
+              <Image
+                key={n}
+                src={`/assets/neptune-grid-${String(n).padStart(2, "0")}.png`}
+                alt="Neptune"
+                width={80}
+                height={80}
+                className="h-[50px] w-[50px] md:h-[80px] md:w-[80px] rounded-full object-cover"
+              />
+            ))}
           </Link>
 
           {/* Hamburger button */}

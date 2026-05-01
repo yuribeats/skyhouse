@@ -25,8 +25,8 @@ export default function Home() {
             <Image
               src="/assets/logo-cropped.png"
               alt="The Ascension Service"
-              width={960}
-              height={400}
+              width={1920}
+              height={1080}
               preload
               className="h-auto w-[50vw]"
             />
