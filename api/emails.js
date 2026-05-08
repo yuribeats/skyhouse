@@ -1,6 +1,6 @@
-const { Redis } = require('@upstash/redis');
+import { Redis } from '@upstash/redis';
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
     try {
         const redis = new Redis({
             url: (process.env.KV_REST_API_URL || '').trim(),
@@ -24,4 +24,4 @@ module.exports = async function handler(req, res) {
         console.error('Emails error:', e.message);
         return res.status(500).json({ error: e.message });
     }
-};
+}

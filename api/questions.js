@@ -1,4 +1,4 @@
-const { Redis } = require('@upstash/redis');
+import { Redis } from '@upstash/redis';
 
 var DEFAULT_QUESTIONS = [
     { id: 'q0', text: "IS THERE ANYTHING ELSE YOU'D LIKE TO SHARE, REFLECT UPON, OR ILLUMINATE?", type: 'comment', placeholder: '...' },
@@ -9,7 +9,7 @@ var DEFAULT_QUESTIONS = [
     { id: 'q5', text: 'IF YOU HAD TO DESCRIBE THE ASCENSION SERVICE TO A FRIEND, WHAT WOULD YOU SAY?', type: 'comment', placeholder: 'I WOULD SAY...' }
 ];
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
     try {
         const redis = new Redis({
             url: (process.env.KV_REST_API_URL || '').trim(),
@@ -38,4 +38,4 @@ module.exports = async function handler(req, res) {
         console.error('Questions error:', e.message);
         return res.status(500).json({ error: e.message });
     }
-};
+}
