@@ -78,6 +78,13 @@ export default function Home() {
         <p className="-mt-[10vw] mb-2 px-4 text-center font-body text-xs font-bold uppercase tracking-wide text-[var(--tas-fg)] md:-mt-[8vw] md:mb-4 md:px-6 md:text-xl md:tracking-wider">
           &quot;HELPING YOU EMBODY YOUR FUTURE SELF SINCE 2025 AD!!&quot;
         </p>
+        <Image
+          src="/assets/Single_Neptune__No_BG_Graphic_.png"
+          alt="Neptune"
+          width={1080}
+          height={1350}
+          className="mt-4 h-auto w-[60vw] max-w-[400px] md:mt-6 md:w-[40vw]"
+        />
       </section>
 
       {/* Manifesto */}
