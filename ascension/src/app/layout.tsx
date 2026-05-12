@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "The Ascension Service",
@@ -16,10 +17,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="h-full antialiased">
-      <body className="flex min-h-full flex-col bg-black font-body text-white">
-        <Nav />
-        <main className="flex-1 pt-[220px] md:pt-[272px]">{children}</main>
-        <Footer />
+      <body className="flex min-h-full flex-col font-body">
+        <ThemeProvider>
+          <Nav />
+          <main className="flex-1 pt-[68px]">{children}</main>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

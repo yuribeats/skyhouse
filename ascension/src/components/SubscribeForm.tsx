@@ -43,7 +43,7 @@ export default function SubscribeForm() {
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         required
-        className="flex-1 border border-neptune-blue/40 bg-transparent px-4 py-2 font-body text-sm tracking-wider text-white outline-none transition-colors focus:border-neptune-teal"
+        className="flex-1 border border-[var(--tas-border)] bg-transparent px-4 py-2 font-body text-sm tracking-wider text-[var(--tas-fg)] outline-none transition-colors focus:border-[var(--tas-accent)]"
       />
       <button
         type="submit"

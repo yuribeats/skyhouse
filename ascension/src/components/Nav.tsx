@@ -1,146 +1,88 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import ScrollingBanner from "@/components/ScrollingBanner";
+import ScrollingPoems from "@/components/ScrollingPoems";
+import { useTheme } from "@/components/ThemeProvider";
 
 const links = [
-  { href: "/events", label: "EVENTS" },
-  { href: "/about", label: "ABOUT" },
-  { href: "/shop", label: "SHOP" },
-  { href: "/community", label: "COMMUNITY", children: [
-    { href: "/community?view=gallery", label: "GALLERY" },
-    { href: "/community?view=mint", label: "JOIN / MINT" },
-  ]},
-  { href: "/contact", label: "CONTACT" },
+  { href: "#about", label: "ABOUT" },
+  { href: "#steward", label: "STEWARD" },
+  { href: "#music", label: "MUSIC" },
+  { href: "#events", label: "EVENTS" },
+  { href: "#contact", label: "CONTACT" },
 ];
 
-const row1 = Array.from({ length: 13 }, (_, i) => `/assets/panels/panel-${25 + i}.jpg`);
-const row2 = Array.from({ length: 12 }, (_, i) => `/assets/panels/panel-${38 + i}.jpg`);
+const poems = [
+  "A RITUAL FOR THE LIVING",
+  "A SECULAR SPIRITUAL GATHERING",
+  "FOR THE INTERNET AGE",
+  "STAY IN THE CURRENT",
+  "EMBODY YOUR FUTURE SELF",
+];
 
 export default function Nav() {
-  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [communityOpen, setCommunityOpen] = useState(false);
+  const { theme, toggle } = useTheme();
+
+  const handleClick = (href: string) => (e: React.MouseEvent) => {
+    e.preventDefault();
+    setMenuOpen(false);
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Banner above nav */}
-      <div className="overflow-hidden bg-black">
-        <ScrollingBanner images={row1} direction="left" speed={60} height={72} />
-      </div>
+      <ScrollingPoems poems={poems} speed={120} height={28} />
 
-      {/* Nav bar */}
-      <nav className="relative border-b border-neptune-blue/30 bg-white">
-        <div className="mx-auto flex max-w-[1200px] items-center justify-between px-6 py-1 md:px-12 md:py-1">
-          <Link href="/" className="block">
-            <Image
-              src="/assets/logo-cropped.png"
-              alt="The Ascension Service"
-              width={1920}
-              height={1080}
-              priority
-              className="h-[72px] w-auto md:h-[96px]"
+      <div className="relative h-10 bg-[var(--tas-bg)] border-b border-[var(--tas-border)]">
+        <div className="absolute right-4 top-1/2 -translate-y-1/2">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="flex flex-col gap-1.5"
+            aria-label="Toggle menu"
+          >
+            <span
+              className={`block h-[2px] w-6 bg-[var(--tas-fg)] transition-transform duration-200 ${
+                menuOpen ? "translate-y-[5px] rotate-45" : ""
+              }`}
             />
-          </Link>
+            <span
+              className={`block h-[2px] w-6 bg-[var(--tas-fg)] transition-opacity duration-200 ${
+                menuOpen ? "opacity-0" : ""
+              }`}
+            />
+            <span
+              className={`block h-[2px] w-6 bg-[var(--tas-fg)] transition-transform duration-200 ${
+                menuOpen ? "-translate-y-[5px] -rotate-45" : ""
+              }`}
+            />
+          </button>
 
-          {/* Neptune globes — center */}
-          <Link href="/" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 hidden md:flex items-center gap-2">
-            {[1, 5, 8, 11].map((n) => (
-              <Image
-                key={n}
-                src={`/assets/neptune-grid-${String(n).padStart(2, "0")}.png`}
-                alt="Neptune"
-                width={80}
-                height={80}
-                className="h-[50px] w-[50px] md:h-[80px] md:w-[80px] rounded-full object-cover"
-              />
-            ))}
-          </Link>
-
-          {/* Hamburger button */}
-          <div className="relative">
-            <button
-              onClick={() => { setMenuOpen(!menuOpen); setCommunityOpen(false); }}
-              className="flex flex-col gap-1.5"
-              aria-label="Toggle menu"
+          {menuOpen && (
+            <div
+              className="absolute right-0 top-full mt-3 z-50 border border-[var(--tas-border)] bg-[var(--tas-bg)] shadow-lg"
+              style={{ minWidth: "220px" }}
             >
-              <span
-                className={`block h-[2px] w-6 bg-neptune-teal transition-transform duration-200 ${
-                  menuOpen ? "translate-y-[5px] rotate-45" : ""
-                }`}
-              />
-              <span
-                className={`block h-[2px] w-6 bg-neptune-teal transition-opacity duration-200 ${
-                  menuOpen ? "opacity-0" : ""
-                }`}
-              />
-              <span
-                className={`block h-[2px] w-6 bg-neptune-teal transition-transform duration-200 ${
-                  menuOpen ? "-translate-y-[5px] -rotate-45" : ""
-                }`}
-              />
-            </button>
-
-            {/* Dropdown menu */}
-            {menuOpen && (
-              <div
-                className="absolute right-0 top-full mt-4 z-50 border border-neptune-blue/30 bg-white shadow-lg"
-                style={{ minWidth: '200px' }}
+              {links.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={handleClick(link.href)}
+                  className="block px-6 py-3 font-body text-xs font-black tracking-widest text-[var(--tas-fg)] border-b border-[var(--tas-border)] hover:opacity-70"
+                >
+                  {link.label}
+                </a>
+              ))}
+              <button
+                onClick={toggle}
+                className="block w-full text-left px-6 py-3 font-body text-xs font-black tracking-widest text-[var(--tas-fg)] hover:opacity-70"
               >
-                {links.map((link) => (
-                  <div key={link.href}>
-                    {link.children ? (
-                      <button
-                        onClick={() => setCommunityOpen(!communityOpen)}
-                        className={`block w-full text-left px-6 py-3 font-body text-sm font-black tracking-widest transition-colors duration-200 hover:bg-neptune-blue/5 hover:text-neptune-teal border-b border-neptune-blue/10 ${
-                          pathname.startsWith(link.href)
-                            ? "text-neptune-teal"
-                            : "text-neptune-blue"
-                        }`}
-                      >
-                        {link.label}
-                      </button>
-                    ) : (
-                      <Link
-                        href={link.href}
-                        onClick={() => setMenuOpen(false)}
-                        className={`block px-6 py-3 font-body text-sm font-black tracking-widest transition-colors duration-200 hover:bg-neptune-blue/5 hover:text-neptune-teal border-b border-neptune-blue/10 ${
-                          pathname === link.href
-                            ? "text-neptune-teal"
-                            : "text-neptune-blue"
-                        }`}
-                      >
-                        {link.label}
-                      </Link>
-                    )}
-                    {link.children && communityOpen && (
-                      <div>
-                        {link.children.map((child) => (
-                          <Link
-                            key={child.href}
-                            href={child.href}
-                            onClick={() => { setMenuOpen(false); setCommunityOpen(false); }}
-                            className="block px-6 py-2 pl-10 font-body text-xs font-black tracking-widest text-neptune-blue/60 transition-colors duration-200 hover:bg-neptune-blue/5 hover:text-neptune-teal border-b border-neptune-blue/10"
-                          >
-                            {child.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+                {theme === "dark" ? "LIGHT MODE" : "DARK MODE"}
+              </button>
+            </div>
+          )}
         </div>
-      </nav>
-
-      {/* Banner below nav */}
-      <div className="overflow-hidden bg-black">
-        <ScrollingBanner images={row2} direction="right" speed={50} height={72} />
       </div>
     </header>
   );

@@ -20,7 +20,23 @@
   --color-neptune-muted: #8899aa;
 
   --font-display: "BrushScript", cursive;
-  --font-body: system-ui, -apple-system, sans-serif;
+  --font-body: Arial, system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  --tas-bg: #000;
+  --tas-fg: #fff;
+  --tas-muted: #8899aa;
+  --tas-border: rgba(0, 11, 255, 0.3);
+  --tas-accent: #ff4b00;
+}
+
+:root.light {
+  --tas-bg: #fff;
+  --tas-fg: #000;
+  --tas-muted: #555;
+  --tas-border: rgba(0, 0, 0, 0.2);
+  --tas-accent: #ff4b00;
 }
 
 * {
@@ -32,29 +48,30 @@ html {
 }
 
 body {
-  background-color: #000;
-  color: #fff;
-  font-family: system-ui, -apple-system, sans-serif;
+  background-color: var(--tas-bg);
+  color: var(--tas-fg);
+  font-family: Arial, system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 ::selection {
-  background: #ff4b00;
-  color: #000;
+  background: var(--tas-accent);
+  color: var(--tas-bg);
 }
 
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #000;
+  background: var(--tas-bg);
 }
 ::-webkit-scrollbar-thumb {
   background: #000bff;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff4b00;
+  background: var(--tas-accent);
 }
 
 @keyframes scroll-left {
@@ -91,4 +108,12 @@ body {
   to {
     transform: translate3d(0, 0, 0);
   }
+}
+
+.logo-white {
+  filter: brightness(0) invert(1);
+}
+
+:root.light .logo-white {
+  filter: brightness(0);
 }
