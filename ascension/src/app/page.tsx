@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import PhotoGrid from "@/components/PhotoGrid";
+import AudioPlayer from "@/components/AudioPlayer";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 16 },
@@ -137,9 +138,10 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-6 text-center font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:mb-12 md:text-7xl">
+            <h2 className="mb-2 text-center font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
               Reflections From Service
             </h2>
+            <div className="mx-auto mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
 
           <motion.div
@@ -210,16 +212,11 @@ export default function Home() {
               { title: "Prophecy of the Morning Dew", src: "/audio/Prophecy of the Morning Dew.mp3" },
               { title: "Sea The Signs", src: "/audio/Sea The Signs.mp3" },
             ].map((track) => (
-              <div
-                key={track.src}
-                className="flex flex-col gap-3 border border-[var(--tas-border)] px-4 py-4 sm:px-6 sm:py-5"
-              >
+              <div key={track.src} className="flex flex-col gap-2">
                 <span className="font-body text-xs font-bold uppercase tracking-wider text-[var(--tas-fg)] sm:text-sm">
                   {track.title}
                 </span>
-                <audio controls preload="none" className="w-full">
-                  <source src={track.src} type="audio/mpeg" />
-                </audio>
+                <AudioPlayer src={track.src} />
               </div>
             ))}
           </motion.div>
@@ -305,7 +302,7 @@ export default function Home() {
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
             <h2 className="mb-2 text-center font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
-              Press/Booking
+              Reach Out
             </h2>
             <div className="mx-auto mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
