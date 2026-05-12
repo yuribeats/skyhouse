@@ -91,7 +91,7 @@ export default function Home() {
       {/* Manifesto */}
       <motion.section
         id="manifesto"
-        className="bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
+        className="scroll-mt-28 bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
@@ -130,7 +130,7 @@ export default function Home() {
       {/* Reflections from Service */}
       <motion.section
         id="reflections"
-        className="bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
+        className="scroll-mt-28 bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
@@ -166,7 +166,7 @@ export default function Home() {
       {/* About Our Steward */}
       <motion.section
         id="steward"
-        className="bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
+        className="scroll-mt-28 bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
@@ -192,7 +192,7 @@ export default function Home() {
       {/* Music */}
       <motion.section
         id="music"
-        className="bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
+        className="scroll-mt-28 bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
@@ -226,7 +226,7 @@ export default function Home() {
       {/* Events */}
       <motion.section
         id="events"
-        className="bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
+        className="scroll-mt-28 bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
@@ -293,7 +293,7 @@ export default function Home() {
       {/* Contact */}
       <motion.section
         id="contact"
-        className="bg-[var(--tas-bg)] px-6 pb-4 pt-4 md:px-12 md:pb-6 md:pt-6"
+        className="scroll-mt-28 bg-[var(--tas-bg)] px-6 pb-4 pt-4 md:px-12 md:pb-6 md:pt-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
