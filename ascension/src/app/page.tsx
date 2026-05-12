@@ -84,7 +84,7 @@ export default function Home() {
           alt="Neptune"
           width={1080}
           height={1350}
-          className="-mt-[12vw] h-auto w-[60vw] max-w-[400px] md:-mt-[10vw] md:w-[40vw]"
+          className="-mt-[4vw] h-auto w-[60vw] max-w-[400px] md:-mt-[2vw] md:w-[40vw]"
         />
       </section>
 
