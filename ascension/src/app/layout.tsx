@@ -20,7 +20,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col font-body">
         <ThemeProvider>
           <Nav />
-          <main className="flex-1 pt-[96px]">{children}</main>
+          <main className="flex-1 pb-[200px] pt-[96px] md:pb-[220px]">{children}</main>
           <Footer />
         </ThemeProvider>
       </body>
