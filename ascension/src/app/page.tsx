@@ -285,7 +285,7 @@ export default function Home() {
       {/* Contact */}
       <motion.section
         id="contact"
-        className="bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
+        className="bg-[var(--tas-bg)] px-6 pb-4 pt-4 md:px-12 md:pb-6 md:pt-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
