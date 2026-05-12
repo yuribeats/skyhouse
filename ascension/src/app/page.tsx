@@ -139,7 +139,7 @@ export default function Home() {
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
             <h2 className="mb-2 text-center font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
-              Reflections From Service
+              Reflections from Service
             </h2>
             <div className="mx-auto mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
@@ -175,7 +175,7 @@ export default function Home() {
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
             <h2 className="mb-2 text-center font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
-              About Our Steward
+              About our Steward
             </h2>
             <div className="mx-auto mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>

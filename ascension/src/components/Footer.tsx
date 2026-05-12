@@ -12,7 +12,7 @@ export default function Footer() {
     <footer className="border-t border-[var(--tas-border)]">
       <div className="mx-auto max-w-[1200px] px-6 py-2 text-center md:px-12 md:py-3">
         <p className="mb-1 font-display text-2xl text-[var(--tas-fg)] md:text-3xl">
-          Stay in the current
+          Stay in the Current
         </p>
         <div className="mx-auto mb-2 max-w-md">
           <SubscribeForm />
