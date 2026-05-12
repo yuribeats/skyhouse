@@ -10,7 +10,7 @@ const links = [
   { href: "#steward", label: "STEWARD" },
   { href: "#music", label: "MUSIC" },
   { href: "#events", label: "EVENTS" },
-  { href: "#contact", label: "CONTACT" },
+  { href: "#contact", label: "PRESS/BOOKING" },
 ];
 
 const poems = [

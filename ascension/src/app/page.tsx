@@ -113,16 +113,6 @@ export default function Home() {
             <p>WE INVITE YOU TO JOIN US AS WE EMBARK UPON THIS INTENTIONAL EVOLUTIONARY JOURNEY SO THAT TOGETHER WE MAY BIRTH THIS COLLECTIVELY BENEVOLENT REALITY - ONE ALREADY WRITTEN THROUGH THE LINES OF SPACETIME, JUST WAITING TO BE SUNG FORTH FROM WITHIN US ALL.</p>
           </motion.div>
 
-          <motion.p variants={fadeUp} className="mt-12 text-center font-body text-sm tracking-wider text-[var(--tas-fg)]">
-            —
-          </motion.p>
-          <motion.p variants={fadeUp} className="mt-6 text-center font-body text-base italic text-[var(--tas-fg)]">
-            <a href="#" className="hover:text-[var(--tas-accent)]">~ * Previous Manifesto Musings HERE * ~</a>
-          </motion.p>
-          <motion.p variants={fadeUp} className="mt-6 text-center font-body text-sm tracking-wider text-[var(--tas-fg)]">
-            —
-          </motion.p>
-
           <motion.div variants={fadeUp} className="mt-16">
             <PhotoGrid photos={allPhotos} />
           </motion.div>
@@ -140,12 +130,9 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-2 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
-              Reflections from Service
+            <h2 className="mb-12 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
+              Reflections From Service
             </h2>
-            <p className="mb-12 font-body text-xs font-normal normal-case text-[var(--tas-fg)]">
-              Note: Some testimonials have been lightly edited for clarity and length.
-            </p>
           </motion.div>
 
           <motion.div
@@ -160,6 +147,10 @@ export default function Home() {
             <p>“BEFORE I ARRIVED, I FELT HEAVY AND LIKE I WANTED TO HIDE. I LEFT FEELING LIGHTER, LIBERATED, HOPEFUL, AND DEEPLY HELD BY COMMUNITY.”</p>
             <p>“THIS SPIRITUAL ART IS GOING TO TRANSFORM ENTIRE COMMUNITIES AND PEOPLE AROUND THE WORLD.”</p>
           </motion.div>
+
+          <motion.p variants={fadeUp} className="mt-8 max-w-[820px] font-body text-xs font-normal normal-case text-[var(--tas-fg)]">
+            Note: Some testimonials have been lightly edited for clarity and length.
+          </motion.p>
         </div>
       </motion.section>
 
@@ -175,7 +166,7 @@ export default function Home() {
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
             <h2 className="mb-2 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
-              About our Steward
+              About Our Steward
             </h2>
             <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />
           </motion.div>
@@ -201,7 +192,7 @@ export default function Home() {
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
             <h2 className="mb-2 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
-              music
+              Music
             </h2>
             <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />
           </motion.div>
@@ -236,7 +227,7 @@ export default function Home() {
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
             <h2 className="mb-2 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
-              events
+              Events
             </h2>
             <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />
           </motion.div>
@@ -303,7 +294,7 @@ export default function Home() {
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
             <h2 className="mb-2 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
-              contact
+              Press/Booking
             </h2>
             <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />
           </motion.div>
