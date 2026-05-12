@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
+import FixedBottomBanner from "@/components/FixedBottomBanner";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 export const metadata: Metadata = {
@@ -20,8 +21,9 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col font-body">
         <ThemeProvider>
           <Nav />
-          <main className="flex-1 pb-[200px] pt-[96px] md:pb-[220px]">{children}</main>
+          <main className="flex-1 pt-[96px]">{children}</main>
           <Footer />
+          <FixedBottomBanner />
         </ThemeProvider>
       </body>
     </html>
