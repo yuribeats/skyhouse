@@ -198,17 +198,21 @@ export default function Home() {
           </motion.div>
 
           <motion.div variants={fadeUp} className="flex flex-col gap-4">
-            {[1, 2, 3].map((n) => (
+            {[
+              { title: "Blossoms", src: "/audio/Blossoms.mp3" },
+              { title: "Prophecy of the Morning Dew", src: "/audio/Prophecy of the Morning Dew.mp3" },
+              { title: "Sea The Signs", src: "/audio/Sea The Signs.mp3" },
+            ].map((track) => (
               <div
-                key={n}
-                className="flex flex-col gap-2 border border-[var(--tas-border)] px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5"
+                key={track.src}
+                className="flex flex-col gap-3 border border-[var(--tas-border)] px-4 py-4 sm:px-6 sm:py-5"
               >
                 <span className="font-body text-xs font-bold uppercase tracking-wider text-[var(--tas-fg)] sm:text-sm">
-                  TRACK {n} — [TITLE PLACEHOLDER]
+                  {track.title}
                 </span>
-                <span className="font-body text-[10px] uppercase tracking-wider text-[var(--tas-muted)] sm:text-xs">
-                  COMING SOON
-                </span>
+                <audio controls preload="none" className="w-full">
+                  <source src={track.src} type="audio/mpeg" />
+                </audio>
               </div>
             ))}
           </motion.div>
