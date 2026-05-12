@@ -99,7 +99,7 @@ export default function Home() {
 
           <motion.div
             variants={fadeUp}
-            className="flex max-w-[820px] flex-col gap-6 font-body text-base font-bold uppercase leading-relaxed tracking-wide text-[var(--tas-fg)] md:text-lg"
+            className="mx-auto flex w-full max-w-[820px] flex-col gap-6 font-body text-base font-bold uppercase leading-relaxed tracking-wide text-[var(--tas-fg)] md:text-lg"
           >
             <p>FOR CENTURIES, HUMAN EMOTIONAL INTELLIGENCE HAS BEEN GROSSLY UNDERVALUED BY HEGEMONIC SYSTEMS, THEREBY LIMITING OUR COLLECTIVE CAPACITY TO MAKE CHOICES THAT FOSTER SURVIVAL AND WELLBEING FOR OUR SPECIES, AND ALL OUR EARTHLY RELATIONS.</p>
             <p>THE ROOT PROBLEM OF THE CURRENT POLYCRISIS IS OUR COLLECTIVE LACK OF SKILLS AND PRACTICES FOR EMBODYING SELF-COMPASSION, A CORE PILLAR OF EMOTIONAL INTELLIGENCE AND SPIRITUAL ALIGNMENT. THE ASCENSION SERVICE AIMS TO FOSTER A CULTURE OF COMPASSIONATE SELF-INQUIRY, COLLECTIVE EMOTIONAL INTIMACY, AND THE VIBRATIONAL AMPLIFICATION OF BENEVOLENT HUMAN POSSIBILITY.</p>
@@ -137,7 +137,7 @@ export default function Home() {
 
           <motion.div
             variants={fadeUp}
-            className="flex max-w-[820px] flex-col gap-6 font-body text-base font-bold uppercase leading-relaxed tracking-wide text-[var(--tas-fg)] md:text-lg"
+            className="mx-auto flex w-full max-w-[820px] flex-col gap-6 font-body text-base font-bold uppercase leading-relaxed tracking-wide text-[var(--tas-fg)] md:text-lg"
           >
             <p>“IT’S ALL YOUR FAVORITE PARTS OF CHURCH WITHOUT THE SH*T YOU DON’T WANT.”</p>
             <p>“YOUR VOICE CRACKED ME OPEN… I FELT LIKE I WAS TRANSCENDING TIME AND SPACE, LIKE YOUR VOICE WAS CARRYING ME THROUGH DIFFERENT DIMENSIONS OF LOVE.”</p>
@@ -148,7 +148,7 @@ export default function Home() {
             <p>“THIS SPIRITUAL ART IS GOING TO TRANSFORM ENTIRE COMMUNITIES AND PEOPLE AROUND THE WORLD.”</p>
           </motion.div>
 
-          <motion.p variants={fadeUp} className="mt-8 max-w-[820px] font-body text-xs font-normal normal-case text-[var(--tas-fg)]">
+          <motion.p variants={fadeUp} className="mx-auto mt-8 w-full max-w-[820px] font-body text-xs font-normal normal-case text-[var(--tas-fg)]">
             Note: Some testimonials have been lightly edited for clarity and length.
           </motion.p>
         </div>
@@ -173,7 +173,7 @@ export default function Home() {
 
           <motion.p
             variants={fadeUp}
-            className="max-w-[820px] font-body text-base font-bold uppercase leading-relaxed tracking-wide text-[var(--tas-fg)] md:text-lg"
+            className="mx-auto w-full max-w-[820px] font-body text-base font-bold uppercase leading-relaxed tracking-wide text-[var(--tas-fg)] md:text-lg"
           >
             FORREST MORTIFEE (HE/HIM) IS A MULTI-DISCIPLINARY ARTIST AND SPIRITUAL ACTIVIST CREATING AT THE INTERSECTION OF MUSIC, RITUAL, AND EMERGING TECH. WITH 60M STREAMS AND A DECADE OF INTERNATIONAL PERFORMANCE UNDER HIS BELT, FORREST IS NOW BUILDING THE IMMERSIVE WORLD OF ©THE ASCENSION SERVICE™. DESIGNING WITH EMPOWERMENT, CONNECTION, AND EMPATHY ON HIS MIND, FORREST FINDS PURPOSE IN MATERIALIZING REALITIES OF MUTUAL HEALING AND AWE.
           </motion.p>
@@ -303,7 +303,7 @@ export default function Home() {
             <div className="mx-auto mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
 
-          <motion.div variants={fadeUp} className="max-w-[600px]">
+          <motion.div variants={fadeUp} className="mx-auto w-full max-w-[600px]">
             {submitted ? (
               <p className="font-display text-3xl text-[var(--tas-accent)]">
                 We&apos;ll be in touch.
