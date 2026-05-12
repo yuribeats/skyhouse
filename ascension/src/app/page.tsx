@@ -65,7 +65,7 @@ export default function Home() {
     <>
       {/* Hero — white logo flush against header */}
       <section id="top" className="flex flex-col items-center bg-[var(--tas-bg)]">
-        <div className="flex w-full justify-center">
+        <div className="-mt-[10vw] flex w-full justify-center md:-mt-[12vw]">
           <Image
             src="/assets/Welcome_to_The_Ascension_Service__logo_.png"
             alt="Welcome to The Ascension Service"
@@ -75,7 +75,7 @@ export default function Home() {
             className="logo-white block h-auto w-[80vw] max-w-[1000px]"
           />
         </div>
-        <p className="mt-2 mb-16 px-6 text-center font-body text-base font-bold uppercase tracking-wider text-[var(--tas-fg)] md:text-xl">
+        <p className="-mt-[6vw] mb-16 px-6 text-center font-body text-base font-bold uppercase tracking-wider text-[var(--tas-fg)] md:-mt-[8vw] md:text-xl">
           &quot;HELPING YOU EMBODY YOUR FUTURE SELF SINCE 2025 AD!!&quot;
         </p>
       </section>
