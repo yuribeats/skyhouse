@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import ScrollingPoems from "@/components/ScrollingPoems";
+import ScrollingBanner from "@/components/ScrollingBanner";
 import { useTheme } from "@/components/ThemeProvider";
 
 const links = [
@@ -13,13 +13,7 @@ const links = [
   { href: "#contact", label: "REACH OUT" },
 ];
 
-const poems = [
-  "A RITUAL FOR THE LIVING",
-  "A SECULAR SPIRITUAL GATHERING",
-  "FOR THE INTERNET AGE",
-  "STAY IN THE CURRENT",
-  "EMBODY YOUR FUTURE SELF",
-];
+const panels = Array.from({ length: 25 }, (_, i) => `/assets/panels/panel-${25 + i}.jpg`);
 
 export default function Nav() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -34,7 +28,9 @@ export default function Nav() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
-      <ScrollingPoems poems={poems} speed={120} height={28} />
+      <div className="overflow-hidden bg-black">
+        <ScrollingBanner images={panels} direction="right" speed={80} height={56} />
+      </div>
 
       <div className="relative h-10 bg-[var(--tas-bg)] border-b border-[var(--tas-border)]">
         <div className="absolute right-4 top-1/2 -translate-y-1/2">

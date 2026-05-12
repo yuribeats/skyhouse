@@ -76,7 +76,7 @@ export default function Home() {
             className="logo-white block h-auto w-[92vw] max-w-[1000px] md:w-[80vw]"
           />
         </div>
-        <p className="-mt-[10vw] mb-2 px-4 text-center font-body text-xs font-bold uppercase tracking-wide text-[var(--tas-fg)] md:-mt-[8vw] md:mb-4 md:px-6 md:text-xl md:tracking-wider">
+        <p className="-mt-[7vw] mb-1 px-4 text-center font-body text-xs font-bold italic uppercase tracking-wide text-[var(--tas-fg)] md:-mt-[5vw] md:mb-2 md:px-6 md:text-xl md:tracking-wider">
           &quot;HELPING YOU EMBODY YOUR FUTURE SELF SINCE 2025 AD!!&quot;
         </p>
         <Image
@@ -84,7 +84,7 @@ export default function Home() {
           alt="Neptune"
           width={1080}
           height={1350}
-          className="mt-4 h-auto w-[60vw] max-w-[400px] md:mt-6 md:w-[40vw]"
+          className="-mt-[12vw] h-auto w-[60vw] max-w-[400px] md:-mt-[10vw] md:w-[40vw]"
         />
       </section>
 
@@ -206,7 +206,7 @@ export default function Home() {
             <div className="mx-auto mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
 
-          <motion.div variants={fadeUp} className="flex flex-col gap-4">
+          <motion.div variants={fadeUp} className="mx-auto flex w-full max-w-[820px] flex-col gap-4">
             {[
               { title: "Blossoms", src: "/audio/Blossoms.mp3" },
               { title: "Prophecy of the Morning Dew", src: "/audio/Prophecy of the Morning Dew.mp3" },
