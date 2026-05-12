@@ -91,10 +91,10 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-2 font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
+            <h2 className="mb-2 text-center font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
               Manifesto
             </h2>
-            <div className="mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
+            <div className="mx-auto mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
 
           <motion.div
@@ -130,7 +130,7 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-6 font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:mb-12 md:text-7xl">
+            <h2 className="mb-6 text-center font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:mb-12 md:text-7xl">
               Reflections From Service
             </h2>
           </motion.div>
@@ -165,10 +165,10 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-2 font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
+            <h2 className="mb-2 text-center font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
               About Our Steward
             </h2>
-            <div className="mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
+            <div className="mx-auto mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
 
           <motion.p
@@ -191,10 +191,10 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-2 font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
+            <h2 className="mb-2 text-center font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
               Music
             </h2>
-            <div className="mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
+            <div className="mx-auto mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
 
           <motion.div variants={fadeUp} className="flex flex-col gap-4">
@@ -226,10 +226,10 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-2 font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
+            <h2 className="mb-2 text-center font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
               Events
             </h2>
-            <div className="mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
+            <div className="mx-auto mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
 
           {eventsLoaded && events.length > 0 && (
@@ -293,10 +293,10 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-2 font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
+            <h2 className="mb-2 text-center font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
               Press/Booking
             </h2>
-            <div className="mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
+            <div className="mx-auto mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
 
           <motion.div variants={fadeUp} className="max-w-[600px]">
