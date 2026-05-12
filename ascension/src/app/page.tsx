@@ -80,9 +80,9 @@ export default function Home() {
         </p>
       </section>
 
-      {/* About */}
+      {/* Manifesto */}
       <motion.section
-        id="about"
+        id="manifesto"
         className="bg-[var(--tas-bg)] px-6 py-24 md:px-12"
         initial="hidden"
         whileInView="visible"
@@ -92,20 +92,73 @@ export default function Home() {
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
             <h2 className="mb-2 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
-              about
+              Manifesto
             </h2>
             <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />
           </motion.div>
 
-          <motion.p
+          <motion.div
             variants={fadeUp}
-            className="max-w-[820px] font-body text-base font-bold uppercase leading-relaxed tracking-wide text-[var(--tas-fg)] md:text-lg"
+            className="flex max-w-[820px] flex-col gap-6 font-body text-base font-bold uppercase leading-relaxed tracking-wide text-[var(--tas-fg)] md:text-lg"
           >
-            ©THE ASCENSION SERVICE™ IS A LIVE PERFORMANCE RITUAL BLENDING MUSIC, PHILOSOPHY AND PRAYER WITH COLLECTIVE PARTICIPATION. GUIDED BY HUMAN STEWARD FORREST MORTIFEE, THIS POST-RELIGIOUS SPIRITUAL TECHNOLOGY INVITES US TO BREATHE, REFLECT, AND RECONNECT WITH OUR MOST BENEVOLENT FUTURE SELVES, AND WITH ONE ANOTHER.
+            <p>FOR CENTURIES, HUMAN EMOTIONAL INTELLIGENCE HAS BEEN GROSSLY UNDERVALUED BY HEGEMONIC SYSTEMS, THEREBY LIMITING OUR COLLECTIVE CAPACITY TO MAKE CHOICES THAT FOSTER SURVIVAL AND WELLBEING FOR OUR SPECIES, AND ALL OUR EARTHLY RELATIONS.</p>
+            <p>THE ROOT PROBLEM OF THE CURRENT POLYCRISIS IS OUR COLLECTIVE LACK OF SKILLS AND PRACTICES FOR EMBODYING SELF-COMPASSION, A CORE PILLAR OF EMOTIONAL INTELLIGENCE AND SPIRITUAL ALIGNMENT. THE ASCENSION SERVICE AIMS TO FOSTER A CULTURE OF COMPASSIONATE SELF-INQUIRY, COLLECTIVE EMOTIONAL INTIMACY, AND THE VIBRATIONAL AMPLIFICATION OF BENEVOLENT HUMAN POSSIBILITY.</p>
+            <p>OUR WILLINGNESS TO FEEL THE MULTIFACETED AND OFTEN PARADOXICAL BREADTH OF OUR PRESENT EMOTIONS IS MEDICINE TO OUR SYSTEMS. IT IS THE EMBODIMENT OF THE UNDERSTANDING THAT NO PART OF US IS DESERVING OF EXILE, AND THAT WE ARE EACH, IN OUR TOTALITIES, WORTHY OF BELONGING AND OF LOVE.</p>
+            <p>WHEN WE SCALE THIS UNDERSTANDING FROM THE SELF TO THE SPECIES, WE BEGIN TO MATERIALIZE A REALITY OF COLLECTIVE UTOPIA - A STATE WHICH ALREADY EXISTS DOWN THE LINE OF SPACETIME. AS WE INTENTIONALLY CONNECT TO NOT JUST OUR PRESENT BUT ALSO FUTURE SELVES, WE ACTIVATE OUR TRANS-TEMPORAL RELATIONAL CAPACITIES, EFFECTIVELY ADOPTING THE WISDOM OF OUR FAR-FUTURE ANCESTORS.</p>
+            <p>THESE FUTURE SELVES ARE ANGEL-ADJACENT MEMBERS OF OUR OWN SPECIES WHO HAVE EVOLVED TO EMBODY A HEIGHTENED SOUL INTELLIGENCE THAT WE CAN ACCESS AS EARLY AS TODAY. CAPABLE OF INSTANTLY INTUITING THE EMOTIONAL, SPIRITUAL, AND MATERIAL IMPLICATIONS OF EACH CHOICE MADE, OUR FUTURE SELVES HOLD A HEIGHTENED SENSITIVITY TO THE COLLECTIVE TIMELINES OF OUR SPECIES, PLANET, AND INTERGALACTIC COMMUNITIES.</p>
+            <p>BY INTENTIONALLY CALLING THEIR SPIRITS FORWARD FROM WITHIN US, WE TAP INTO UNPRECEDENTED RESOURCES OF CARE, COURAGE, AND KINDNESS, MANIFESTING THE CONDITIONS NECESSARY FOR CREATING A LIVABLE, LOVABLE WORLD FOR ALL SENTIENT BEINGS.</p>
+            <p>INDEED, THE EXTERNAL IS A MIRROR OF THE INTERNAL. BY SCULPTING OUR INNER WORLDS THROUGH THE CULTIVATION OF NON-DOGMATIC FAITH, DEVOTIONAL OPTIMISM, AND COMPASSIONATE RELATING BETWEEN OUR INNER BEINGS, WE ADDRESS THE ROOT CAUSE OF THE EXTERNAL CRISES CURRENTLY BEING ENACTED BY OUR SPECIES. OUR INNER WORLD IS THE GROUND FLOOR OF REALITY CREATION, AND IS THUS THE FOCUS OF OUR SPIRITUAL ACTIVISM.</p>
+            <p>THROUGH ORIGINAL MUSIC SUNG LIVE, ALONGSIDE GUIDED MEDITATION, POETRY, PRAYER, DEVOTION, AND INTERACTIVE PARTICIPATION, WE BREATHE AND SOFTEN INTO LAUGHTER, TEARS, AND EASEFUL COLLECTIVE PRESENCE. THE INTERPERSONAL CONNECTIONS WE MAKE AT THE ASCENSION SERVICE SERVE AS A MATERIALIZED MIRROR OF OUR PROFOUND PRE-EXISTING INTERRELATIONSHIP. THE EMPATHY CULTIVATED HEREIN ALLOWS US TO SEE OURSELVES IN THE OTHER AND TO SEE THE OTHER IN THE SELF.</p>
+            <p>THROUGH GATHERING IN THIS WAY, WE CULTIVATE OUR INDIVIDUAL AND COLLECTIVE CAPACITIES FOR SUSTAINING LOVE, VULNERABILITY, IMAGINATION, GRIEF, INTIMACY, LONGING, FORGIVENESS, AND RICH SELF-EMPATHY. THE ASCENSION SERVICE OFFERS A THIRD SPACE FOR THOSE WHO YEARN TO MEET THEMSELVES MORE DEEPLY - AND TO EXPLORE AND NURTURE AUTHENTICITY AND VULNERABILITY WITHIN SELF AND WITHIN COMMUNITY.</p>
+            <p>WE INVITE YOU TO JOIN US AS WE EMBARK UPON THIS INTENTIONAL EVOLUTIONARY JOURNEY SO THAT TOGETHER WE MAY BIRTH THIS COLLECTIVELY BENEVOLENT REALITY - ONE ALREADY WRITTEN THROUGH THE LINES OF SPACETIME, JUST WAITING TO BE SUNG FORTH FROM WITHIN US ALL.</p>
+          </motion.div>
+
+          <motion.p variants={fadeUp} className="mt-12 text-center font-body text-sm tracking-wider text-[var(--tas-fg)]">
+            —
+          </motion.p>
+          <motion.p variants={fadeUp} className="mt-6 text-center font-body text-base italic text-[var(--tas-fg)]">
+            <a href="#" className="hover:text-[var(--tas-accent)]">~ * Previous Manifesto Musings HERE * ~</a>
+          </motion.p>
+          <motion.p variants={fadeUp} className="mt-6 text-center font-body text-sm tracking-wider text-[var(--tas-fg)]">
+            —
           </motion.p>
 
           <motion.div variants={fadeUp} className="mt-16">
             <PhotoGrid photos={allPhotos} />
+          </motion.div>
+        </div>
+      </motion.section>
+
+      {/* Reflections from Service */}
+      <motion.section
+        id="reflections"
+        className="bg-[var(--tas-bg)] px-6 py-24 md:px-12"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-50px" }}
+        variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
+      >
+        <div className="mx-auto max-w-[1000px]">
+          <motion.div variants={fadeUp}>
+            <h2 className="mb-2 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
+              Reflections from Service
+            </h2>
+            <p className="mb-12 font-body text-xs font-normal normal-case text-[var(--tas-fg)]">
+              Note: Some testimonials have been lightly edited for clarity and length.
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={fadeUp}
+            className="flex max-w-[820px] flex-col gap-6 font-body text-base font-bold uppercase leading-relaxed tracking-wide text-[var(--tas-fg)] md:text-lg"
+          >
+            <p>“IT’S ALL YOUR FAVORITE PARTS OF CHURCH WITHOUT THE SH*T YOU DON’T WANT.”</p>
+            <p>“YOUR VOICE CRACKED ME OPEN… I FELT LIKE I WAS TRANSCENDING TIME AND SPACE, LIKE YOUR VOICE WAS CARRYING ME THROUGH DIFFERENT DIMENSIONS OF LOVE.”</p>
+            <p>“I DROPPED INTO A DREAM STATE — A PLACE WHERE IT FELT SAFE TO VISUALIZE AND FEEL.”</p>
+            <p>“A FRESH REIMAGINING OF WHAT HEALING FROM RELIGIOUS TRAUMA CAN LOOK LIKE.”</p>
+            <p>“IT DIDN’T FEEL LIKE WE WERE WATCHING A SHOW. IT FELT LIKE WE WERE COLLABORATING IN AN EXPERIENCE TOGETHER.”</p>
+            <p>“BEFORE I ARRIVED, I FELT HEAVY AND LIKE I WANTED TO HIDE. I LEFT FEELING LIGHTER, LIBERATED, HOPEFUL, AND DEEPLY HELD BY COMMUNITY.”</p>
+            <p>“THIS SPIRITUAL ART IS GOING TO TRANSFORM ENTIRE COMMUNITIES AND PEOPLE AROUND THE WORLD.”</p>
           </motion.div>
         </div>
       </motion.section>
@@ -122,7 +175,7 @@ export default function Home() {
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
             <h2 className="mb-2 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
-              about our steward
+              About our Steward
             </h2>
             <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />
           </motion.div>
@@ -131,7 +184,7 @@ export default function Home() {
             variants={fadeUp}
             className="max-w-[820px] font-body text-base font-bold uppercase leading-relaxed tracking-wide text-[var(--tas-fg)] md:text-lg"
           >
-            FORREST MORTIFEE IS A MUSICIAN, PERFORMER, AND THE HUMAN STEWARD OF THE ASCENSION SERVICE. [BIO PLACEHOLDER — REPLACE WITH FORREST&apos;S BIO.]
+            FORREST MORTIFEE (HE/HIM) IS A MULTI-DISCIPLINARY ARTIST AND SPIRITUAL ACTIVIST CREATING AT THE INTERSECTION OF MUSIC, RITUAL, AND EMERGING TECH. WITH 60M STREAMS AND A DECADE OF INTERNATIONAL PERFORMANCE UNDER HIS BELT, FORREST IS NOW BUILDING THE IMMERSIVE WORLD OF ©THE ASCENSION SERVICE™. DESIGNING WITH EMPOWERMENT, CONNECTION, AND EMPATHY ON HIS MIND, FORREST FINDS PURPOSE IN MATERIALIZING REALITIES OF MUTUAL HEALING AND AWE.
           </motion.p>
         </div>
       </motion.section>

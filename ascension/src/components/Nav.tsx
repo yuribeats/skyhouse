@@ -5,7 +5,8 @@ import ScrollingPoems from "@/components/ScrollingPoems";
 import { useTheme } from "@/components/ThemeProvider";
 
 const links = [
-  { href: "#about", label: "ABOUT" },
+  { href: "#manifesto", label: "MANIFESTO" },
+  { href: "#reflections", label: "REFLECTIONS" },
   { href: "#steward", label: "STEWARD" },
   { href: "#music", label: "MUSIC" },
   { href: "#events", label: "EVENTS" },
