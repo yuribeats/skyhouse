@@ -75,7 +75,7 @@ export default function Home() {
             className="logo-white block h-auto w-[80vw] max-w-[1000px]"
           />
         </div>
-        <p className="-mt-[6vw] mb-16 px-6 text-center font-body text-base font-bold uppercase tracking-wider text-[var(--tas-fg)] md:-mt-[8vw] md:text-xl">
+        <p className="-mt-[6vw] mb-4 px-6 text-center font-body text-base font-bold uppercase tracking-wider text-[var(--tas-fg)] md:-mt-[8vw] md:text-xl">
           &quot;HELPING YOU EMBODY YOUR FUTURE SELF SINCE 2025 AD!!&quot;
         </p>
       </section>
@@ -83,7 +83,7 @@ export default function Home() {
       {/* Manifesto */}
       <motion.section
         id="manifesto"
-        className="bg-[var(--tas-bg)] px-6 py-24 md:px-12"
+        className="bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
@@ -122,7 +122,7 @@ export default function Home() {
       {/* Reflections from Service */}
       <motion.section
         id="reflections"
-        className="bg-[var(--tas-bg)] px-6 py-24 md:px-12"
+        className="bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
@@ -157,7 +157,7 @@ export default function Home() {
       {/* About Our Steward */}
       <motion.section
         id="steward"
-        className="bg-[var(--tas-bg)] px-6 py-24 md:px-12"
+        className="bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
@@ -183,7 +183,7 @@ export default function Home() {
       {/* Music */}
       <motion.section
         id="music"
-        className="bg-[var(--tas-bg)] px-6 py-24 md:px-12"
+        className="bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
@@ -218,7 +218,7 @@ export default function Home() {
       {/* Events */}
       <motion.section
         id="events"
-        className="bg-[var(--tas-bg)] px-6 py-24 md:px-12"
+        className="bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
@@ -285,7 +285,7 @@ export default function Home() {
       {/* Contact */}
       <motion.section
         id="contact"
-        className="bg-[var(--tas-bg)] px-6 py-24 md:px-12"
+        className="bg-[var(--tas-bg)] px-6 pb-12 pt-4 md:px-12 md:pb-16 md:pt-6"
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-50px" }}
