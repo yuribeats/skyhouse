@@ -29,7 +29,7 @@ export default function Nav() {
   return (
     <header className="fixed top-0 left-0 right-0 z-50">
       <div className="overflow-hidden bg-black">
-        <ScrollingBanner images={panels} direction="right" speed={80} height={56} />
+        <ScrollingBanner images={panels} direction="right" speed={150} height={56} />
       </div>
 
       <div className="relative h-10 bg-[var(--tas-bg)] border-b border-[var(--tas-border)]">
