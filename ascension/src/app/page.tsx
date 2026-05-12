@@ -65,17 +65,17 @@ export default function Home() {
     <>
       {/* Hero — white logo flush against header */}
       <section id="top" className="flex flex-col items-center bg-[var(--tas-bg)]">
-        <div className="-mt-[10vw] flex w-full justify-center md:-mt-[12vw]">
+        <div className="-mt-[15vw] flex w-full justify-center md:-mt-[12vw]">
           <Image
             src="/assets/Welcome_to_The_Ascension_Service__logo_.png"
             alt="Welcome to The Ascension Service"
             width={1920}
             height={1080}
             priority
-            className="logo-white block h-auto w-[80vw] max-w-[1000px]"
+            className="logo-white block h-auto w-[92vw] max-w-[1000px] md:w-[80vw]"
           />
         </div>
-        <p className="-mt-[6vw] mb-4 px-6 text-center font-body text-base font-bold uppercase tracking-wider text-[var(--tas-fg)] md:-mt-[8vw] md:text-xl">
+        <p className="-mt-[10vw] mb-2 px-4 text-center font-body text-xs font-bold uppercase tracking-wide text-[var(--tas-fg)] md:-mt-[8vw] md:mb-4 md:px-6 md:text-xl md:tracking-wider">
           &quot;HELPING YOU EMBODY YOUR FUTURE SELF SINCE 2025 AD!!&quot;
         </p>
       </section>
@@ -91,10 +91,10 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-2 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
+            <h2 className="mb-2 font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
               Manifesto
             </h2>
-            <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />
+            <div className="mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
 
           <motion.div
@@ -113,7 +113,7 @@ export default function Home() {
             <p>WE INVITE YOU TO JOIN US AS WE EMBARK UPON THIS INTENTIONAL EVOLUTIONARY JOURNEY SO THAT TOGETHER WE MAY BIRTH THIS COLLECTIVELY BENEVOLENT REALITY - ONE ALREADY WRITTEN THROUGH THE LINES OF SPACETIME, JUST WAITING TO BE SUNG FORTH FROM WITHIN US ALL.</p>
           </motion.div>
 
-          <motion.div variants={fadeUp} className="mt-16">
+          <motion.div variants={fadeUp} className="mt-8 md:mt-16">
             <PhotoGrid photos={allPhotos} />
           </motion.div>
         </div>
@@ -130,7 +130,7 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-12 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
+            <h2 className="mb-6 font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:mb-12 md:text-7xl">
               Reflections From Service
             </h2>
           </motion.div>
@@ -165,10 +165,10 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-2 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
+            <h2 className="mb-2 font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
               About Our Steward
             </h2>
-            <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />
+            <div className="mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
 
           <motion.p
@@ -191,22 +191,22 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-2 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
+            <h2 className="mb-2 font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
               Music
             </h2>
-            <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />
+            <div className="mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
 
           <motion.div variants={fadeUp} className="flex flex-col gap-4">
             {[1, 2, 3].map((n) => (
               <div
                 key={n}
-                className="flex items-center justify-between border border-[var(--tas-border)] px-6 py-5"
+                className="flex flex-col gap-2 border border-[var(--tas-border)] px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5"
               >
-                <span className="font-body text-sm font-bold uppercase tracking-wider text-[var(--tas-fg)]">
+                <span className="font-body text-xs font-bold uppercase tracking-wider text-[var(--tas-fg)] sm:text-sm">
                   TRACK {n} — [TITLE PLACEHOLDER]
                 </span>
-                <span className="font-body text-xs uppercase tracking-wider text-[var(--tas-muted)]">
+                <span className="font-body text-[10px] uppercase tracking-wider text-[var(--tas-muted)] sm:text-xs">
                   COMING SOON
                 </span>
               </div>
@@ -226,10 +226,10 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-2 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
+            <h2 className="mb-2 font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
               Events
             </h2>
-            <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />
+            <div className="mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
 
           {eventsLoaded && events.length > 0 && (
@@ -237,27 +237,27 @@ export default function Home() {
               {events.map((e) => (
                 <div
                   key={e.id}
-                  className="flex flex-col gap-3 border-b border-[var(--tas-border)] py-6 md:flex-row md:items-center md:justify-between md:gap-6"
+                  className="flex flex-col gap-3 border-b border-[var(--tas-border)] py-5 md:flex-row md:items-center md:justify-between md:gap-6 md:py-6"
                 >
                   <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-6">
                     {e.name && (
-                      <span className="font-body text-base font-bold tracking-wider text-[var(--tas-accent)]">
+                      <span className="font-body text-sm font-bold tracking-wider text-[var(--tas-accent)] md:text-base">
                         {e.name}
                       </span>
                     )}
-                    <span className="font-body text-sm tracking-wider text-[var(--tas-muted)] md:w-[180px]">
+                    <span className="font-body text-xs tracking-wider text-[var(--tas-muted)] md:w-[180px] md:text-sm">
                       {e.date}{e.startTime ? ` · ${e.startTime}` : ""}
                     </span>
-                    <span className="font-body text-base text-[var(--tas-fg)]">
+                    <span className="font-body text-sm text-[var(--tas-fg)] md:text-base">
                       {e.city} — {e.venue}
                     </span>
-                    <span className="font-body text-xs tracking-wider text-[var(--tas-muted)]">
+                    <span className="font-body text-[10px] tracking-wider text-[var(--tas-muted)] md:text-xs">
                       {e.country}
                     </span>
                   </div>
-                  <div className="flex items-stretch self-start md:self-auto">
+                  <div className="flex w-full flex-wrap items-stretch gap-2 self-start md:w-auto md:gap-0 md:self-auto">
                     <span
-                      className={`inline-flex w-[110px] shrink-0 items-center justify-center px-3 py-1 font-body text-xs tracking-wider ${statusStyles[e.status] || ""}`}
+                      className={`inline-flex min-w-[110px] flex-1 shrink-0 items-center justify-center px-3 py-1 font-body text-[10px] tracking-wider sm:flex-none md:text-xs ${statusStyles[e.status] || ""}`}
                     >
                       {e.status.toUpperCase()}
                     </span>
@@ -265,12 +265,12 @@ export default function Home() {
                       (e.ticketUrl ? (
                         <a
                           href={e.ticketUrl}
-                          className="inline-flex w-[140px] shrink-0 items-center justify-center border border-neptune-blue px-3 py-1 font-body text-xs tracking-wider text-[var(--tas-fg)] transition-colors duration-200 hover:border-[var(--tas-accent)] hover:text-[var(--tas-accent)]"
+                          className="inline-flex min-w-[140px] flex-1 shrink-0 items-center justify-center border border-neptune-blue px-3 py-1 font-body text-[10px] tracking-wider text-[var(--tas-fg)] transition-colors duration-200 hover:border-[var(--tas-accent)] hover:text-[var(--tas-accent)] sm:flex-none md:text-xs"
                         >
                           TICKETS
                         </a>
                       ) : (
-                        <span className="inline-flex w-[140px] shrink-0 items-center justify-center border border-[var(--tas-border)] px-3 py-1 font-body text-xs tracking-wider text-[var(--tas-muted)]">
+                        <span className="inline-flex min-w-[140px] flex-1 shrink-0 items-center justify-center border border-[var(--tas-border)] px-3 py-1 font-body text-[10px] tracking-wider text-[var(--tas-muted)] sm:flex-none md:text-xs">
                           JUST SHOW UP
                         </span>
                       ))}
@@ -293,10 +293,10 @@ export default function Home() {
       >
         <div className="mx-auto max-w-[1000px]">
           <motion.div variants={fadeUp}>
-            <h2 className="mb-2 font-display text-5xl text-[var(--tas-fg)] md:text-7xl">
+            <h2 className="mb-2 font-display text-4xl text-[var(--tas-fg)] sm:text-5xl md:text-7xl">
               Press/Booking
             </h2>
-            <div className="mb-12 h-[2px] w-16 bg-neptune-blue" />
+            <div className="mb-6 h-[2px] w-16 bg-neptune-blue md:mb-12" />
           </motion.div>
 
           <motion.div variants={fadeUp} className="max-w-[600px]">
