@@ -1,6 +1,9 @@
 "use client";
 
 import SubscribeForm from "@/components/SubscribeForm";
+import ScrollingBanner from "@/components/ScrollingBanner";
+
+const panels = Array.from({ length: 25 }, (_, i) => `/assets/panels/panel-${25 + i}.jpg`);
 
 export default function Footer() {
   const year = new Date().getFullYear();
@@ -18,6 +21,10 @@ export default function Footer() {
         <p className="font-body text-[10px] tracking-wider text-[var(--tas-muted)] md:text-xs">
           &copy; {year} THE ASCENSION SERVICE. ALL RIGHTS RESERVED.
         </p>
+      </div>
+
+      <div className="overflow-hidden bg-black">
+        <ScrollingBanner images={panels} direction="left" speed={150} height={56} />
       </div>
     </footer>
   );
